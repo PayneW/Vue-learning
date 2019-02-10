@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>12-8--官网文档-重定向</title>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        input:focus, input:active, input:link, input:visited {
+            outline: none;
+        }
+
+        .row {
+            margin-top: 5em;
+            border-radius: 6px;
+            padding: .4em;
+            font-size: 16px;
+            background: #e2e2e2;
+            min-height: 20em;
+        }
+
+        .ele {
+            margin: 20px;
+            width: 8rem;
+            height: 8rem;
+            background: lightseagreen;
+            border-radius: 6px;
+        }
+
+        .view {
+            background: #f0ad4e;
+        }
+
+    </style>
+
+
+    <script src="../bower_components/vue/dist/vue.js"></script>
+    <script src="../bower_components/vue-router/dist/vue-router.js"></script>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div id="box">
+                <h1>Hello App!</h1>
+
+            </div>
+        </div>
+    </div>
+
+    <template id="redirectTemplate">
+       <div>
+           <h1>重定向 Redirect</h1>
+           <ul>
+               <li>
+                   <router-link to="/relative-redirect">
+                       /relative-redirect 相对重定向 (redirects to /foo)
+                   </router-link>
+               </li>
+               <li>
+                   <router-link to="/relative-redirect?foo=bar">
+                       /relative-redirect?foo=bar 相对重定向?foo=bar (redirects to /foo?foo=bar)
+                   </router-link>
+               </li>
+               <li>
+                   <router-link to="/absolute-redirect">
+                       /absolute-redirect 绝对重定向 (redirects to /bar)
+                   </router-link>
+               </li>
+               <li>
+                   <router-link to="/dynamic-redirect">
+                       /dynamic-redirect 动态重定向 (redirects to /bar)
+                   </router-link>
+               </li>
+               <li>
+                   <router-link to="/dynamic-redirect/123">
+                       /dynamic-redirect/123 (redirects to /with-params/123)
+                   </router-link>
+               </li>
+               <li>
+                   <router-link to="/dynamic-redirect?to=foo">
+                       /dynamic-redirect?to=foo (redirects to /foo)
+                   </router-link>
+               </li>
+               <li>
+                   <router-link to="dynamic-redirect#baz">
+                       /dynamic-redirect#bar (redirects to /baz)
+                   </router-link>
+               </li>
+               <li>
+                   <router-link to="/named-redirect">
+                       /named-redirect (redirects to /bar)
+                   </router-link>
+               </li>
+               <li>
+                   <router-link to="/redirect-with-params/123">
+                       /redirect-with-params/123 (redirects to /with-params/123)
+                   </router-link>
+               </li>
+               <li>
+                   <router-link to="/not-found">
+                       /not-fount (redirects to /)
+                   </router-link>
+               </li>
+           </ul>
+
+           <router-view></router-view>
+       </div>
+    </template>
+
+
+    <script type="text/javascript">
+        /** # 重定向和别名:
+         *  ## 重定向 :
+         *  - 重定向也是通过 routes 配置来完成，下面例子是从 /a 重定向到 /b:
+         *  ```base
+         *      const router = new VueRouter({
+         *          routes: [
+         *              { path: "/a", redirect: "/b" }
+         *          ]
+         *      })
+         *  ```
+         *  - 重定向的目标也可以是一个命名的路由:
+         *  ```base
+         *      const router = new VueRouter({
+         *          routes: [
+         *              { path: "/a", redirect: { name: "foo" } }
+         *          ]
+         *      })
+         *  ```
+         *  - 甚至是一个方法，动态返回重定向目标:
+         *  ```base
+         *      const router = new VueRouter({
+         *          routes: [
+         *              { path: "/a", redirect: (to) => {
+         *                  // 方法接收  目标路由  作为参数
+         *                  // return 重定向的 字符串路径/路径对象
+         *              } }
+         *          ]
+         *      })
+         *  ```
+         *
+         *  */
+
+        const Home = { template: "<router-view></router-view>" };
+        const Default = { template: "<div>默认 default</div>" };
+        const Foo = { template: "<div>foo foo </div>" };
+        const Bar = { template: "<div>bar  bar</div>" };
+        const Baz = { template: "<div>baz  baz</div>" };
+        const WithParams = { template: "<div>{{ $router.params.id }}</div>" };
+
+        // 就像一座山脉坚强永不变
+
+        const router = new VueRouter({
+            /*mode: "history",*/
+            routes: [
+                { path: "/", component: Home,
+                    children: [
+                        { path: "", component: Default },
+                        { path: "foo", component: Foo },
+                        { path: "bar", component: Bar },
+                        { path: "baz", name: "baz",  component: Baz },
+                        { path: "with-params/:id", component: WithParams },
+                        // relative redirect to a sibling route
+                        { path: "relative-redirect", redirect: "foo" }
+                    ]
+                },
+
+                // absolute redirect 绝对重定向
+                { path: "/absolute-redirect", redirect: "/bar" },
+
+                // dynamic redirect, note that the target route `to` is available for the redirect function
+                // 动态重定向，注意目标路由 "to" 可用于重定向功能
+                {
+                    path: "/dynamic-redirect/:id?",
+                    redirect: to => {
+                        /*
+                         * 对象解构
+                         * let node = {
+                         *     type: "Identifier",
+                         *     name: "foo"
+                         * };
+                         * let {type, name} = node;
+                         * console.log(type);
+                         * console.log(name);
+                         */
+                        const { hash, params, query } = to;
+                        if (query.to === "foo") {
+                            return { path: "/foo", query: null }
+                        }
+                        if (hash === "#baz") {
+                            return { name: "baz", hash: "" }
+                        }
+                        if (params.id) {
+                            return "/with-params/:id"
+                        } else {
+                            return "/bar"
+                        }
+                    }
+                },
+
+                // named redirect 命名重定向
+                { path: "/named-redirect", redirect: { name: "baz"} },
+
+                // redirect with params 重定向带参数
+                { path: "/redirect-with-params/:id", redirect: "/with-params/:id" },
+
+                // catch all redirect 捕获所有重定向
+                { path: "*", redirect: "/" }
+
+            ]
+        });
+
+        new Vue({
+            // 最后把 router 的示例挂载到 Vue 上
+            router: router,
+            template: "#redirectTemplate"
+        }).$mount("#box");
+    </script>
+</body>
+</html>

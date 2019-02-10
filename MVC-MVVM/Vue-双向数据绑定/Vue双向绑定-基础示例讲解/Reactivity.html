@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js 响应式</title>
+</head>
+<body>
+<script>
+    let price = 5;
+    let quantity = 2;
+    let total = 0;
+    let target = null;
+    let storage = [];
+
+    // debugger;
+    function record() {
+        storage.push(target);
+    }
+
+    function replay() {
+        storage.forEach(function (item) {
+            return item();
+        })
+    }
+
+    // 把用于计算的匿名函数赋值给 target
+    target = function () {
+        total = price * quantity;
+    };
+    record();
+    target();
+
+    price = 20;
+    console.log("total: ", total);   // total:  10
+    replay();
+    console.log("total2: ", total);  // total2:  40
+
+    price = 30;
+    replay();
+    console.log("total3: ", total);
+    console.log("storage: ", storage);
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+dist/
+node_modules/
+.DS_Store
+*.log
+dest/
+.tern-port
+*.sublime-project
+*.sublime-workspace
+bak/*
+*.bak
+doc/*
+*_bak.*
+*.bak
+*.vscode/*
+*vscode*

@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>10th 组件</title>
+    <link type="text/css" href="../../src/reset.css">
+    <script type="text/javascript" src="../../src/vue.js"></script>
+    <script type="text/javascript" src="../../src/axios.js"></script>
+    <!--<script type="text/javascript" src="src/lodash.js"></script>-->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+    <style type="text/css">
+    </style>
+</head>
+<body>
+
+    <!--******************<10.> 组件 ******************-->
+    <script type="text/javascript">
+        /**
+         *  什么是组件(Component)？
+         *      组件时Vue.js最强大的功能之一。组件可以扩展html元素，封装可重用的代码。在较高层面上，组件时自定义元素，
+         *      vue.js的编译器为它添加特殊功能。在有些情况下，组件也可以表现为用 is 特性进行了扩展的原生html元素。
+         */
+    </script>
+
+
+    <div class="wall">
+
+
+        <div>
+            <h3>1.注册全局组建</h3>
+
+            <div id="example-10">
+                <my-component></my-component>
+            </div>
+        </div>
+        <script>
+            Vue.component("my-component", {
+                template: "<div>A custom component!</div>"
+            });
+            new Vue({
+                el: "#example-10",
+                data:""
+            })
+        </script>
+        <br><br>
+
+
+
+        <div>
+            <h3>2.注册局部组件</h3>
+            <!--利用局部注册: id="example-10-1"这个div在最终渲染时并没有在页面中，但是全局注册的父级id元素却是存在的-->
+            <div id="example-10-1"></div>
+        </div>
+        <script type="text/javascript">
+            var Parent  = Vue.extend({
+                template: "<div> I am Parent, my children: <my-component></my-component> </div>",
+                components: {
+                    "my-component": {
+                        template: "<span> ---我是子模板 </span>"
+                    }
+                }
+            });
+            new Parent({
+                el: "#example-10-1"
+            })
+        </script>
+        <br><br>
+
+
+        <div>
+            <h3> 在Vue.component()组件方法中，data必须是函数，但在new Vue()中data却是对象</h3>
+            <div id="example-2">
+                <simple-counter></simple-counter>
+                <simple-counter></simple-counter>
+                <simple-counter></simple-counter>
+            </div>
+            <script type="text/javascript">
+                Vue.component("simple-counter", {
+                    template: "<button @click='counter += 1'> {{ counter }} </button>",
+                    data: function(){
+                        return {
+                            counter: 0
+                        }
+                    }
+                });
+                new Vue({
+                    el: "#example-2"
+                })
+            </script>
+        </div>
+        <br><br>
+
+
+        <div>
+            <h3>
+                3. #组件组合: 在Vue中，父子组件的关系可以总结为 "prop向下传递，事件向上传递"。父组件通过prop给子组件下发数据，
+                子组件通过事件给父组件发送消息。
+            </h3>
+            <h4>
+                #使用Prop传递数据: 组件实例的作用域是孤立的。这意味着不能(也不应该)在子组件的模板内直接饮用父组件的数据。
+                父组件要显式地用 prop 选项声明它预期的数据:
+            </h4>
+            <div id="example-3">
+                <child message="Hello!"></child>
+            </div>
+            <script type="text/javascript">
+                Vue.component("child", {
+                    props: ["message"],
+                    template: "<span> {{ message }} </span>"
+                });
+                new Vue({
+                    el: "#example-3"
+                })
+            </script>
+        </div>
+
+
+
+        <div>
+            <h3>
+                4.动态Prop: 可以用v-bind来动态地将prop绑定到父组件的数据。每当父组件的数据变化时，
+                该变化也会传导给子组件。
+                <br>
+                (这个示例在官网文档中js没有给全，第二次看代码也是死活改不对，又找到2个月前的代码才知道问题在哪里，就不能给出完整的代码吗！！！)
+            </h3>
+            <div id="example-4">
+                <input v-model="parentMsg">
+                <br>
+                <child :my-message="parentMsg"></child>
+            </div>
+        </div>
+        <script type="text/javascript">
+            Vue.component("child", {
+                props: ["my-message"],
+
+                // 这里span中引用的数据必须写v-bind绑定的属性名: myMessage(而且是驼峰形式)，因为myMessage此时已经引用了父级元素的值
+                template: "<span> {{ myMessage }} </span>"
+            });
+            new Vue({
+                el: "#example-4",
+                data: {
+                    parentMsg: "默认数据"
+                }
+            })
+        </script>
+
+
+
+        <div>
+            <h3> 5.Prop验证: 为组建的prop制定验证规则。只有语法讲解没有具体demo</h3>
+        </div>
+        <br><br>
+
+
+        <div>
+            <h3>
+                6. 自定义事件: #.使用 v-on 绑定自定义事件, 每个Vue实例都实现了"事件接口",即: <br>
+                (1.)使用 $on(eventName)监听事件 <br>
+                (2.)使用 $emit(eventName)触发事件
+            </h3>
+            <h4>
+                父组件可以在使用子组件的地方直接用 v-on 来监听子组件触发的事件。不能用 $on 侦听子组件
+                释放的事件，而必须在模板里直接用 v-on 绑定，参见下面的例子。
+            </h4>
+            <div id="counter-event-example">
+                <p>{{ total }}</p>
+                <button-counter @increment="incrementTotal"></button-counter>
+                <button-counter @increment="incrementTotal"></button-counter>
+            </div>
+        </div>
+        <script type="text/javascript">
+            Vue.component("button-counter", {
+                template: "<button  @click='incrementCounter'>{{ counter }}</button>",
+                data: function(){
+                    return {
+                        counter: 0
+                    }
+                },
+                methods: {
+                    incrementCounter: function(){
+                        this.counter += 1;
+                        this.$emit("increment")
+                    }
+                }
+            });
+            new Vue({
+                el: "#counter-event-example",
+                data: {
+                    total: 0
+                },
+                methods:{
+                    incrementTotal: function(){
+                        this.total += 1
+                    }
+                }
+            });
+        </script>
+        <br><br>
+
+
+        <div>
+            <h4>
+                #给组件绑定原生事件: 如果想在某个组件的根元素上监听一个原生事件。可以使用 v-on 的修饰符 .native。例如:
+            </h4>
+            <my-component v-on:click.native="doTheThing"></my-component>
+        </div>
+
+
+        <div>
+            <h3>
+                7.  .sync修饰符 : 在某些场景中，我们可能需要对一个prop进行[双向绑定]。当一个组件修改带有 .sync 修饰符的prop时，
+                设置的值就会反向映射(reflect)到父组件中。这很方便，然而长远来看会造成维护上的问题，因为这种双向绑定的机制，
+                破坏了单向数据流(one-way data flow)的设计: 在修改子组件的props后，这些代码隐式的，也会影响到父组件状态，
+                父组件的状态来源很难从代码中显式推断。然而，我们发现确实在某些场景中还是需要双向绑定，尤其有助于数据往返于可重用
+                组件。我们需要作出的改进是，将子组件影响父组件状态的代码，能够和单向数据流保持一致，以及变得更加清晰明确。
+                在 2.3.0+中， 我们为 props 重新引入了 .sync 修饰符，但是这次只是原有语法的语法糖(syntax sugar)包装而成，
+                其背后实现原理是，在组件上自动扩充一个额外的 v-on 监听器:
+            </h3>
+        </div>
+        <br><br>
+
+
+        <div>
+            <h3> 8. # 插槽  </h3>
+            <h4> 插槽的3个示例来自于: http://www.cnblogs.com/XmanLin/p/7667670.html </h4>
+            <!--~~~~~~~~~~~~~~~~~~~~~~~~#单个插槽~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+            <h4>8-0. #单个插槽  </h4>
+            <style type="text/css">
+                .single-slot{
+                    background:lightcoral;
+                    font-size: 14px;
+                }
+                .border-radius-2{
+                    border-radius:2px;
+                }
+            </style>
+            <!--singleSlot是Vue实例中data对象下的属性的键，所以命名只能符合js的命名规则，但是这个下面可以包含一组class-->
+            <div id="app-8-0" :class="singleSlot">
+                <my-com></my-com>
+            </div>
+            <script type="text/javascript">
+                Vue.component("child-com", {
+                    template:   "<div >" +
+                    "<h2>我是子组件的标题</h2>" +
+                    "<slot>只有在没有要分发的内容时才会显示</slot>" +
+                    "</div>"
+                });
+                Vue.component("my-com", {
+                    template: "<div><h1>我是父组件的标题</h1><child-com></child-com></div>"
+                });
+                new Vue({
+                    el: "#app-8-0",
+                    data:{
+                        singleSlot: {
+                            // 关于这里: 实际是singleSlot对象下有2个属性 ，js属性名本身是不允许出现横杠的，
+                            // 但是如果写成json格式(键加上引号)后，确实是允许这样写的，所以这样不报错
+                            "single-slot": true,
+                            "border-radius-2": true
+                        }
+                    }
+                })
+            </script>
+            <!--~~~~~~~~~~~~~~~~~~~~~~~~~#单个插槽~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+
+            <!--~~~~~~~~~~~~~~~~~~~~~~~~~~#具名插槽~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+            <div>
+                <h4> 8-1. #具名插槽 ： slot 元素可以用一个特殊的特性 name 来进一步配置如何分发内容。多个插槽可以有不同的名字。
+                    具名插槽将匹配内容片段中有对应 slot 特性的元素。
+                </h4>
+
+                <div id="app-8-1">
+                    <parent-com></parent-com>
+                </div>
+
+                <script type="text/javascript">
+                    // 子组件
+                    Vue.component("app-layout", {
+                        template:  "<div class='container'>" +
+                        "<header>" +
+                        "<slot name='header'></slot>" +
+                        "</header>" +
+                        "<main>" +
+                        "<slot></slot>" +
+                        "</main>" +
+                        "<footer>" +
+                        "<slot name='footer'></slot>" +
+                        "</footer>" +
+                        "</div>"
+                    });
+
+                    // 父组件
+                    Vue.component("parent-com", {
+                        template:  "<app-layout>" +
+                        "<h1 slot='header'>这里是一个页面标题</h1>" +
+                        "<p>内容中第一个段落。</p>" +
+                        "<p>第二个段落。</p>" +
+                        "<p slot='footer'>这里是页脚</p>" +
+                        "</app-layout>"
+                    });
+
+                    new Vue({
+                        el: "#app-8-1"
+                    })
+                </script>
+            </div>
+            <br><br>
+            <!--~~~~~~~~~~~~~~~~~~~~~~~~~~#具名插槽~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+
+            <!--~~~~~~~~~~~~~~~~~~~~~~~~~~#作用于插槽~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+            <div>
+                <h4> 8-2. #作用于插槽: 作用域插槽是一种特殊类型的插槽，用作一个(能被传递数据的)可重用模板，来代替已经渲染好的元素 </h4>
+                <div>
+                    <h4>文档代码: </h4>
+
+                    <h5>在子组件中，只需将数据传递到插槽，就像你将prop传递给组件一样:</h5>
+                    <div class="child">
+                        <slot text="hello from child"></slot>
+                    </div>
+
+                    <h5>
+                        在父级中，具有特殊特性slot-scope的 "template" 元素必须存在，表示它是作用域插槽的模板。slot-scope的值被用作
+                        一个临时变量名，此变量接受从子组件传递过来的prop对象。
+                    </h5>
+                    <div class="parent">
+                        <child>
+                            <template slot-scop="props">
+                                <span> hello from parent</span>
+                                <span>{{ props.text }}</span>
+                            </template>
+                        </child>
+                    </div>
+                </div>
+            </div>
+
+            <div id="app-8-2">
+                <parent-com></parent-com>
+            </div>
+
+            <script type="text/javascript">
+                // 子组件: 代表性的列表组件模块
+                Vue.component("children-com", {
+                    template:   "<ul>" +
+                    "<slot name='child-ul' v-for='item in animal' :text='item.name'>" +
+                    "</slot>" +
+                    "</ul>",
+                    data: function(){
+                        return {
+                            animal: [
+                                { name: "大象" },
+                                { name: "小狗" },
+                                { name: "大猫" },
+                                { name: "老虎" }
+                            ]
+                        }
+                    }
+                });
+
+                // 父组件: 在父组件的模板里，使用一个Vue自带的特殊组件<template>，并在该组上使用scope属性，值是
+                //     一个临时的变量，存着的是由子组件传过来的prop对象，在下面的例子中命名为props。获得由子组件传过来
+                //     的prop对象，这时候，父组件就可以访问子组件在自定义属性上暴露的数据了。
+                Vue.component("parent-com", {
+                    template:   "<div class='container'>" +
+                    "<p>动物列表</p>" +
+                    "<children-com>" +
+                    "<template scope='props' slot='child-ul'>" +
+                    "<li class='child-ul'> {{props.text}} </li>" +
+                    "</template>" +
+                    "</children-com>" +
+                    "</div>"
+                });
+                new Vue({
+                    el: "#app-8-2"
+                })
+            </script>
+            <!--~~~~~~~~~~~~~~~~~~~~~~~~~~#作用于插槽~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        </div>
+
+
+    </div>
+
+
+    <br><br>
+    <!-- 作用域插槽示例 -->
+    <div class="theChild">
+        <slot text="Hello, I am from children"></slot>
+    </div>
+
+    <div class="theParent">
+        <children>
+            <!-- 父级template中必须存在slot-scope, 表示它是作用域插槽的模板. slot-scope的值被用作一个临时变量名，此变量接受从子组件传递过来的prop对象。 -->
+            <template slot-scop="props">
+                <span> Hello I am form parent </span>
+                <span>{{ props.text }}</span>
+            </template>
+            <!--<ul>
+                <slot name="the-Child-ul" v-for="item in animalArr" :text="item.name"></slot>
+            </ul>-->
+        </children>
+    </div>
+
+    <div id="app-8-3">
+        <parent-template></parent-template>
+        <!--<div class="contain">
+            <p>动物列表</p>
+            <the-children>
+                <template scope="props" slot="the-Child-ul">
+                    <li class="the-Child-ul">
+                        {{ props.text }}
+                    </li>
+                </template>
+            </the-children>
+        </div>-->
+    </div>
+
+    <script type="text/javascript">
+        /* 父组件: 在父组件的template属性拼接模板字符串时，其中需包含一个template字符串用来创建子元素的html字符标签,
+           并且在template上还需要scope属性，用来获取子组件传递过来的prop对象，这个时候，父组件就可以访问子组件在自
+           定义属性上暴露的数据了。 */
+        Vue.component("parent-template", {
+            // slot='the-Child-ul'中的the-Child-ul为子插槽的name
+            template:  "<div class=contain>" +
+                            "<p>动物列表</p>" +
+                            "<the-children>" +
+                                "<template scope='props' slot='the-Child-ul'>" +
+                                    "<li class='the-Child-ul'>{{ props.text }}</li>" +
+                                "</template>" +
+                            "</the-children>" +
+                        "</div>"
+        });
+
+        // 子组件: 这里子组件的标签名是在上面父组件的template属性的字符模板中的标签
+        Vue.component("the-children", {
+            template:  '<ul>' +
+                            '<slot name="the-Child-ul" v-for="item in animalArr" :text="item.name"></slot>' +
+                       '</ul>',
+            data: function(){
+                return {
+                    animalArr: [
+                        { name: "小象" },
+                        { name: "小狗" },
+                        { name: "小猫" },
+                        { name: "老虎" }
+                    ]
+                }
+            }
+        });
+
+        new Vue({
+            el: "#app-8-3"
+        })
+    </script>
+
+
+
+
+
+    <!--
+        3.构成组件:组件意味着协同工作，通常父子组件会是这样的关系: 组件A在它的模板中使用了组件B。他们之间必然需要相互通信:
+            父组件要给子组件传递数据，子组件需要将它内部发生的事情告知给父组件。然而，在一个良好定义的接口中尽可能将父子组件
+            解耦是很重要的。这保证了每个组件可以再相对隔离的环境中书写和理解，也大幅提高了组件的可维护性和可重用性。
+          在Vue中，父子组件的关系可以总结为 props down, events up。父组件通过props向下传递数据给子组件，子组件通过
+          events给父组件发送消息。 Parent: pass Props.    Child: Emit Events.   &ndash;&gt;
+        3-1. #使用 Prop传递数据 : 组件实例的作用域是孤立的。这意味着不能(也不应该)在子组件的模板内直接应用父组件的数据。
+            要让子组件使用父组件的数据，我们需要通过子组件的 props 选项。&ndash;&gt;
+
+
+    3-2 动态Prop 在模板中，要动态地绑定父组件的数据到子模板的props,与绑定到任何普通的HTML特性类似，就是
+            用 v-bind。每当父组件的数据变化时，该变化也会传导给子组件: 指令(Directives)是带有v-前缀的特殊属性。指令属性的值预期是单一javascript表达式(除了 v-for)。指令的
+        职责就是当其表达式的值改变时相应地将某些行为应用到DOM上。&ndash;&gt;
+
+
+     .sync修饰符 : 在某些场景中，我们可能需要对一个prop进行[双向绑定]。当一个组件修改带有 .sync 修饰符的prop时，
+          设置的值就会反向映射(reflect)到父组件中。这很方便，然而长远来看会造成维护上的问题，因为这种双向绑定的机制，
+          破坏了单向数据流(one-way data flow)的设计: 在修改子组件的props后，这些代码隐式的，也会影响到父组件状态，
+          父组件的状态来源很难从代码中显式推断。然而，我们发现确实在某些场景中还是需要双向绑定，尤其有助于数据往返于可重用
+          组件。我们需要作出的改进是，将子组件影响父组件状态的代码，能够和单向数据流保持一致，以及变得更加清晰明确。
+          在 2.3.0+中， 我们为 props 重新引入了 .sync 修饰符，但是这次只是原有语法的语法糖(syntax sugar)包装而成，
+          其背后实现原理是，在组件上自动扩充一个额外的 v-on 监听器:
+          以下: &ndash;&gt;
+            &lt;!&ndash; <comp v-bind:foo.sync="bar"></comp>&ndash;&gt;
+            &lt;!&ndash;会被扩充为: &ndash;&gt;
+            &lt;!&ndash;<comp v-bind:foo="bar" @update:foo="varl => bar = val"></comp>&ndash;&gt;
+            &lt;!&ndash;对于子组件，如果想要更新 foo 的值， 则需要显示地触发一个事件，而不是直接修改prop: &ndash;&gt;
+            &lt;!&ndash;<script>
+                this.$emit("update:foo", newValue);
+            </script>&ndash;&gt;
+
+    &lt;!&ndash;#使用自定义事件的表单输入组件(Form Input Components using Custom Events)&ndash;&gt;
+    &lt;!&ndash;<input v-model="something">&ndash;&gt;
+    &lt;!&ndash;其实是下面的语法糖包装而成: &ndash;&gt;
+    &lt;!&ndash;<input v-bind:value="something" v-on:input="something= $event.target.value">&ndash;&gt;
+    &lt;!&ndash;在一个组件上使用v-model时，会简化为: &ndash;&gt;
+    &lt;!&ndash;<custom-input :value="something" @input="value => {something = value}"></custom-input>&ndash;&gt;
+    &lt;!&ndash;因此，对于一个带有 v-model的组件，他应该如下(在 2.2.0+ 这里可配置的):
+        (1.)接受一个 value prop
+        (2.)触发input事件，并传入新值
+        让我们通过一个非常简单的货币输入框，看看带有v-model的组件的表现:&ndash;&gt;
+    <br><br>
+    <div id="example-10-4">
+        <currency-input v-model="price"></currency-input>
+    </div>
+    <script>
+        Vue.component("currency-input", {
+            template: '<span>$ <input ref="input" v-bind:value="value" v-on:input="updateValue($event.target.value)"></span>',
+            props: ["value"],
+            methods: {
+                //此方法不是用来直接更新value,而是用于对input的value进行格式化和位数限制
+                updateValue: function(value){
+                    //.trim()移除两侧的空白符， .slice()保留2位小数. formatted
+                    var formattedValue = value.trim().slice(0, value.indexOf(".")=== -1 ? value.length :value.indexOf(".") + 3);
+                    //如果value还不是标准格式，手动将其覆盖以符合规范
+                    if(formattedValue !== value){
+                        this.$refs.input.value = formattedValue;
+                    }
+                    //向上触发input事件，并传递数字值
+                    this.$emit("input", Number(formattedValue));
+                }
+            }
+        });
+
+        new Vue({
+            el: "#example-10-4",
+            data: {
+                price: ""  //price 必须初始化，不然会报错
+            }
+        })
+    </script>
+    <br><br>
+
+    &lt;!&ndash;#定制组件 v-model : 在一个组件中，v-model 默认使用 value 作为prop, 以及默认使用 input 作为监听事件，但是一些输入框类型，
+      例如checkbox和radio, 可能会用到value。在这种情况下，为了避免冲突，就会需要使用组件的model选项&ndash;&gt;
+    <div>
+        <script>
+            Vue.component("my-checkbox", {
+                template: "<input>",
+                model: {
+                    prop: "checked",
+                    event: "change"
+                },
+                props: {
+                    checked: Boolean,
+                    //这样可以将 value, prop释放出来，用作其他用途
+                    value: String
+                }
+            });
+        </script>
+
+        <div id="example-10-5">
+            <my-checkbox v-model="foo" value="some value"></my-checkbox>
+            <br>
+            &lt;!&ndash;上一行等同于&ndash;&gt;
+            <my-checkbox :checked="foo" @change="val => { foo = val }" value="some value"></my-checkbox>
+        </div>
+
+        <script>
+            new Vue({
+                el: "#example-10-5",
+                data:{
+                    foo: ""
+                }
+            })
+        </script>
+    </div>
+
+    &lt;!&ndash;#非父子组件通信(Non Parent-Child Communication) : 有时候两个组件之间需要进行通信，但是他们彼此不是父子组件的关系。在一些
+        简单场景，你可以使用一个空的Vue实例作为一个事件总线中心(central event bus)&ndash;&gt;
+
+    &lt;!&ndash;+++++++++++++++++++++++++++++++++++++++++++&ndash;&gt;
+    &lt;!&ndash; 使用slot分发内容(Content Distribution with Slots) &ndash;&gt;
+        <div>
+            <app>
+                <app-header></app-header>
+                <app-footer></app-footer>
+            </app>
+            &lt;!&ndash;为了能够使组成组件正常运行，我们需要 一种组织方式，将父组件的“内容”和子组件自身的模板掺杂在一起。这个过程
+                被称为"内容分发(content distribution)",Vue.js 实现了一个内容分发API，参照了当前Web组件规范草案，使用特殊的
+                <slot>元素，作为原始内容的插槽。&ndash;&gt;
+        </div>
+
+        <div>
+            &lt;!&ndash;#编译作用域&ndash;&gt;
+            <child-component> {{ message }}</child-component>
+            &lt;!&ndash;message应该与父组件的data数据绑定，简单来说:
+                "父组件模板的内容，全部在父组件作用域内编译；子组件模板的内容，全部在子组件作用域内编译。"&ndash;&gt;
+        </div>
+
+        <div>
+            &lt;!&ndash;#单个slot&ndash;&gt;
+            <div>
+                <h2>我是子组件的标题</h2>
+                <slot>只有在没有要分发的内容时才会显示。</slot>
+            </div>
+
+            &lt;!&ndash;然后是，一个调用子组件的父组件:&ndash;&gt;
+            <div>
+                <h1>我是父组件的标题</h1>
+                <my-component>
+                    <p>这是一些初始内容</p>
+                    <p>这是更多的初始内容</p>
+                </my-component>
+            </div>
+        </div>
+
+        <br><br>
+
+        <div>
+            &lt;!&ndash;一个完整的slot实例 - start &ndash;&gt;
+            <template id="per">
+                <div>
+                    <p>姓名: <slot name="name"></slot></p>
+                    <p>年龄: <slot name="age"></slot></p>
+                    <p>职业: <slot name="job"></slot></p>
+                </div>
+            </template>
+
+            <div id="app-slot">
+                <person>
+                    <span slot="name">{{ componentData.name }}</span>
+                    <span slot="age">{{ componentData.age }}</span>
+                    <span slot="job">{{ componentData.job }}</span>
+                </person>
+            </div>
+
+            <script>
+                var person = {
+                    template: "#per"  //利用id
+                };
+
+                new Vue({
+                    el: "#app-slot",
+                    data: {
+                        componentData: {
+                            name: "wang",
+                            age: "28",
+                            job: "Web Development"
+                        }
+                    },
+                    components: {
+                        "person": person
+                    }
+                })
+            </script>
+            &lt;!&ndash;一个完整的slot实例 -  over &ndash;&gt;
+        </div>
+
+        <br><br>
+
+        <div>
+            &lt;!&ndash;知乎看到的slot插槽的实例&ndash;&gt;
+        </div>
+    &lt;!&ndash; 使用slot分发内容(Content Distribution with Slots) &ndash;&gt;
+    &lt;!&ndash;+++++++++++++++++++++++++++++++++++++++++++&ndash;&gt;
+
+    &lt;!&ndash;动态组件&ndash;&gt;
+    <div>
+        &lt;!&ndash;可以让多个组件使用同一个挂载点，然后动态第在他们之间切换。要实现此效果，我们可以使用Vue保留的 <component>元素，将多个组件动态地
+            绑定到 <component>元素的 is 属性上: &ndash;&gt;
+        &lt;!&ndash; #keep-alive : 如果把切换出去的组件保留在内存中，可以保留它的状态或避免重新渲染。为此可以添加一个 keep-alive指令参数: &ndash;&gt;
+    </div>
+
+    &lt;!&ndash;杂项&ndash;&gt;
+    <div>
+        &lt;!&ndash;#编写可复用组件: 在编写组件时，记住是否要复用组件有好处。一次性组件跟其他组件紧密耦合没有关系，但可复用组件应当定义一个清晰的公共接口。
+            Vue组件的API来自三部分- props, events 和 slots:
+                (1.) Props 允许外部环境传递数据给组件。
+                (2.) Events 允许组件对外部环境产生影响(side effects)。
+                (3.) Slots 允许外部环境将额外的内容组合在组件中。
+            使用 v-bind 和 v-on的简写语法，模板的缩进清晰且简洁:
+         &ndash;&gt;
+        <my-component :foo="baz" :bar="qux" @event-a="doThis" @event-b="doThat">
+            <img src="..." alt="" slot="icon">
+            <p slot="main-text">Hello!</p>
+        </my-component>
+    </div>-->
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+

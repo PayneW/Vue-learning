@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue双向数据绑定原理</title>
+    <style type="text/css">
+        * {margin:0; padding:0;list-style:none;font-size:14px; border:0; }
+        .container {
+            width:600px; height:400px;
+            background: lightcoral;
+            padding:20px;
+            margin:100px auto;
+        }
+        input[type="text"] {
+            display: block;     height: 40px;
+            line-height: 40px;  width: 200px;
+            text-indent:10px;  margin:10px 0;
+            background: #fff;   border-radius: 6px;
+            letter-spacing: 1px; font-size: 15px;
+        }
+        span#msg {
+            display:block;  border-radius: 6px;
+            line-height: 40px;
+            background:lightBlue; margin:20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="container">
+        <input type="text" id="a" v-model="text">
+        {{text}}
+    </div>
+    <script type="text/javascript">
+
+        // 程序界的「二八定律」，百分之八十的问题可以运用百分之二十的知识来解决，而剩下的百分之二十的问题需要运用百分之八十的知识来解决。
+        // 准备好那百分之八十的知识，才会在遇到有挑战的问题时更加游刃有余，机会永远留给准备好的人。
+
+        /** 第六章: 《js高级程序设计》 访问器属性不能直接定义，必须使用 Object.defineProperty()来定义。请看下面的例子 */
+        /*var book = {
+            _year: 2004,
+            edition: 1
+        };
+
+        Object.defineProperty(book, "year", {
+            get: function(){
+                return this._year;
+            },
+            set: function(newValue){
+                if(newValue > 2004){
+                    this._year = newValue;
+                    this.edition += newValue - 2004;
+                }
+            }
+        });
+
+        book.year = 2005;
+        console.log(book.edition);*/
+        // --------------------------------------------
+
+
+
+        window.onload = function () {
+
+            // NodeList: { 0: text, 1: input#a, 2: text  }
+            // 0: text 为换行空格。 1. input#theInput. 2. text: Hello world!
+            // console.log(container.childNodes);
+
+            /** Vue 中双向数据绑定
+             *  http://www.cnblogs.com/kidney/p/6052935.html
+             */
+
+            // subscribe    /səb'skraɪb/    vi. 订阅, 订购
+            // subscriber   /səbˈskraɪbə /   n. 订阅者，订购者，消费者，用户
+
+            // 定义观察者
+            // obj 为 new Vue({})中的参数对象
+            function observe (obj, vm) {
+
+                // 要取得对象上所有可枚举的实例属性，可以使用 ECMAScript5 的 Object.keys() 方法。
+                // 这个方法接收一个对象作为参数，返回一个包含所有可枚举属性的字符串数组 (js高程 -- 6.2.3-2)
+                Object.keys(obj).forEach(function (key) {
+
+                    // console.log(vm); // 打开页面走到这里 Vue 对象只包含: Vue: {data: {text: "Hello world"}}
+
+                    // 调用响应函数
+                    defineReactive(vm, key, obj[key]);
+                })
+            }
+
+            // 定义响应函数    reactive /rɪ'æktɪv/ adj.反应的，起反应的，活性的
+            function defineReactive (obj, key, val) {
+                // 首先實例化-依賴對象 Dependence
+                const dep = new Dependence();
+                Object.defineProperty(obj, key, {
+                    get: function () {
+
+                        // 添加订阅者 Watcher 到对象 Dependence 中
+                        // Dependence.target 是在 Watcher 对象中定义的，把 Watcher 对象赋值给 Dependence 对象的 target 属性。
+                        // 但是 Watcher 对象是在 compile 编译函数中当节点为文本节点时才被实例化的。 所以下面 console 第一次为元素节点(input)
+                        // 时为 undefined, 第二次为文本节点(text)时 输出才为 [object object]
+                        // console.log("Dependence.target " + Dependence.target);
+
+                        if (Dependence.target) {
+                            // 把 Watcher 对象当作参数传入到 dep 实例对象调用 Dependence 对象的 addSub() 方法中
+                            dep.addSub(Dependence.target);
+                        }
+                        return val;
+                    },
+                    set: function (newVal) {
+                        if (newVal === val) return;
+                        val = newVal;
+
+                        // 作为发布者发出通知
+                        dep.notify();
+                    }
+                })
+            }
+
+            // 依赖对象 Dependence
+            function Dependence() {
+                this.subs = [];
+            }
+            Dependence.prototype = {
+                addSub: function (sub) {
+                    this.subs.push(sub);
+                },
+                notify: function () {
+                    this.subs.forEach(function (sub) {
+
+                        // sub:  Watcher {name: "text", node: text, vm: Vue, nodeType: "text"}
+                        // console.log("sub " + sub);
+
+                        // 为什么这里调用的是 this.subs 数组里每一项上的 update() 方法，update()方法不是在 Watcher 订阅者对象内部定义的吗？
+                        // 答: 上面的 Object.defineProperty()内的 get() 方法中，调用当前对象的 addSub 方法，把 Watcher
+                        // (Dependence.target = Watcher) 对象推入到this.subs 数组中，所以当前数组中的每一项都是一个单独的 Watcher 实例化对象
+                        // 就是这样的 Watcher {name: "text", node: text, vm: Vue, nodeType: "text"}
+                        sub.update();
+                    });
+                }
+            };
+
+
+            // 观察者 Watcher
+            // 講解: Watcher 构造函数在哪里被实例化的？ 答: 在打开页面就执行的 compile 编译函数中被初始化
+            function Watcher (vm, node, name, nodeType) {
+
+                // 把 this 赋值给 Dependence.target 对象是什么意思？
+                // 答: 应该是把当前 Watcher 对象赋值给 Dependence 对象的 target 属性。
+
+                // 这里的 target 到底指什么，我真是懵B了一整天,为什么呢? : 在原生 js 中我们都知道，target 代表事件处理程序的
+                // 真正目标即(event.target)，我全局搜索了"js高程"中 target 出现的次数，除了事件对象之外没有别的地方有提及，
+                // 所以我只能认为这里是把当前 Watcher 对象(指针)赋值给 Dependence 对象的 target 自定义属性。
+                Dependence.target = this;
+
+                this.name = name;
+                this.node = node;
+                this.vm = vm;
+                this.nodeType = nodeType;
+
+                // 构造函数内就调用 update() 方法，给节点赋值
+                this.update();
+
+                // 赋值完成后把自定义的 Dependence.target 设置为 null
+                Dependence.target = null;
+            }
+            Watcher.prototype = {
+                // 更新 text 节点中的数据
+                update: function () {
+                    // 首先取得数据
+                    this.get();
+
+                    // 判断当前节点为 text
+                    if (this.nodeType === "text") {
+                        this.node.nodeValue = this.value;
+                    }
+
+                    // 判断当前节点为 input
+                    if (this.nodeType === "input") {
+                        this.node.value = this.value;
+                    }
+                },
+                // 取得数据: 把此时 Vue 对象下 data 对象中的属性值赋值给当前 Watcher 对象的 value 属性
+                get: function () {
+                    // 触发相应属性的 get
+                    this.value = this.vm[this.name];
+                }
+            };
+
+
+
+            // 节点转换为虚拟 DOM
+            function nodeToFragment (node, vm) {
+                const flag = document.createDocumentFragment();
+                let child;
+
+                // 此处判断条件为什么是 " node.firstChild 的值赋值给 child " ?
+                // 答: (js高程-10.1.1) 在 DOM 中每个节点都有一个 childNodes 属性，其中保存着一个 NodeList 对象，
+                // NodeList 对象会随着 DOM 结构的变化动态更新，如果保存在 NodeList 中的节点为0，再次访问 node.firstChild
+                // 浏览器会返回一个 null。在 while 语句内部找到当前节点的第一个子节点推入到文档对象模型中，此时浏览器动态把
+                // 第二个子节点变更为第一个， 这样循环直到 node.firstChild = null 退出循环
+                while(child = node.firstChild){
+                    // console.log("打印 while 判断中的 node.firstChild " + node.firstChild);
+                    // 绑定初始化数据
+                    compile(child, vm);
+
+                    // 将 container 下所有的子节点劫持，放到文档片段中(此处打断点可以清晰的看到过程)
+                    flag.appendChild(child);
+                }
+                return flag;
+            }
+
+
+            // 数据绑定(编译)
+            function compile (node, vm) {
+
+                // . 匹配任何字符， * 前面的项出现0次或多次
+                let reg = /\{\{(.*)\}\}/;
+
+                // 节点类型为元素
+                if (node.nodeType === 1) {
+                    let attr = node.attributes;
+                    // 解析属性
+                    for (let i=0; i < attr.length; i++) {
+                        if (attr[i].nodeName === "v-model") {
+                            // 获取 v-model 绑定的属性名
+                            let name = attr[i].nodeValue;
+                            node.addEventListener("keyup", function (e) {
+
+                                // 给相应的 data 属性赋值，进而触发该属性的 set 方法
+
+                                // 看了很久还是一直迷茫到底 input 上的事件怎么再次做的触发，现在终于明白了？
+                                // 答: 把当前对象的 value 值赋值给 vm.name 属性，在上面的 Object.defineProperty()中
+                                // 已经为 Vue.data 下的每个属性都添加了 get 和 set 方法，所以这里赋值就触发了 set 方法。
+                                // set 方法触发就会调用 依赖对象 Dependence 对象上的 notify 方法, notify 方法内部遍历
+                                // 所有的属性，然后分别调用，当前属性的 update() 方法来更新值
+                                vm[name] = e.target.value;
+                            });
+
+                            // 将 data 的值赋给该 node
+                            node.value = vm[name];
+                            node.removeAttribute("v-model");
+                        }
+                    }
+                }
+                // 节点类型为 text
+                if (node.nodeType === 3) {
+                    if (reg.test(node.nodeValue)) {
+                        // 获取匹配到的字符串
+                        let name = RegExp.$1;
+
+                        name = name.trim();
+
+                        // 将 data 的值赋值给该 node
+                        // node.nodeValue = vm[name];
+
+                        new Watcher(vm, node, name, "text");
+                    }
+                }
+            }
+
+
+
+
+            // 发布-订阅模式(publish-subscribe) : 又称"观察者模式"定义了一种一对多的关系，让多个观察者
+            // 同时监听某一个主题对象，这个主题对象的状态发生改变时就会通知所有观察者对象。
+            // △△ 发布者发出通知 => 主题对象收到通知并推送给订阅者 => 订阅者执行相应操作
+            // 一个发布者 publisher
+            /* const publisher = {
+                publish: function () {
+                    dep.notify();
+                }
+            };*/
+
+
+
+
+            function Vue (options) {
+                this.data = options.data;
+                let data = this.data;
+
+                // 调用观察者
+                observe(data, this);
+
+                let id = options.el;
+                let dom = nodeToFragment(document.getElementById(id), this);
+                // console.log(dom);
+                // 编译完成后，将 dom 返回到 容器中
+                document.getElementById(id).appendChild(dom);
+            }
+
+            const vm = new Vue({
+                el: "container",
+                data: {
+                    text: "Hello word!"
+                }
+            })
+        }
+    </script>
+</body>
+</html>

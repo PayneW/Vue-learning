@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue-过渡效果-官网文档</title>
+    <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+    <style type="text/css">
+        .row {
+            margin-top:5em; border-radius:6px;
+            padding:.4em; font-size:14px;
+            background:#ccc; min-height:20em;
+        }
+        .form-group {
+            margin:1em;
+        }
+
+        #transition-box {
+            width:8em; height:8em;
+            border-radius:5px;
+            background:lightcoral;
+            margin-top:2em;
+        }
+
+        .fade-enter-active, .fade-leave-active {  transition: 1s all ease; }
+        .fade-enter, .fade-leave-to {
+            opacity:0;
+            transform: translateX(200px);
+        }
+    </style>
+
+    <script src="../../bower_components/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div class="container" id="container">
+       <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+           <form role="form">
+               <div class="form-group">
+                   <input type="button" class="btn btn-info" value="按钮" @click="toggle">
+               </div>
+
+               <!-- 智能社上讲的示例不能用，可能是因为版本太老的，此示例为vue官网示例 -->
+               <transition name="fade">
+                   <div id="transition-box" v-show="flag"></div>
+               </transition>
+           </form>
+       </div>
+    </div>
+    <script type="text/javascript">
+        window.onload = function () {
+            let vm = new Vue({
+                el: "#container",
+                data: {
+                    flag: "true"
+                },
+                methods: {
+                    // ES6写法
+                    toggle(){
+                        this.flag = !this.flag;
+                    }
+                }
+            })
+        };
+    </script>
+</body>
+</html>

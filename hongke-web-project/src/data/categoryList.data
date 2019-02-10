@@ -1,0 +1,43 @@
+{
+    "code": "SUC",
+    "msg": "success find users",
+    "data": [
+        {
+            "childrenIndustryList": [
+                {"childrenIndustryList": [], "id": 5, "name": "冰箱", "remark": ""},
+                {"childrenIndustryList": [], "id": 6, "name": "电视", "remark": ""}
+            ],
+            "id": 1,
+            "name": "家电",
+            "remark": ""
+        },
+        {
+            "childrenIndustryList": [
+                {"childrenIndustryList": [], "id": 7, "name": "单反", "remark": ""},
+                {"childrenIndustryList": [], "id": 8, "name": "相机", "remark": ""}
+            ],
+            "id": 2,
+            "name": "数码",
+            "remark": ""
+        },
+        {
+            "childrenIndustryList": [
+                {"childrenIndustryList": [], "id": 9, "name": "笔记本", "remark": ""},
+                {"childrenIndustryList": [], "id": 10, "name": "台式", "remark": ""},
+                {"childrenIndustryList": [], "id": 11, "name": "平板", "remark": ""}
+            ],
+            "id": 3,
+            "name": "电脑",
+            "remark": ""
+        },
+        {
+            "childrenIndustryList": [
+                {"childrenIndustryList": [], "id": 12, "name": "安卓", "remark": ""},
+                {"childrenIndustryList": [], "id": 13, "name": "苹果", "remark": ""},
+                {"childrenIndustryList": [], "id": 14, "name": "微软", "remark": ""}
+            ],
+            "id": 4,
+            "name": "手机",
+            "remark": ""
+    }]
+}

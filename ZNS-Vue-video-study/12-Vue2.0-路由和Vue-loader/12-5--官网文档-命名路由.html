@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>12-5--官网文档-命令路由</title>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        input:focus, input:active, input:link, input:visited {
+            outline: none;
+        }
+
+        .row {
+            margin-top: 5em;
+            border-radius: 6px;
+            padding: .4em;
+            font-size: 16px;
+            background: #e2e2e2;
+            min-height: 20em;
+        }
+        .mar-bot-20 {
+            margin-bottom: 20px;
+        }
+
+        .ele {
+            margin: 20px;
+            width: 8rem;
+            height: 8rem;
+            background: lightseagreen;
+            border-radius: 6px;
+        }
+
+        .view {
+            background: #f0ad4e;
+        }
+
+    </style>
+
+
+    <script src="../bower_components/vue/dist/vue.js"></script>
+    <script src="../bower_components/vue-router/dist/vue-router.js"></script>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div id="box">
+                <h1>Hello App!</h1>
+                <ul>
+                    <!-- 使用 router-link 组件来导航 -->
+                    <!-- 通过传入 "to" 属性指定链接 -->
+                    <!-- <router-link> 默认会被渲染城一个 "<a>" 标签 -->
+                   <li><router-link :to="{name: 'home'}">home</router-link></li>
+                   <li><router-link :to="{name: 'foo'}">foo</router-link></li>
+                   <li><router-link :to="{name: 'bar', params: {id: 123}}">bar</router-link></li>
+                </ul>
+
+                <p>
+                    <!-- 路由出口: 路由匹配到的组件将渲染在这里 -->
+                    <router-view class="view"></router-view>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript">
+        /*
+         * abort /ə'bɔːt/  v 中断，中止
+         */
+
+        /** # 命名路由:
+         *
+         * */
+
+        // 组件
+        const Home = {
+            template: "<h3>我是 Home 组件</h3>"
+        };
+        const Foo = {
+            template: "<h3>我是 Foo 组件</h3>"
+        };
+        const Bar = {
+            template: "<h3>This is Bar {{ $route.params.id }}</h3>"
+        };
+
+        // 配置路由
+        const routes = [
+            {path: "/",     name: "home", component: Home},
+            {path: "/foo",  name: "foo",  component: Foo,},
+            {path: "/bar/:id", name: "bar", component: Bar}
+        ];
+
+        // 创建 router 实例
+        const router = new VueRouter({
+            routes: routes
+        });
+
+
+        new Vue({
+            // 最后把 router 的示例挂载到 Vue 上
+            router: router,
+        }).$mount("#box");
+    </script>
+</body>
+</html>

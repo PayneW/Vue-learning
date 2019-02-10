@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2-3-父子组建-prop传递数据</title>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        .row {
+            margin-top:5em; border-radius:6px;
+            padding:.4em; font-size:14px;
+            background:lightsalmon; min-height:20em;
+        }
+
+    </style>
+
+    <script src="../bower_components/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div id="box">
+                    <my-component message="How are you!"></my-component>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        /**
+         * 父子组建的关系: prop 向下传递，事件向上传递。 父组件通过 prop 给子组件下发数据，子组件通过事件
+         * 给父组件发送消息。
+         *
+         */
+
+
+        Vue.component("my-component", {
+            // 声明 props
+            // 就像 data 一样， prop 也可以在模板中使用，
+            props: ["message"],
+
+            // 同样也可以在 vm 实例中通过 this.message 来使用
+            template: "<span>{{ message }}</span>"
+        });
+        new Vue({
+            el: "#box",
+        });
+    </script>
+</body>
+</html>

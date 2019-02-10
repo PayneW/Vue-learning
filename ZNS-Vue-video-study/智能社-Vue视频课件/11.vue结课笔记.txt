@@ -1,0 +1,186 @@
+vue:
+	两种:
+		1. 直接页面级开发，script直接引入vue
+		2. 工程性开发  , webpack+loader\  vue-cli
+---------------------------------------
+webpack  配置多文件入口
+-------------------------------------
+
+webpack 打包完很大?
+	bundle.js
+	build.js
+
+	a). webpack代码拆分: code-spliting
+	b). 提取公共(css,js)
+	c). 预渲染: prerender-spa-plugin
+	d). 后台——开启压缩，gz
+	e). 异步加载组件
+		require.ensure
+----------------------------------
+vuex:
+-------------------------------------
+Vue  10月1   ->  2.0变的简单
+
+-------------------------------------
+vue
+-------------------------------------
+组件之间通信:
+	vue1.0  ->  props ->  子组件可以更改父组件数据   .sync
+
+	解决问题:
+		0. props
+		1. $emit   单一事件管理	Store.js
+			var Event=new Vue()
+			export default Event
+		2. 对象之间引用	√
+			msg:'welcome'  -> 子级
+
+			msg:{
+				title:'welcome'
+			}
+
+			msg.title
+		3. vuex  管理状态
+-------------------------------------	
+this.$el
+
+src/
+
+
+	$http('../src/data/api.')	
+
+localhost:8080#/home
+localhost:8080/home
+-----------------------------------------
+<router-link to="">
+-----------------------------------------
+main.js
+	->const router=new VueRouter({})
+
+	use
+
+	new App({
+		router
+	})
+
+	new Vuex.Store()
+		->  构造函数(类) 首字母大写
+
+vue init
+
+webpack2.0->  端口 8080  8081  8082 8083....
+
+module:{
+	loaders:[
+		{test:/\.css$/, loader:'style!css'}
+	]
+}
+
+module:{
+	rules:[
+		{test:/\.css$/, loader:'style-loader!css-loader'}
+	]
+}
+-------------------------------------
+全家桶
+-------------------------------------
+axios——不能use
+
+Vue.prototype.$http=axios;
+
+this.$http.get
+
+loading
+	install
+
+vue init  webpack-simple
+
+webpack
+
+this  -> new Vue()
+
+this ->  原生jsDOM对象
+--------------------------------------
+vue中引入百度地图?
+	1. <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=您的密钥">	->  需要index.html
+	2. map.vue
+		template
+			<div id="div1" :style="style"></div>
+		script
+			export default{
+				data:(){
+					style:{
+						width:'100%',
+						height:this.height+'ox'
+					}
+				},
+				props:{
+					height:{
+						type:Number,
+						default:300
+					},
+					longitude:{},
+					latitude:{}
+				},
+				mounted(){
+					var map = new BMap.Map("div1");
+					var point = new BMap.Point(this.longitude,this.latitude);
+					map.centerAndZoom(point, 12);
+					var marker = new BMap.Marker(point);// 创建标注
+					map.addOverlay(marker);
+				}
+			}
+	----------------------------------
+	App.vue
+	template:
+		<MapView :height="300" :latitude=""></MapView>
+
+	import MapView
+
+	export default{
+		componets:{
+			MapView
+		}
+		mounted:
+	}
+	--------------------------------
+vue:
+	指令
+	属性
+	事件
+	数据:
+		data,props/computed
+	生命周期
+--------------------------------------------
+http://bbs.zhinengshe.com
+--------------------------------------------
+Vue2.0  ->  React
+
+json		diff
+
+package.json
+	
+	cnpm install vue-resource -D
+
+node_modules   ->	rm -rf 
+
+-g  ->  命令环境用
+	webpack
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

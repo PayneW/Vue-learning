@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2-2-局部组建</title>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        .row {
+            margin-top:5em; border-radius:6px;
+            padding:.4em; font-size:14px;
+            background:lightsalmon; min-height:20em;
+        }
+
+    </style>
+
+    <script src="../bower_components/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div id="box">
+                    <my-component></my-component>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template id="son-component">
+        <div>
+            我是子组件 ~~~
+            <p>{{ msg }}</p>
+        </div>
+    </template>
+
+
+    <script>
+
+
+        new Vue({
+            el: "#box",
+            components: {
+                // <my-component> 将只在父组件模板中可用
+                "my-component": {
+                    data: function () {
+                        return {
+                            msg: "Vue.js"
+                        }
+                    },
+                    template: "#son-component"
+                },
+            }
+        })
+    </script>
+</body>
+</html>

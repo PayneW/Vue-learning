@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>20180531 - render 渲染函数</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        .row {
+            margin-top: 5em;
+            border-radius: 6px;
+            padding: .4em;
+            font-size: 14px;
+            background: lightsalmon;
+            min-height: 20em;
+        }
+
+    </style>
+
+    <script src="bower_components/vue/dist/vue.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div id="app">
+                <!-- 在不使用 slot 属性向组件中传递内容时(比如 hello world!),这些子节点会被存储到组件实例中的 $slots.default 中。 -->
+                <anchored-heading :level="1"> Hello Vue!</anchored-heading>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--<template>
+    <h1 v-if="level === 1"> <slot></slot> </h1>
+    <h2 v-else-if="level === 2"> <slot></slot> </h2>
+    <h3 v-else-if="level === 3"> <slot></slot> </h3>
+    <h4 v-else-if="level === 4"> <slot></slot> </h4>
+    <h5 v-else-if="level === 5"> <slot></slot> </h5>
+    <h6 v-else-if="level === 6"> <slot></slot> </h6>
+</template>-->
+
+
+<script>
+
+    // 取得子元素的文字内容
+    let getChildrenTextContent = function (children) {
+        return children.map(function (node) {
+            return node.children ? getChildrenTextContent(node, children) : node.text
+        }).join("")
+    };
+
+    // anchor /'æŋkə/  n.锚
+    Vue.component("anchored-heading", {
+        render: function (createElement) {
+            // 创建 kebabCase 风格的 ID
+            // \W: 匹配除了字母、数字、下划线之外的字符。
+            let headingId = getChildrenTextContent(this.$slots.default)
+                .toLowerCase()
+                .replace(/\W+/g, "-")
+                .replace(/(^\-|\-$)/g, "");
+            return createElement(
+                "h" + this.level,
+                [
+                    createElement("a", {
+                        attrs: {
+                            name: headingId,
+                            href: "#" + headingId
+                        }
+                    }, this.$slots.default)
+                ]
+            )
+        },
+        props: {
+            level: {
+                type: Number,
+                required: true
+            }
+        }
+
+    });
+
+    new Vue({
+        el: "#app",
+    })
+</script>
+
+</body>
+</html>

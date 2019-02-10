@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>8-Vue-列表排序过渡</title>
+    <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        .row {
+            margin-top:5em; border-radius:6px;
+            padding:.4em; font-size:16px;
+            background:#ccc; min-height:20em;
+        }
+
+        button {
+            margin:10px;
+        }
+        li { line-height:1.6em; }
+
+        .flip-list-move { transition: transform 1.2s; }
+
+    </style>
+
+    <script src="../../bower_components/lodash/lodash.js"></script>
+    <script src="../../bower_components/vue/dist/vue.js"></script>
+
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            <button @click="shuffle" class="btn btn-danger"> Shuffle </button>
+
+            <br>
+            <br>
+
+            <transition-group name="flip-list" tag="ul">
+                <li v-for="item in items" :key="item">
+                    {{ item }}
+                </li>
+            </transition-group>
+
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            let vm = new Vue({
+                el: "#container",
+                data: {
+                    items: [1111,2222,3333,4444,5555,6666,7777,8888,9999],
+                },
+
+                methods: {
+                    shuffle: function () {
+                        this.items = _.shuffle(this.items);
+                    }
+                }
+            })
+        };
+    </script>
+</body>
+</html>

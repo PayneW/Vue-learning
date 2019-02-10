@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>11-Vue-动态过渡</title>
+    <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        .row {
+            margin-top:5em; border-radius:6px;
+            padding:.4em; font-size:16px;
+            background:#ccc; min-height:20em;
+        }
+
+        button {
+            margin:10px;
+        }
+
+    </style>
+
+
+    <script src="../../bower_components/velocity/velocity.js"></script>
+    <script src="../../bower_components/vue/dist/vue.js"></script>
+
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div id="dynamic-fade-demo" class="demo">
+                Fade In: <input type="range" v-model="fadeInDuration" min="0"  :max="maxFadeDuration">
+                Fade Out: <input type="range" v-model="fadeOutDuration" min="0" :max="maxFadeDuration">
+            </div>
+
+            <transition :css="false" @:before-enter="beforeEnter" @enter="enter" @leave="leave">
+                <p v-if="show">Hello</p>
+            </transition>
+
+            <button
+                v-if="stop"
+                @click="stop=false; show=false">
+                Start animating
+            </button>
+            <button
+                v-else
+                @click="stop=true">
+                Stop it
+            </button>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            new Vue({
+                el: "#dynamic-fade-demo",
+                data: {
+                    show: true,
+                    fadeInDuration: 1000,
+                    fadeOutDuration: 1000,
+                    maxFadeDuration: 1500,
+                    stop: true
+                },
+                mounted: function () {
+                    this.show = false
+                },
+                methods:  {
+                    beforeEnter: function (el) {
+                        el.style.opacity = 0
+                    },
+                    enter: function (el, done) {
+                        var vm = this;
+                        Velocity(el,
+                            {opacity: 1},
+                            {
+                                duration:this.fadeInDuration,
+                                complete: function () {
+                                    done();
+                                    if (!vm.stop) vm.show = false;
+                                }
+                            }
+                        )
+                    },
+                    leave: function (el, done) {
+                        var vm = this;
+                        Velocity(el,
+                            {opacity: 0},
+                            {
+                                duration: this.fadeOutDuration,
+                                complete: function () {
+                                    done();
+                                    vm.show = true;
+                                }
+                            }
+                        )
+                    }
+                }
+            })
+        };
+    </script>
+</body>
+</html>

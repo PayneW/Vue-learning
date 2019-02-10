@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2-2-局部组建</title>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        .row {
+            margin-top:5em; border-radius:6px;
+            padding:.4em; font-size:14px;
+            background:lightsalmon; min-height:20em;
+        }
+
+    </style>
+
+    <script src="../bower_components/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div id="box">
+                    <my-component></my-component>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <template id="my-aaa">
+        <!-- Vue 2.0 后组建不再支持片段代码，要放在一个标签中-->
+        <div>
+            <h1 @click="change" style="cursor:pointer">{{ msg }}</h1>
+            <h2>我是单独的模板</h2>
+            <p>我是模板中拼凑数据的</p>
+            <ul>
+                <li v-for="val in arr">
+                    {{ val }}
+                </li>
+            </ul>
+        </div>
+    </template>
+
+
+    <script>
+
+        new Vue({
+            el: "#box",
+            components: {
+                "my-component": {
+                    data: function () {
+                        return {
+                            msg: "Welcome Vue",
+                            arr: ["Green", "lightBlue", "Black", "Red"]
+                        }
+                    },
+                    methods: {
+                      change(){
+                          this.msg = "I had Changed!"
+                      }
+                    },
+                    template: "#my-aaa"
+                },
+            }
+        })
+    </script>
+</body>
+</html>

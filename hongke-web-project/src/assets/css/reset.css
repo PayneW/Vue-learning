@@ -1,0 +1,92 @@
+@charset "utf-8";
+
+
+@font-face {
+    font-family: 'PingFangSC';
+    src: url('../fonts/PingFang-SC-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+/* 默认样式 */
+html { /* overflow-y: scroll; overflow-x: hidden;*/ }
+
+
+
+body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6,
+p, blockquote, pre, a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong,
+sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend, table, caption, tbody, tfoot, thead,
+tr, th, td, article, aside, canvas, details, embed, figure, header,
+figcaption, footer, menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    font-size: 100%;
+    vertical-align: baseline;
+    font-family: PingFangSC;
+}
+
+
+body {
+    font-size: 12px;
+    letter-spacing: 1px;
+    background: #f7f7f9;
+    color: #666666;
+    font-family: "PingFangSC","arial","simsun", "microsoft yahei", "sans-serif";
+}
+
+li { list-style: none; }
+
+a { text-decoration: none; font-family: PingFangSC; }
+a:hover { text-decoration: none;  color: #139ef6;}
+
+
+a, img { border: 0; }
+
+table { border-collapse: collapse; border-spacing: 0; }
+
+article, aside, details, figcaption, figure, footer, header, main,
+menu, nav, section, summary { display: block; }
+
+caption, th, td { text-align: left; font-weight: normal; vertical-align: middle; }
+
+q, blockquote { quotes: none; }
+
+input, textarea, select { margin: 0; padding: 0; border: 0; outline: none; }
+
+
+/* 解决点击 input textarea 出现边框的问题 */
+input:focus, input:active, input:link, input:visited { outline: none; border: 0; }
+textarea:focus, textarea:active, textarea:link, textarea:visited { outline: none; border: 0; }
+
+/* 解决 ios 苹果 button 圆角和渐变的问题 */
+input[type=button], input[type=submit], input[type=file], button {
+    cursor: pointer; -webkit-appearance: none;
+}
+
+input::-webkit-input-placeholder { letter-spacing:1px; }
+input::-moz-placeholder { letter-spacing:1px; }
+input:-ms-input-placeholder { letter-spacing:1px; }
+
+
+
+
+/* 浮动公共样式 */
+.left { float: left; _display: inline; }
+.right { float: right; _display: inline; }
+.clear:after { display: block; content: ""; clear: both; }
+.clear { clear: both;}
+.dis-none { display: none; }
+.overflow-hid { overflow: hidden; }
+
+.blue { color: #139ef6; }
+.C666 { color: #666666; }
+.C999 { color: #999999; }
+.white { color: #fff; }
+.red { color: #ee3442 }
+.bold { font-weight: bold;}

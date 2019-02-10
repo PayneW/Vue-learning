@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue双向数据绑定原理</title>
+    <style type="text/css">
+        * {margin:0; padding:0;list-style:none;font-size:14px; border:0; }
+        .container {
+            width:600px; height:400px;
+            background: lightcoral;
+            padding:20px; margin:100px auto;
+        }
+        p {
+            border-radius: 6px;
+            line-height: 40px; width: 200px;
+            background:lightBlue; margin:20px 0;
+        }
+        input[type="text"] {
+            display: block;     height: 40px;
+            line-height: 40px;  width: 200px;
+            text-indent:10px;  margin:10px 0;
+            background: #fff;   border-radius: 6px;
+            letter-spacing: 1px; font-size: 15px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container" id="container">
+        {{ font }}
+        <input type="text" id="a" v-model="font">
+    </div>
+    <div id="save-fragment"></div>
+    <script type="text/javascript">
+
+        window.onload = function () {
+
+            /** Vue 中双向数据绑定
+             *  http://www.cnblogs.com/kidney/p/6052935.html
+             */
+
+            /*
+             * subscribe    /səb'skraɪb/     vi. 订阅; 订购
+             * subscriber   /səbˈskraɪbə /   n. 订阅者; 消费; 用户
+             * reactive     /rɪ'æktɪv/       adj. 反应的; 起反应的
+             * dependence   /dɪ'pend(ə)ns/   n. 依赖
+             */
+
+            // observer 检查者
+            // obj 为 Vue 构造函数内的 this.data, vm 代表构造函数 Vue
+            function observe (obj, vm) {
+                // Object.keys(): JS-book-learning\《js高级程序设计》\js高程部分方法\js高程---Object.keys().js
+                Object.keys(obj).forEach(function (key) {
+                    console.log("key: ", key);  // key = font
+                    console.log("obj[key]: ", obj[key]); // obj[key] = Hello word!
+                    // 调用响应函数
+                    defineReactive(vm, key, obj[key]);
+                })
+            }
+
+            // 响应函数: 注意: 1st 参数 obj 为 Vue 构造函数； key 可以看出分别指代的为 data 对象中的键名
+            function defineReactive (obj, key, val) {
+
+                // 首先實例化-依賴對象 Dependence (就是图里的: Dep)
+                const dep = new Dependence();
+
+                // Object.defineProperty() 方法讲解: 见:
+                // JS-book-learning\《js高级程序设计》\js高程部分方法\js高程---Object.defineProperty.html
+
+                // 在 obj (注: obj 为 Vue 构造函数)上定义访问器属性 key.
+                // 注: 这里的巧妙之处是会把 data 数据中的键名拿来作为访问器属性的名, 并定义到 Vue 构造函数上
+                // Note(1-0): 初始化页面代码时这个 defineProperty() 方法不会被调用，被调用的代码见同注释。
+                Object.defineProperty(obj, key, {
+                    // getter 中，我们把 watcher 添加到 dep 中
+                    get: function () {
+
+                        // Dependence.ref 是在 Watcher 对象中定义的，把 Watcher 观察者赋值给
+                        // Dependence 对象的 ref 属性。
+                        if (Dependence.ref) {
+                            dep.addSub(Dependence.ref)
+                        }
+                        return val;
+                    },
+                    // setter 中，触发 watcher 执行回调
+                    set: function (newVal) {
+                        // 当 Vue() 构造函数内的代码执行完(即:完整的虚拟节点 dom 已经插入到 #container 下),
+                        // 我们在 input 中触发 keyup 事件时，浏览器应该会自动执行这里的 set 方法
+                        if (newVal === val) return;
+                        val = newVal;
+
+                        // 作为发布者发出通知
+                        dep.notify();
+                    }
+                })
+            }
+
+            // 订阅者构造函数
+            function Dependence() {
+                // subscriber 用来保存有多少需要实时监听的: 观察者(Watcher)
+                this.subs = [];
+            }
+            Dependence.prototype = {
+                addSub: function (sub) {
+                    this.subs.push(sub);
+                },
+                notify: function () {
+                    this.subs.forEach(function (sub) {
+                        // subs 数组中保存的是每一项都是一个 Watcher 观察者构造函数
+                        sub.update();
+                    });
+                }
+            };
+
+
+            /* 观察者 Watcher (注: 在  compile() 的第二个 if 语句中调用)
+             * vm(Vue),
+             * node(#container 下的 NodeList 中的一个),
+             * val(劫持的文本节点的值),
+             * nodeType(下面 compiler() 传入的 "text")
+             * */
+            function Watcher (vm, node, val, nodeType) {
+
+                // 把 this 赋值给 Dependence.target 对象是什么意思？
+                // 答: 应该是把当前 Watcher 对象赋值给 Dependence 对象的 target 属性。
+
+                // 这里的 target 到底指什么，我真是懵B了一整天,为什么呢? : 在原生 js 中我们都知道，target 代表事件处理程序的
+                // 真正目标即(event.target)，我全局搜索了"js高程"中 target 出现的次数，除了事件对象之外没有别的地方有提及，
+                // 所以我只能认为这里是把当前 Watcher 对象赋值给 Dependence 对象的 target 自定义属性。
+                Dependence.ref = this;
+
+                console.log("Watcher 构造函数中查看此时的 Dependence: ", Dependence);
+
+                this.val = val;
+                this.node = node;
+                this.vm = vm;
+                this.nodeType = nodeType;
+
+                // 构造函数内就调用 update() 方法，给节点赋值
+                this.update();
+
+                // 赋值完成后把自定义的 Dependence.target 设置为 null
+                Dependence.ref = null;
+            }
+            Watcher.prototype = {
+                // 更新节点中的数据
+                update: function () {
+                    // 首先取得 Vue 下 data 属性中的数据
+                    this.get();
+
+                    // 调用过 get 方法后我们输出当前 Watcher 构造函数有没有 get() 方法中
+                    // 添加的 this.value 属性
+                    console.log("this: ", this);
+
+                    // 判断当前节点为 text 走此判断
+                    if (this.nodeType === "text") {
+                        this.node.nodeValue = this.value;
+                    }
+
+                    // 判断当前节点为 input 走此
+                    if (this.nodeType === "input") {
+                        this.node.value = this.value;
+                    }
+                },
+                // 取得数据: 把此时 Vue 对象下 data 对象中的属性值赋值给 get 方法内新添加的 value 属性
+                get: function () {
+                    // Note(1-1): this.vm[this.val] 就是直接调用 Object.defineProperty()
+                    // 下的 get() 方法。注意这里也是 defineProperty 方法第一次被初始化。
+                    // 🔺 this.value 为当前方法内动态给构造函数添加的
+                    // ~~Note(1-2): 注意这有 2 次调用defineProperty()方法, 1st 是节点为 text,~~
+                    this.value = this.vm[this.val];
+                }
+            };
+
+
+            // 节点转换为虚拟 DOM (node = #container, vm = Vue)
+            function nodeToFragment (node, vm) {
+                const flag = document.createDocumentFragment();
+                let child;
+
+                /* NodeList: { 0:text, 1: input#a, 2: text  }
+                 * 0. text: font  1. input#a. 2. text: 为换行符。
+                 * */
+                console.log(container.childNodes);
+
+                /* 此处判断条件为什么是 " node.firstChild 的值赋值给 child " ?
+                 * 答: (js高程-10.1.1) 在 DOM 中每个节点都有一个 childNodes 属性，其中保存着一个 NodeList 对象，
+                 * NodeList 对象会随着 DOM 结构的变化动态更新，如果保存在 NodeList 中的节点为0，再次访问 node.firstChild
+                 * 浏览器会返回一个 null。在 while 语句内部找到当前节点的第一个子节点推入到文档对象模型中，此时浏览器动态把
+                 * 第二个子节点变更为第一个， 这样循环直到 node.firstChild = null 退出循环
+                 * */
+                while(child = node.firstChild){
+
+                    // 传入 child 和 Vue 来解析指令
+                    compile(child, vm);
+
+                    // 将 container 下所有的子节点劫持，放到文档片段中(此处打断点可以清晰的看到过程)
+                    flag.appendChild(child);
+
+                    document.getElementById("save-fragment").innerHTML = flag;
+
+                }
+                return flag;
+            }
+
+
+            // 解析指令: node(#container 下的 NodeList 中的一个), vm(Vue)
+            function compile (node, vm) {
+
+                // . 匹配任何字符， * 前面的项出现0次或多次
+                let reg = /\{\{(.*)\}\}/;
+
+                // 节点类型为元素
+                if (node.nodeType === 1) {
+                    let attr = node.attributes;
+                    // 解析属性
+                    for (let i=0; i < attr.length; i++) {
+                        if (attr[i].nodeName === "v-model") {
+                            // 获取 v-model 绑定的属性名
+                            let name = attr[i].nodeValue;
+                            console.log("name: ", name);   // font
+                            // 再第一次初始化页面的时候，keyup 事件还没有调用
+                            node.addEventListener("keyup", function (e) {
+                                // 把当前 input 中输入的值赋值给 Vue 中已定义的访问器属性(name: font),
+                                // 赋值的过程就是调用 Object.defineProperty() 中的 setter 方法，
+                                // 赋完值之后会立即调用 Dependence 对象的 notify() 方法， notify()
+                                // 方法会遍历 subs 数组中保存的 Watcher 观察者对象，然后 Watcher
+                                // 内再调用 update() 方法
+                                vm[name] = e.target.value;
+                            });
+
+                            // vm[name]这里是再次调用了 Object.defineProperty() 中的 get() 方法，取得值
+                            // 赋值给当前 input 的 value 属性
+                            node.value = vm[name];
+                            node.removeAttribute("v-model");
+                        }
+                    }
+                }
+                // 节点类型为 text
+                if (node.nodeType === 3) {
+                    // 利用正则匹配当前的文本节点
+                    if (reg.test(node.nodeValue)) {
+                        /* RegExp.$1是RegExp的一个属性,指的是与正则表达式匹配的第一个 子匹配(以括号为标志)
+                           字符串，以此类推，RegExp.$2，RegExp.$3，..RegExp.$99总共可以有99个匹配 */
+                        // 获取匹配到的文本节点的值
+                        let val = RegExp.$1;
+                        val = val.trim();
+                        // debugger;
+                        console.log("val: ", val);  // val: text(为 font)
+
+                        // 实例化观察者构造函数 Watch
+                        new Watcher(vm, node, val, "text");
+                    }
+                }
+            }
+
+
+            function Vue (options) {
+                this.data = options.data;
+                let data = this.data;
+
+                // 1.实例化 Vue 后取得 options.data 中的所有属性，this 为 Vue 构造函数本身
+                observe(data, this);    // 第一次执行代码时的输出 data = { font: "Hello world!" }
+
+                // 2.把 #container 下的节点劫持，利用 nodeToFragment 转换为虚拟节点
+                let id = options.el;
+                let dom = nodeToFragment(document.getElementById(id), this);
+                // 最后把完整的虚拟节点 dom 再插入到 #container 下
+                document.getElementById(id).appendChild(dom);
+            }
+
+            const vm = new Vue({
+                el: "container",
+                data: {
+                    font: "Hello word!"
+                }
+            })
+        }
+    </script>
+</body>
+</html>

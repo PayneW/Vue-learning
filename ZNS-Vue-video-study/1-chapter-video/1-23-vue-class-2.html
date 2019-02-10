@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>绑定class json形式</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, use-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+    <style type="text/css">
+        .row {
+            margin-top: 5em;  padding-top: 2em;
+            min-height:10em;
+            background: #fafafa;  border-radius: 6px;
+        }
+        .red    { color:lightcoral; }
+        .strong { font-weight:bold; font-size:16px; letter-spacing:1px; }
+        .blue   { background:lightblue; }
+
+        .allInOne {
+            color:lightcoral; font-weight:bold;
+            font-size:16px; letter-spacing:1px;
+            background:lightBlue;
+        }
+    </style>
+
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../bower_components/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div class="container" id="box">
+        <div class="row" @click="changeBg()">
+            <strong :class="json">给文字添加样式...</strong>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+    window.onload = function () {
+        var vm = new Vue({
+            el:"#box",
+            data: {
+                msg: "测试console",
+                json: {
+                    /*red:    true,
+                    strong: true,
+                    blue:   true*/
+                    allInOne: true
+                }
+            },
+
+            methods: {
+                changeBg: function () {
+
+                    /** 讲解: 正常情况下 methods 对象下的方法是无法直接利用 this 访问到和 methods 同级对象下的"方法/属性"的，
+                     *  按照作用域当前方法(例如 changeBg)中的 this 为父级对象;
+                     *  1.那么 Vue 的对象参数(对象字面量) 中的对象下的方法为什么可以访问到这个对象字面量(this)？
+                     *    答: 这些方法(比如 methods 下的方法) 他们都作为属性加到 this (这个 this 应该是全局对象 window)中
+                     *    去了，
+                     **/
+
+                    this.json.allInOne = !this.json.allInOne;
+                    console.log(this);
+                }
+            }
+        });
+        // console.log( vm );
+    };
+</script>
+</body>
+</html>

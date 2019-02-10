@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue-resource 交互</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, use-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+    <style type="text/css">
+        .row {
+            margin-top: 5em;  padding-top: 2em;
+            min-height:10em;
+            background: #fafafa;  border-radius: 6px;
+        }
+        .bg {
+            background:lightseagreen;
+        }
+    </style>
+
+    <script src="../bower_components/vue/dist/vue.js"></script>
+    <script src="../vue-resource.js"></script>
+
+</head>
+<body>
+    <div class="container" id="box">
+        <div class="row">
+            <form action="" class="form-horizontal">
+               <div class="col-lg-1 col-md-2 text-center">
+                   <label for="" class="control-label">搜索：</label>
+               </div>
+                <div class="col-lg-11 col-md-10">
+                    <input type="text"
+                           class="form-control"
+                           v-model="t1"
+                           @keyup="get($event)"
+                           @keydown.down = "changeDown()"
+                           @keydown.up.prevent = "changeUp()"
+                    >
+                </div>
+                <br><br>
+                <div class="col-lg-11 col-lg-offset-1 col-md-10 col-md-offset-2" style="padding-left:0;">
+                    <ul>
+                        <li v-for="(item, index) in getData" :class="{bg:index==now}" :style="cur" >
+                            {{item}}
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-12 col-md-12 text-center">
+                    <p v-show="getData.length === 0">暂无数据...</p>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        window.onload = function () {
+
+            /** 这里遗留一个问题,如何在li上点击后添加背景并把值写入到input?
+             *   : 等以后对 vue 更熟悉了再回来写
+             * */
+
+
+            var vm = new Vue({
+                el:"#box",
+                data: {
+                    getData: [],
+                    t1: "",
+                    now: -1,
+                    cur: {
+                        cursor:"pointer"
+                    }
+                },
+                methods: {
+                    get:        function (ev) {
+                        if (ev.keyCode === 38 || ev.keyCode === 40){
+                            return;
+                        }
+                        if (ev.keyCode === 13) {
+                            window.open("https://www.baidu.com/s?wd=" + this.t1);
+                            this.t1 = "";
+                        }
+
+                        this.$http.jsonp(
+                            'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',
+                            { wd: this.t1},
+                            {jsonp: "cb"}
+                        ).then (
+                            function (res) { this.getData = res.data.s },
+                            function () {}
+                        )
+                    },
+                    changeDown: function () {
+                        this.now++;
+                        if (this.now === this.getData.length) {
+                            this.now = -1;
+                            this.t1 = this.getData[this.now];
+                        }
+                    },
+                    changeUp:   function () {
+                        this.now--;
+                        if (this.now === -2) {
+                            this.now = this.getData.length -1;
+                            this.t1 = this.getData[this.now];
+                        }
+                    },
+
+                }
+            })
+        };
+    </script>
+</body>
+</html>

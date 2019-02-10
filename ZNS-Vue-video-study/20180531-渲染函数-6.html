@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>20180531-6-render渲染函数</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        .row {
+            margin-top: 5em;
+            border-radius: 6px;
+            padding: .4em;
+            font-size: 14px;
+            background: lightsalmon;
+            min-height: 20em;
+        }
+
+        input:focus,
+        input:active,
+        input:link,
+        input:visited {
+            outline: none;
+        }
+
+        .all-in-one {
+            color: lightcoral;
+            font-weight: bold;
+            font-size: 16px;
+            letter-spacing: 1px;
+            border: 1px solid #ccc;
+            margin: 20px;
+            border-radius: 6px;
+            text-indent: 10px;
+            width: 276px;
+            height: 40px;
+            line-height: 40px;
+        }
+
+        .light-bg {
+            background: lightblue;
+        }
+
+    </style>
+
+    <script src="bower_components/vue/dist/vue.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div id="app">
+
+                <scoped-slot>
+                    <template scope="props">
+                        <p> Parent value </p>
+                        <p> {{ props.text }} </p>
+                    </template>
+                </scoped-slot>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    Vue.component("scoped-slot", {
+        render: function (createElement) {
+            // <div> <slot :text="message"></slot> </div>
+            return createElement("div", [
+                // 还可以从 this.$scopedSlots 中获得能用作函数的作用域插槽，这个函数返回 VNodes
+                this.$scopedSlots.default({
+                    text: this.msg
+                })
+            ])
+        },
+        props: ['text'],
+        data: function () {
+            return {
+                msg: "child Value"
+            }
+        }
+
+    });
+
+
+    new Vue({
+        el: "#app",
+    })
+</script>
+
+</body>
+</html>

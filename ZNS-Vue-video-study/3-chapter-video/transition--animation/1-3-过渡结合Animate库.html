@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue-动画结合Animate.css库</title>
+    <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../../bower_components/animate.css/animate.css">
+    <style type="text/css">
+        .row {
+            margin-top:5em; border-radius:6px;
+            padding:.4em; font-size:14px;
+            background:#ccc; min-height:20em;
+        }
+        .form-group {
+            margin:1em;
+        }
+
+        #transition-box {
+            width:26em; height:8em;
+            border-radius:5px;
+            font-size: 15px;
+            margin-top:2em;
+            margin-left: 10em;
+        }
+
+
+    </style>
+
+    <script src="../../bower_components/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div class="container" id="container">
+       <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+           <form role="form">
+               <div class="form-group">
+                   <input type="button" class="btn btn-info" value="按钮" @click="toggle">
+               </div>
+
+
+               <transition
+                   name="custom-classes-transition"
+                   enter-active-class="animated tada"
+                   leave-active-class="animated bounceOutRight">
+                   <div id="transition-box" v-show="flag">
+                       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris facilisis enim libero, at lacinia diam fermentum id.
+                       Pellentesque habitant morbi tristique senectus et netus.
+                   </div>
+               </transition>
+           </form>
+       </div>
+    </div>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            let vm = new Vue({
+                el: "#container",
+                data: {
+                    flag: "true"
+                },
+                methods: {
+                    // ES6写法
+                    toggle(){
+                        this.flag = !this.flag;
+                    }
+                }
+            })
+        };
+    </script>
+</body>
+</html>

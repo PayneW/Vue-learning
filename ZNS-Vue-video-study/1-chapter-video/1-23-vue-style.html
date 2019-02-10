@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>绑定style</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, use-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+    <style type="text/css">
+        .row {
+            margin-top: 5em;  padding-top: 2em;
+            min-height:10em;
+            background: #fafafa;  border-radius: 6px;
+        }
+        .red    { color:lightcoral; }
+        .strong { font-weight:bold; font-size:16px; letter-spacing:1px; }
+        .blue   { background:lightblue; }
+    </style>
+
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../bower_components/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div class="container" id="box">
+        <div class="row">
+            <strong :style="[c, b, f]">给文字添加样式...</strong>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+    window.onload = function () {
+        var vm = new Vue({
+            el:"#box",
+            data: {
+                c:{color: "#CC665E"},
+                f:{fontSize: "16px", letterSpacing: "1px"},
+                b:{}
+            }
+        })
+    };
+</script>
+</body>
+</html>

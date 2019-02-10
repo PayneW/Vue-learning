@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-html</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, use-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+    <style type="text/css">
+        .row {
+            margin-top: 5em;  padding-top: 2em;
+            min-height:10em; font-size:15px; letter-spacing:1px;
+            background: #fafafa;  border-radius: 6px}
+    </style>
+
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../bower_components/vue/dist/vue.js"></script>
+    <script src="../vue-resource.js"></script>
+</head>
+<body>
+    <div class="container" id="box">
+        <div class="row">
+           <span>{{msg}}</span>
+           <span v-html="msg"></span>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+    window.onload = function () {
+        new Vue({
+            el:"#box",
+            data: {
+                // 对于这样含有标签的字符串，解析方式就是使用 v-html
+                msg: "<strong>welcome</strong>"
+            }
+        })
+    };
+    </script>
+</body>
+</html>

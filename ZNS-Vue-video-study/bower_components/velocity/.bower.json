@@ -1,0 +1,52 @@
+{
+  "name": "velocity",
+  "homepage": "http://velocityjs.org",
+  "authors": [
+    {
+      "name": "Julian Shapiro",
+      "homepage": "http://julian.com/"
+    },
+    {
+      "name": "Ryc O'Chet",
+      "url": "https://github.com/Rycochet"
+    }
+  ],
+  "description": "Accelerated JavaScript animation.",
+  "main": [
+    "./velocity.js",
+    "./velocity.ui.js"
+  ],
+  "keywords": [
+    "animation",
+    "jquery",
+    "animate",
+    "lightweight",
+    "smooth",
+    "ui",
+    "velocity.js",
+    "velocityjs",
+    "javascript"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "*.json",
+    "!/bower.json",
+    "LICENSE",
+    "*.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/julianshapiro/velocity.git"
+  },
+  "version": "2.0.2",
+  "_release": "2.0.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.0.2",
+    "commit": "30ee65ec047b440842ba0e6ae75dd48223547007"
+  },
+  "_source": "https://github.com/julianshapiro/velocity.git",
+  "_target": "^2.0.2",
+  "_originalSource": "velocity",
+  "_direct": true
+}
