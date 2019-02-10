@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RegExp 构造函数属性</title>
+</head>
+<body>
+    <script>
+        // RegExp.$1是RegExp的一个属性,指的是与正则表达式匹配的第一个 子匹配(以括号为标志)字符串，
+        // 以此类推，RegExp.$2，RegExp.$3，..RegExp.$99总共可以有99个匹配
+
+
+        let RegBirth = /^(\d{4})-(\d{1,2})-(\d{1,2})$/; // 简单匹配出生日期
+        let birthday = "1985-10-05";
+        if (RegBirth.test(birthday)) {
+            console.log(RegExp.$1); // 1985
+            console.log(RegExp.$2); // 10
+            console.log(RegExp.$3); // 05
+        }
+
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        const text = "{{ this has been a short summer }}";
+        let reg = /\{\{(.*)\}\}/;
+
+        if (reg.test(text)){
+            console.log(RegExp.$1); // this has been a short summer
+        }
+
+
+    </script>
+</body>
+</html>

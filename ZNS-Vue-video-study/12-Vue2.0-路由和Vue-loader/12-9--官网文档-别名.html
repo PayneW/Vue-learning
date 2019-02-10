@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>12-8--官网文档-别名</title>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        input:focus, input:active, input:link, input:visited {
+            outline: none;
+        }
+
+        .row {
+            margin-top: 5em;
+            border-radius: 6px;
+            padding: .4em;
+            font-size: 16px;
+            background: #e2e2e2;
+            min-height: 20em;
+        }
+
+        .ele {
+            margin: 20px;
+            width: 8rem;
+            height: 8rem;
+            background: lightseagreen;
+            border-radius: 6px;
+        }
+
+        .view {
+            background: #f0ad4e;
+        }
+
+    </style>
+
+
+    <script src="../bower_components/vue/dist/vue.js"></script>
+    <script src="../bower_components/vue-router/dist/vue-router.js"></script>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div id="box">
+                <h1>Hello App!</h1>
+
+            </div>
+        </div>
+    </div>
+
+    <template id="redirectTemplate">
+       <div>
+           <h1>路由别名 Route Alias</h1>
+           <ul>
+               <li>
+                   <router-link to="/foo">
+                       /foo (renders  /home/foo)
+                   </router-link>
+               </li>
+               <li>
+                   <router-link to="/home/bar-alias">
+                       /home/bar-alias (renders  /home/bar)
+                   </router-link>
+               </li>
+               <li>
+                   <router-link to="/baz">
+                       /baz (renders /home/baz)
+                   </router-link>
+               </li>
+               <li>
+                   <router-link to="/home/baz-alias">
+                       /home/baz-alias (renders  /home/baz)
+                   </router-link>
+               </li>
+           </ul>
+
+           <router-view></router-view>
+       </div>
+    </template>
+
+
+    <script type="text/javascript">
+        /** # 重定向和别名:
+         *  ## 别名 : "重定向"的意思是，当用户访问 /a 时，URL 将会被替换成 /b, 然后匹配路由为 /b
+         *  那么"别名"又是什么呢？
+         *     /a 的别名时 /b, 意味着， 当用户访问 /b 时， URL 会保持为 /b, 但是路由匹配为 /a,
+         *  就像用户访问 /a 一样。
+         *  上面对应的路由配置为:
+         *  ```base
+         *      const router = new VueRouter({
+         *          routes: [
+         *              { path: "/a", component: A, alias: "/b" }
+         *          ]
+         *      })
+         *  ```
+         */
+
+        const Home = { template: "<div><h3>Home</h3> <router-view></router-view> </div>" };
+        const Foo = { template: "<div>foo foo </div>" };
+        const Bar = { template: "<div>bar  bar</div>" };
+        const Baz = { template: "<div>baz  baz</div>" };
+
+
+        const router = new VueRouter({
+            mode: "history",
+            routes: [
+                { path: "/home", component: Home,
+                    children: [
+                        // absolute alias
+                        { path: "foo", component: Foo, alias: "/foo" },
+
+                        // relative alias (alias to /home/bar-alias)
+                        { path: "bar", component: Bar, alias: "bar-alias" },
+
+                        // multiple aliases
+                        { path: "baz", component: Baz, alias: ["/baz", "baz-alias"] },
+                    ]
+                }
+            ]
+        });
+
+        new Vue({
+            // 最后把 router 的示例挂载到 Vue 上
+            router: router,
+            template: "#redirectTemplate"
+        }).$mount("#box");
+    </script>
+</body>
+</html>

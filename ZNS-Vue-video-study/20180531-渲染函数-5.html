@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>20180531-5-render渲染函数</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        .row {
+            margin-top: 5em;
+            border-radius: 6px;
+            padding: .4em;
+            font-size: 14px;
+            background: lightsalmon;
+            min-height: 20em;
+        }
+
+        input:focus,
+        input:active,
+        input:link,
+        input:visited {
+            outline: none;
+        }
+
+        .all-in-one {
+            color: lightcoral;
+            font-weight: bold;
+            font-size: 16px;
+            letter-spacing: 1px;
+            border: 1px solid #ccc;
+            margin: 20px;
+            border-radius: 6px;
+            text-indent: 10px;
+            width: 276px;
+            height: 40px;
+            line-height: 40px;
+        }
+
+        .light-bg {
+            background: lightblue;
+        }
+
+    </style>
+
+    <script src="bower_components/vue/dist/vue.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div id="app">
+
+                <p :class="[cla.allInOne, cla.lightBg]"> {{ msg }} </p>
+
+                <el-input
+                        :value="msg"
+                        :class="[cla.allInOne]"
+                        @inputEvent="updateValue">
+                </el-input>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    Vue.component("el-input", {
+        /*props: ["value"],*/
+        render: function (createElement) {
+            let self = this;
+            return createElement("input", {
+                domProps: {
+                    value: self.value
+                },
+                // 事件监听器基于 `on`
+                on: {
+                    inputEvent: function (event) {
+                        self.$emit("input", event.target.value)
+                    },
+                    "keyup": function (event) {
+                        if (event.which === 13) {
+                            alert(event.target.value);
+                        }
+                    }
+                },
+                attrs: {
+                    type: "text",
+                    maxLength: 20
+                }
+            })
+        },
+    });
+
+
+    new Vue({
+        el: "#app",
+        data: {
+            msg: "函数渲染实现 v-model",
+            cla: {
+                allInOne: "all-in-one",
+                lightBg: "light-bg"
+            },
+        },
+        methods: {
+            updateValue: function (val) {
+                this.msg = val;
+            }
+        }
+    })
+</script>
+
+</body>
+</html>

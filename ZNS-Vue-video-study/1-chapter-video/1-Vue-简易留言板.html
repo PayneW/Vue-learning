@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue-简易留言板-1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, use-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+    <style type="text/css">
+        .container-wall {
+            width: 100%;  height: 100vh;
+            background: url("static/img/svg-bg.svg") no-repeat center center;
+            background-size: cover; overflow:hidden;
+        }
+
+        .row {
+            margin-top: 5em;  padding-top: 2em;
+            min-height:10em;
+            background: #fafafa;  border-radius: 6px;
+        }
+        .form-group { margin-bottom: 2em ; }
+        .btn { padding-left:2em; padding-right:2em; }
+    </style>
+
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../bower_components/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div class="container-wall">
+        <div class="container" id="box">
+            <div class="row">
+                <form class="form-horizontal">
+                    <div class="form-group first-form-group">
+                        <label for="username" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3 text-center" >用户名: </label>
+                        <div class="col-lg-10 col-md-8 col-sm-8 col-xs-8">
+                            <input type="text"  class="form-control" placeholder="请输入用户名" v-model="username">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="age" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3 text-center">年  龄: </label>
+                        <div class="col-lg-10 col-md-8 col-sm-8 col-xs-8">
+                            <input type="text" class="form-control" placeholder="请输入年龄" v-model="age">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <p class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center">
+                            <input type="button" value="添加" class="btn btn-primary" @click="add()">
+                        </p>
+                        <p class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center">
+                            <input type="reset" value="重置" class="btn btn-danger">
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!--表格-->
+            <div class="row">
+                <table class="table table-bordered table-hover">
+                    <caption class="h3 text-info text-center">用户信息表</caption>
+                    <tr class="text-danger text-center">
+                        <td>序号</td>
+                        <td>名字</td>
+                        <td>年龄</td>
+                        <td>操作</td>
+                    </tr>
+                    <tr class="text-center" v-for="(item, index) in myData">
+                        <td>{{index+1}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.age}}</td>
+                        <td>
+                            <!-- data-toggle="modal"为bootstrap模态框事件，data-target="#layer"定义模态框， -->
+                            <button class="btn btn-primary btn-sm"  data-toggle="modal" data-target="#layer" @click="nowIndex=$index">删除</button>
+                        </td>
+                    </tr>
+                    <tr v-show="myData.length != 0">
+                        <td colspan="4" class="text-right">
+                            <button class="btn btn-danger btn-sm" @click="nowIndex= -2" data-toggle="modal" data-target="#layer">删除全部</button>
+                        </td>
+                    </tr>
+
+                    <tr v-show="myData.length == 0">
+                        <td colspan="4" class="text-center text-muted">
+                            <p>暂无数据......</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 模态框 弹出框 -->
+            <!-- modal代表模态框，fade/feɪd/vi.逐渐消失  -->
+            <div class="modal fade " role="dialog" id="layer">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">确定删除么？</h4>
+                            <button type="button" class="close" data-dismiss="modal"> <span>x</span> </button>
+                        </div>
+                        <div class="modal-body text-right">
+                            <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
+                            <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="deleteMsg(nowIndex)">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 模态框 弹出框 -->
+        </div>
+    </div>
+
+<script type="text/javascript">
+    window.onload = function () {
+        let vm = new Vue({
+            el:"#box",
+            data: {
+                myData:     [],
+                username:   "",
+                age:        "",
+                nowIndex:   -100
+            },
+            methods: {
+                add: function () {
+                    this.myData.push(
+                        {
+                            name:   this.username,
+                            age:    this.age
+                        }
+                    );
+
+                    this.username = "";
+                    this.age = "";
+                },
+
+                deleteMsg: function (n) {
+                    if (n === -2) {
+                        this.myData = [];
+                    } else {
+                        this.myData.splice(n, 1)
+                    }
+                }
+            }
+
+        })
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue-过渡效果结合-Velocity.js库</title>
+    <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        .row {
+            margin-top:5em; border-radius:6px;
+            padding:.4em; font-size:14px;
+            background:#ccc; min-height:20em;
+        }
+        .form-group {
+            margin:1em;
+        }
+
+        #transition-box {
+            width:26em; height:8em;
+            border-radius:5px;
+            font-size: 15px;
+            margin-top:2em;
+            margin-left: 10em;
+        }
+
+
+    </style>
+
+    <script src="../../bower_components/vue/dist/vue.js"></script>
+    <script src="../../bower_components/velocity/velocity.js"></script>
+</head>
+<body>
+    <div class="container" id="container">
+       <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+           <form role="form">
+               <div class="form-group">
+                   <input type="button" class="btn btn-info" value="按钮" @click="toggle">
+               </div>
+
+
+               <transition
+                    @before-enter="beforeEnter"
+                    @enter="enter"
+                    @leave="leave"
+                    v-bind:css="false">
+                   <div id="transition-box" v-show="flag">
+                       Lorem ipsum
+                   </div>
+               </transition>
+           </form>
+       </div>
+    </div>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            let vm = new Vue({
+                el: "#container",
+                data: {
+                    flag: "true"
+                },
+                methods: {
+                    // ES6写法
+                    toggle(){
+                        this.flag = !this.flag;
+                    },
+
+                    // 过渡效果js钩子函数
+                    beforeEnter(el){
+                        // el 为 transition-box
+                        console.log(el);
+                        el.style.opaicty = 0;
+                        el.style.transformOrigin = "left";
+                    },
+                    enter (el, done) {
+                        Velocity(el, {opacity: 1, fontSize: "1.4em"}, {duration: 200});
+                        Velocity(el, {fontSize: "1em"}, {complete: done});
+                    },
+                    leave (el, done) {
+                        Velocity(el, {translateX: "15px", rotateZ: "50deg"}, {duration: 600});
+                        Velocity(el, {rotateZ: "100deg"}, {loop: 2});
+                        Velocity(el, {rotateZ: "45deg", translateY: "30px", translateX: "30px", opacity: 0}, {complete: done})
+                    }
+                }
+            })
+        };
+    </script>
+</body>
+</html>

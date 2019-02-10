@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>12-6--官网文档-命名视图</title>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        input:focus, input:active, input:link, input:visited {
+            outline: none;
+        }
+
+        .row {
+            margin-top: 5em;
+            border-radius: 6px;
+            padding: .4em;
+            font-size: 16px;
+            background: #e2e2e2;
+            min-height: 20em;
+        }
+
+        .ele {
+            margin: 20px;
+            width: 8rem;
+            height: 8rem;
+            background: lightseagreen;
+            border-radius: 6px;
+        }
+
+        .view {
+            background: #f0ad4e;
+        }
+
+    </style>
+
+
+    <script src="../bower_components/vue/dist/vue.js"></script>
+    <script src="../bower_components/vue-router/dist/vue-router.js"></script>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div id="box">
+                <h1>Hello App!</h1>
+                <ul>
+                    <!-- 使用 router-link 组件来导航 -->
+                    <!-- 通过传入 "to" 属性指定链接 -->
+                    <!-- <router-link> 默认会被渲染城一个 "<a>" 标签 -->
+                   <li><router-link to="/">Default</router-link></li>
+                   <li><router-link to="/other">Other</router-link></li>
+                </ul>
+
+                <p>
+                    <!-- 路由出口: 路由匹配到的组件将渲染在这里 -->
+                    <router-view class="view one"></router-view>
+                    <router-view class="view two" name="a"></router-view>
+                    <router-view class="view three" name="b"></router-view>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript">
+
+        /** # 命名视图
+         *  有时候想同时(同级)展示多个视图，而不是嵌套展示。例如创建一个布局，有 sidebar (侧导航)
+         *  和 main (主内容)两个视图，这个时候命名视图就派上用场了。你可以在界面中拥有多个单独命名
+         *  的视图，而不是只有一个单独的出口。如果 router-view 没有设置名字，那么默认为 default。
+         *
+         *  ```base
+         *      <router-view class="view one"></router-view>
+         *      <router-view class="view two" name="a"></router-view>
+         *      <router-view class="view three" name="b"></router-view>
+         *  ```
+         *
+         *  一个视图使用一个组件渲染，因此对于【同个路由，多个视图】就需要多个组件。确保正确使用 components
+         *  配置 (带上 s):
+         *  ```base
+         *      const router = new VueRouter({
+         *          routers: [
+         *              {
+         *                  path: "/",
+         *                  components: {
+         *                      default: Foo,
+         *                      a: Bar,
+         *                      b: Baz
+         *                  }
+         *              }
+         *          ]
+         *      })
+         *  ```
+         * */
+
+
+        // 组件
+        const Home = { template: "<h3>我是 Home 组件</h3>" };
+        const Foo = { template: "<h3>我是 Foo 组件</h3>" };
+        const Bar = { template: "<h3>This is Bar</h3>" };
+
+        // 配置路由
+        const routes = [
+            {
+                path: "/",
+                components: {
+                    default: Home,
+                }
+            },
+            {
+                path: "/other",
+                components: {
+                    default: Home,
+                    a: Foo,
+                    b: Bar
+                }
+            }
+        ];
+
+        // 创建 router 实例
+        const router = new VueRouter({
+            routes: routes
+        });
+
+
+        new Vue({
+            // 最后把 router 的示例挂载到 Vue 上
+            router: router,
+        }).$mount("#box");
+    </script>
+</body>
+</html>

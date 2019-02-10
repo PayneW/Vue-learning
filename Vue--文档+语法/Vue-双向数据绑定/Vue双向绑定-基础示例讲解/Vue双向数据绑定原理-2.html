@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue双向数据绑定原理</title>
+    <style type="text/css">
+        * {margin:0; padding:0;list-style:none;font-size:14px; border:0; }
+        .container {
+            width:600px; height:400px;
+            background: lightcoral;
+            padding:20px;
+            margin:100px auto;
+        }
+        input[type="text"] {
+            display: block;     height: 40px;
+            line-height: 40px;  width: 200px;
+            text-indent:10px;  margin:10px 0;
+            background: #fff;   border-radius: 6px;
+            letter-spacing: 1px; font-size: 15px;
+        }
+        span#msg {
+            display:block;  border-radius: 6px;
+            line-height: 40px;
+            background:lightBlue; margin:20px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="container">
+    <input type="text" id="a" v-model="text">
+    {{text}}
+</div>
+<script type="text/javascript">
+
+    window.onload = function () {
+
+        /** Vue 中双向数据绑定
+         *  http://www.cnblogs.com/kidney/p/6052935.html
+         */
+
+        /*
+         * subscribe    /səb'skraɪb/     vi. 订阅; 订购
+         * subscriber   /səbˈskraɪbə /   n. 订阅者; 消费; 用户
+         * reactive     /rɪ'æktɪv/       adj. 反应的; 起反应的
+         * dependence   /dɪ'pend(ə)ns/   n. 依赖
+         */
+
+        // 定义观察者
+        // obj 为 new Vue({})中的参数对象
+        function observe (obj, vm) {
+            Object.keys(obj).forEach(function (key) {
+                // 调用响应函数
+                defineReactive(vm, key, obj[key]);
+            })
+        }
+
+        // 定义响应函数
+        function defineReactive (obj, key, val) {
+            // 首先實例化-依賴對象 Dependence
+            const dep = new Dependence();
+            Object.defineProperty(obj, key, {
+                get: function () {
+
+                    // 添加订阅者 Watcher 到对象 Dependence 中
+                    // Dependence.target 是在 Watcher 对象中定义的，把 Watcher 对象赋值给 Dependence 对象的 target 属性
+                    console.log(Dependence.target);
+                    if (Dependence.target) {
+                        dep.addSub(Dependence.target)
+                    }
+                    return val;
+                },
+                set: function (newVal) {
+                    if (newVal === val) return;
+                    val = newVal;
+
+                    // 作为发布者发出通知
+                    dep.notify();
+                }
+            })
+        }
+
+        // 一个主题对象 Dependence
+        function Dependence() {
+            this.subs = [];
+        }
+        Dependence.prototype = {
+            addSub: function (sub) {
+                this.subs.push(sub);
+            },
+            notify: function () {
+                this.subs.forEach(function (sub) {
+                    // 这句代码是什么意思？
+                    // 答: 在 compile 编译函数中，当节点类型为 text 时，每个节点都会实例化一次 Watcher() 订阅者对象，
+                    // 所以也就是说每个 text 节点本身就已经包含了 Watcher 对象的 update 和 get 方法
+                    sub.update();
+                });
+            }
+        };
+
+        // 订阅者 Watcher
+        function Watcher (vm, node, name, nodeType) {
+            Dependence.target = this;
+
+            this.name = name;
+            this.node = node;
+            this.vm = vm;
+            this.nodeType = nodeType;
+            this.update();
+            Dependence.target = null;
+        }
+        Watcher.prototype = {
+            // 更新 text 节点中的数据
+            update: function () {
+                // 首先取得数据
+                this.get();
+
+                // 判断当前节点为 text
+                if (this.nodeType === "text") {
+                    this.node.nodeValue = this.value;
+                }
+
+                // 判断当前节点为 input
+                if (this.nodeType === "input") {
+                    this.node.value = this.value;
+                }
+            },
+            // 取得数据: 把此时 Vue 对象下 data 对象中的属性值赋值给当前 Watcher 对象的 value 属性
+            get: function () {
+                // 触发相应属性的 get
+                this.value = this.vm[this.name];
+            }
+        };
+
+
+        // 节点转换为虚拟 DOM
+        function nodeToFragment (node, vm) {
+            const flag = document.createDocumentFragment();
+            let child;
+            while(child = node.firstChild){
+                compile(child, vm);
+                flag.appendChild(child);
+            }
+            return flag;
+        }
+
+
+        // 数据绑定(编译)
+        function compile (node, vm) {
+
+            // . 匹配任何字符， * 前面的项出现0次或多次
+            let reg = /\{\{(.*)\}\}/;
+
+            // 节点类型为元素
+            if (node.nodeType === 1) {
+                let attr = node.attributes;
+                // 解析属性
+                for (let i=0; i < attr.length; i++) {
+                    if (attr[i].nodeName === "v-model") {
+                        // 获取 v-model 绑定的属性名
+                        let name = attr[i].nodeValue;
+                        node.addEventListener("input", function (e) {
+                            // 给相应的 data 属性赋值，进而触发该属性的 set 方法
+                            vm[name] = e.target.value;
+                        });
+                        // 将 data 的值赋给该 node
+                        node.value = vm[name];
+                        node.removeAttribute("v-model");
+                    }
+                }
+            }
+            // 节点类型为 text
+            if (node.nodeType === 3) {
+                if (reg.test(node.nodeValue)) {
+                    // 获取匹配到的字符串
+                    let name = RegExp.$1;
+                    name = name.trim();
+                    new Watcher(vm, node, name, "text");
+                }
+            }
+        }
+
+
+        function Vue (options) {
+            this.data = options.data;
+            let data = this.data;
+
+            // 调用观察者
+            observe(data, this);
+
+            let id = options.el;
+            let dom = nodeToFragment(document.getElementById(id), this);
+            // 编译完成后，将 dom 返回到 容器中
+            document.getElementById(id).appendChild(dom);
+        }
+
+        const vm = new Vue({
+            el: "container",
+            data: {
+                text: "Hello word!"
+            }
+        })
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS原生双向数据绑定</title>
+    <style type="text/css">
+        * {margin:0; padding:0;list-style:none;font-size:14px; border:0; }
+        .container {
+            width:600px; height:400px;
+            background: lightcoral;
+            padding:20px;
+            margin:100px auto;
+        }
+        input[type="text"] {
+            display: block;     height: 40px;
+            line-height: 40px;  width: 200px;
+            text-indent:10px;
+            background: #fff;   border-radius: 6px;
+            letter-spacing: 1px; font-size: 15px;
+        }
+        span#msg {
+            display:block;  border-radius: 6px;
+            line-height: 40px;
+            background:lightBlue; margin:20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="container">
+        <input type="text" id="theInput">
+        <span id="msg"></span>
+
+
+    </div>
+    <script type="text/javascript">
+
+        // 示例二: 🔺 访问器属性是对象中的一种特殊属性，它不能直接再对象中设置，而必须通过
+        // Object.defineProperty()方法单独定义。
+        let obj = {};
+        Object.defineProperty(obj, "hello", {
+            get: function() {
+                console.log("get 方法被调用了");
+            },
+            set: function(val) {
+                console.log("set 方法被调用了，参数是: " + val)
+            }
+        });
+        obj.hello;  // get 方法被调用了
+        obj.hello = "AAA";  // set 方法被调用了，参数是: AAA
+
+        // --------------------------------------------
+
+
+
+
+        window.onload = function () {
+            const container = document.getElementById("container");
+            const theInput = document.getElementById("theInput");
+            const msg = document.getElementById("msg");
+
+            // 0: text 为换行空格。 1. input#theInput. 2. text 为input表单换行后的空格。 3. span#msg.  4. text: 位span#msg换行后的空格
+            // console.log(container.childNodes);      // NodeList: { 0:text, 1:input#theInput, 2:text, 3:span#msg, 4:text  }
+            // console.log(container.childNodes[0].nodeType);      // 3 : Node.TEXT_NODE (3)
+            // console.log(container.childNodes[1].nodeName);
+            // console.log(container.childNodes[1].getAttribute("id"));
+
+
+            // 最简易的双向数据绑定
+            const obj = {};
+            Object.defineProperty(obj, "hello", {
+                set: function (newVal) {
+                    theInput.value = newVal;
+                    msg.innerHTML = newVal;
+                }
+            });
+            document.addEventListener("keyup", function (e) {
+                obj.hello = e.target.value;
+            }, false)
+
+
+           /* // 利用文档片段(document.createDocumentFragment())处理DOM,最终一次性的添加元素
+            function nodeToFragment (node) {
+                const flag = document.createDocumentFragment();
+                let child;
+                // 如果node.firstChild 存在，就把node.firstChild 赋值给 child 变量
+                while(child = node.firstChild){
+                    // 劫持 node 的所有子节点
+                    flag.appendChild(child);
+                    console.log(child);
+                }
+                return flag;
+            }
+            const dom = nodeToFragment(container);
+            container.appendChild(dom);*/
+
+        }
+    </script>
+</body>
+</html>

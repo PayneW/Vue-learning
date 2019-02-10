@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Vue 指令 v-bind 示例解析</title>
+    <link type="text/css" href="../../src/reset.css">
+    <script src="../../src/vue.js"></script>
+    <style type="text/css">
+        .classA {  color: red;  }
+        .classB {  color: grey;  }
+        .classC {  font-size: 14px;  }
+        .classD {  color: coral;  }
+        .classE {  font-size: 30px;  }
+        .classF {  font-weight: 600;  }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h4> 1.绑定一个属性 </h4>
+
+        <!--<img id="app-1" v-bind:src="imageSrc" alt="">-->
+        <!--缩写-->
+        <img id="app-1" :src="imageSrc" alt="">
+        <script type="text/javascript">
+            new Vue({
+                el: "#app-1",
+                data: {
+                    imageSrc: "/images/image.png"
+                }
+            })
+        </script>
+    </div>
+    <br><br>
+
+
+    <div>
+        <h4> 2. 内联字符串拼接 </h4>
+        <img id="app-2" :src=" 'images/' + fileName " alt="">
+        <script>
+            new Vue({
+                el: "#app-2",
+                data: {
+                    fileName: "image.png"
+                }
+            })
+        </script>
+    </div>
+    <br><br>
+
+
+    <div>
+        <h4> 3. class绑定 </h4>
+        <div id="app-3">
+            <h6 :class="myClass"> class绑定示例1 </h6>
+        </div>
+
+        <script type="text/javascript">
+            new Vue({
+                el: "#app-3",
+                data: {
+                    myClass: {
+                        classA: true,
+                        classC: true
+                    }
+                }
+            })
+        </script>
+    </div>
+    <br><br>
+
+
+    <div>
+       <!-- <h4> 4.绑定一个有属性的对象 </h4>
+        <div id="app-4">
+            <p :="{id: ID, attr: attr, other-attr: otherAttr}">绑定一个有属性的对象</p>
+        </div>
+        <script type="text/javascript">
+            new Vue({
+                el: "#app-4",
+                data:{
+                    ID: "myId",
+                    attr: "myAttr",
+                    otherAttr: "myOtherAttr"
+                }
+            })
+        </script>-->
+    </div>
+    <br> <br>
+
+
+    <div>
+        <h4> 5. 通过 prop 修饰符绑定 DOM 属性 </h4>
+        <p id="app-5" :text-content.prop="text"></p>
+        <script type="text/javascript">
+            new Vue({
+                el: "#app-5",
+                data: {
+                    text: "这里是通过prop绑定的"
+                }
+            })
+        </script>
+    </div>
+    <br><br>
+
+
+
+    <div>
+        <h4> 6. 在模板标签中利用 v-bind:message="boy" 绑定属性，必须在component()方法中声明 props</h4>
+        <div id="app-6">
+            <child :message="boy"></child>
+        </div>
+        <script>
+            Vue.component("child", {
+                props: ["message"],
+                template: "<span> My name is {{ message.name }}, my age is {{ message.age }} </span>"
+            });
+            new Vue({
+                el: "#app-6",
+                data: {
+                    boy: {
+                        name: "Tom",
+                        age: "36"
+                    }
+                }
+            })
+        </script>
+    </div>
+
+    <div>
+        <h4> 7. 通过 $props 将父组件的 props 一起传递给子组件 </h4>
+        <div id="app-7">
+            <father-component :prop="something"></father-component>
+        </div>
+        <!--<script type="text/javascript">
+            Vue.component("father-component", {
+                template: "<child-component v-bind="$props" ></child-component>"
+            });
+            Vue.component("child-component", {
+                template: "<h1>自定义组件！</h1>"
+            });
+
+            new Vue({
+                el: "#app-7",
+                data: {
+                    something : "someBind"
+                }
+            })
+        </script>-->
+    </div>
+
+</body>
+
+</html>
+
+
+
+
+
+<!--
+<script type="text/javascript">
+    var curObj = {
+        title: ["售价", '日租金', '月租金', '转让费'],
+        val:   [ ['不限', '20万以下','20万以下'], ['12', '13'], ['12', '13'], ['12', '13'] ]
+    };
+
+    var i = 0;
+    var titArr = curObj.title;
+    for(; i <titArr.length; i++){
+        // 这里就可以点击在做判断了
+    }
+
+</script>-->

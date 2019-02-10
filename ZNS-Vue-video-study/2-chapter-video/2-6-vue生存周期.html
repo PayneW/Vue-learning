@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-html</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+    <style type="text/css">
+        .row {
+            margin-top: 5em;  padding-top: 2em;
+            min-height:10em; font-size:15px; letter-spacing:1px;
+            background: #fafafa;  border-radius: 6px}
+    </style>
+
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../bower_components/vue/dist/vue.js"></script>
+    <script src="../vue-resource.js"></script>
+</head>
+<body>
+    <div class="container" id="box">
+        <div class="row">
+           <span>{{msg}}</span>
+            <br>
+            <br>
+            <input type="button" class="btn" @click="change" value="更新数据">
+            <br>
+            <br>
+            <input type="button" class="btn bg-danger" @click="destroy" value="销毁实例">
+        </div>
+    </div>
+
+    <script type="text/javascript">
+    window.onload = function () {
+        let vm = new Vue({
+            el:"#box",
+            data: {
+                // 对于这样含有标签的字符串，解析方式就是使用 v-html
+                msg: "Welcome to Vue.js"
+            },
+
+            methods: {
+                change () {
+                    this.msg = "组件更新完毕，查看console.log中的组件更新提示"
+                },
+                destroy () {
+                    this.$destroy();
+                }
+            },
+
+            /*created: function () {
+                alert("实例创建之前");
+            },
+            // 2.0 这里有变化，beforeCompile, compiled, ready 并没有执行
+            beforeCompile: function () {
+                alert("编译之前");
+            },
+            compiled: function () {
+                alert("编译之后");
+            },
+            ready: function () {
+                alert("插入到文档中");
+            },
+            beforeDestroy: function () {
+                alert("销毁之前");
+            },
+            destroyed: function () {
+                alert("销毁之后");
+            }*/
+
+            beforeCreate () {
+                console.log( "组件实例刚刚被创建,属性方法都没有" );
+                console.log( this );
+            },
+            created () {
+                console.log( "实例已经创建完成, 属性已经绑定" );
+            },
+            beforeMount () {
+                console.log( "模板编译之前" );
+            },
+            mounted () {  // 代替1.0的 compiled 和 ready
+                console.log( "模板编译之后" );
+            },
+            beforeUpdate () {
+                console.log( "组件更新之前" );
+            },
+            updated () {
+                console.log( "组件更新之后" );
+            },
+            beforeDestroy () {
+                console.log( "组件销毁之前" );
+            },
+            destroyed () {
+                console.log( "组件销毁之后" );
+                console.log( this );
+            }
+
+        });
+
+
+    };
+    </script>
+</body>
+</html>

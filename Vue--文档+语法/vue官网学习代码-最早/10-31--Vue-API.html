@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue-API--讲解</title>
+    <link type="text/css" href="../../src/reset.css">
+    <style type="text/css">
+        .container{width:20rem; height:10rem; margin:5rem; background:#00AA88;}
+    </style>
+    <script type="text/javascript" src="../../src/vue.js"></script>
+</head>
+<body>
+    <div class="container"></div>
+
+    <script type="text/javascript">
+        /**
+         * 1. data:
+         *    (1)在Vue实例对象中 data是对象。【推荐在创建实例之前，就声明所有的根级响应式属性 】
+         *    (2)在Vue.component("", {})组件中定义的data只能是function 【 讲解见: Vue.component中data函数讲解.js 】
+         *   实例创建之后可以通过 vm.$data访问原始数据对象。
+         *
+         *   示例: 下
+         */
+        var data = { a: 1 };
+        var vm = new Vue({
+            data: data
+        });
+        console.log(vm.a);              // 1
+        console.log(vm.$data === data); // true
+
+        // Vue.extend()中data必须是函数
+        var Component = Vue.extend({
+            data: function(){
+                return { a:1 }
+            }
+        })
+    </script>
+</body>
+</html>

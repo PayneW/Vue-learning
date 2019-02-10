@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2-Vue2.0过渡动画</title>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        input:focus, input:active, input:link, input:visited {
+            outline: none;
+        }
+
+        .row {
+            margin-top: 5em;
+            border-radius: 6px;
+            padding: .4em;
+            font-size: 16px;
+            background: #e2e2e2;
+            min-height: 20em;
+        }
+
+        .ele {
+            margin: 20px;
+            width: 8rem;
+            height: 8rem;
+            background: lightseagreen;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .fade-enter-active, .fade-leave-active {
+            transition: height .5s, opacity .5s;
+        }
+
+        .fade-enter, .fade-leave-to {
+            height: 0;
+            opacity: 0;
+        }
+
+
+    </style>
+
+
+    <script src="../bower_components/vue/dist/vue.js"></script>
+</head>
+<body>
+<div class="container" id="container">
+    <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div id="box">
+            <button class="btn btn-primary" @mouseenter="show = !show" @mouseleave="show = !show">
+                显示隐藏
+            </button>
+
+            <transition name="fade">
+                <p class="ele" v-if="show"> hello </p>
+            </transition>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    window.onload = function () {
+        new Vue({
+            el: "#box",
+            data: {
+                show: true
+            },
+        })
+    };
+</script>
+</body>
+</html>

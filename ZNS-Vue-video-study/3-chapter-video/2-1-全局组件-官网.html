@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2-1-全局组建</title>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+
+    <style type="text/css">
+        .row {
+            margin-top:5em; border-radius:6px;
+            padding:.4em; font-size:14px;
+            background:lightsalmon; min-height:20em;
+        }
+
+    </style>
+
+    <script src="../bower_components/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div id="box">
+                    <my-component></my-component>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        Vue.component("my-component", {
+            template: "<div>A custom component!</div>"
+        });
+
+        new Vue({
+            el: "#box",
+        })
+    </script>
+</body>
+</html>

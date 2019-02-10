@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue.js study</title>
+    <link type="text/css" href="../../src/reset.css">
+    <style type="text/css">
+        .container{width:20rem; height:10rem; margin:5rem; background:#00AA88;}
+    </style>
+    <script type="text/javascript" src="../../src/vue.js"></script>
+</head>
+<body>
+
+    <!--demo1~~start-->
+    <div class="container">
+        <ul id="my-ul">
+            <li v-for="(item, index) in list"  :addItemIndex=" index +1 ">{{ item.curItem }}</li>
+        </ul>
+    </div>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: "#my-ul",
+            data: {
+                list: [
+                    {curItem: "我是第1项"},
+                    {curItem: "我是第2项"},
+                    {curItem: "我是第3项"}
+                ],
+            }
+        })
+    </script>
+
+    <script type="text/javascript">
+       /* var colors = ["red","green","blue"];
+        colors.forEach(function(item, index-css){
+            console.log(item);
+            console.log(index-css);
+        })*/
+
+    </script>
+
+</body>
+</html>
