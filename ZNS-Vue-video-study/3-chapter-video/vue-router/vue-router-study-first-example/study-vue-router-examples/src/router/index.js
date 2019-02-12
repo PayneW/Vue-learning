@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from '@/components/Home';
-import News from '@/components/News';
+import Home from '@/todo-components/Home';
+import News from '@/todo-components/News';
 
 Vue.use(Router);
 
