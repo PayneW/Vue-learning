@@ -13,7 +13,7 @@ export default {
     data.routerView = true
 
     // directly use parent context's createElement() function
-    // so that components rendered by router-view can resolve named slots
+    // so that todo-components rendered by router-view can resolve named slots
     const h = parent.$createElement
     const name = props.name
     const route = parent.$route

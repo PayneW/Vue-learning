@@ -201,7 +201,7 @@ export function mountComponent (
   hydrating = false
 
   // manually mounted instance, call mounted on self
-  // mounted is called for render-created child components in its inserted hook
+  // mounted is called for render-created child todo-components in its inserted hook
   if (vm.$vnode == null) {
     vm._isMounted = true
     callHook(vm, 'mounted')

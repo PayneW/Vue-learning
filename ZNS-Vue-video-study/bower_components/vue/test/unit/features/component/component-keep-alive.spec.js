@@ -633,7 +633,7 @@ describe('Component keep-alive', () => {
     }).then(done)
   })
 
-  it('should cache anonymous components if include is not specified', done => {
+  it('should cache anonymous todo-components if include is not specified', done => {
     const Foo = {
       template: `<div>foo</div>`,
       created: jasmine.createSpy('foo')
@@ -979,7 +979,7 @@ describe('Component keep-alive', () => {
       }).then(done)
     })
 
-    it('dynamic components, in-out with early cancel', done => {
+    it('dynamic todo-components, in-out with early cancel', done => {
       let next
       const vm = new Vue({
         template: `<div>
@@ -1099,7 +1099,7 @@ describe('Component keep-alive', () => {
       }).then(done)
     })
 
-    it('async components with transition-mode out-in', done => {
+    it('async todo-components with transition-mode out-in', done => {
       const barResolve = jasmine.createSpy('bar resolved')
       let next
       const foo = (resolve) => {

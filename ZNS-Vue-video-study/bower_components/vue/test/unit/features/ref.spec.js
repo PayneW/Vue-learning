@@ -121,7 +121,7 @@ describe('ref', () => {
     }
   })
 
-  it('should register as Array when used with v-for (components)', done => {
+  it('should register as Array when used with v-for (todo-components)', done => {
     const vm = new Vue({
       data: {
         items: [1, 2, 3]

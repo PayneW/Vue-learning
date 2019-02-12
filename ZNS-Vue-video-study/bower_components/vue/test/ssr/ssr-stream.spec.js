@@ -79,7 +79,7 @@ describe('SSR: renderToStream', () => {
     stream.on('data', _ => _)
   })
 
-  it('should not mingle two components', done => {
+  it('should not mingle two todo-components', done => {
     const padding = (new Array(20000)).join('x')
     const component1 = new Vue({
       template: `<div>${padding}<div></div></div>`,

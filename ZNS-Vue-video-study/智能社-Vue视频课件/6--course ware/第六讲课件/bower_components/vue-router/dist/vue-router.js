@@ -1267,7 +1267,7 @@ History.prototype.confirmTransition = function confirmTransition (route, cb) {
     this.router.beforeHooks,
     // enter guards
     activated.map(function (m) { return m.beforeEnter; }),
-    // async components
+    // async todo-components
     resolveAsyncComponents(activated)
   )
 
@@ -1293,7 +1293,7 @@ History.prototype.confirmTransition = function confirmTransition (route, cb) {
     var enterGuards = extractEnterGuards(activated, postEnterCbs, function () {
       return this$1.current === route
     })
-    // wait until async components are resolved before
+    // wait until async todo-components are resolved before
     // extracting in-component enter guards
     runQueue(enterGuards, iterator, function () {
       if (this$1.pending === route) {

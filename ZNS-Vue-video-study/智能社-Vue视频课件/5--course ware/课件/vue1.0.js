@@ -1557,7 +1557,7 @@ var transition = Object.freeze({
           if (expectedTag) {
             warn('Unknown custom element: <' + tag + '> - ' + 'did you mean <' + expectedTag + '>? ' + 'HTML is case-insensitive, remember to use kebab-case in templates.');
           } else if (isUnknownElement(el, tag)) {
-            warn('Unknown custom element: <' + tag + '> - did you ' + 'register the component correctly? For recursive components, ' + 'make sure to provide the "name" option.');
+            warn('Unknown custom element: <' + tag + '> - did you ' + 'register the component correctly? For recursive todo-components, ' + 'make sure to provide the "name" option.');
           }
         }
       }
@@ -3691,7 +3691,7 @@ var template = Object.freeze({
   }
 
   /**
-   * Call attach/detach for all components contained within
+   * Call attach/detach for all todo-components contained within
    * this fragment. Also do so recursively for all child
    * fragments.
    *
@@ -3861,7 +3861,7 @@ var template = Object.freeze({
       template.appendChild(el);
     }
     this.template = template;
-    // linker can be cached, but only for components
+    // linker can be cached, but only for todo-components
     var linker;
     var cid = vm.constructor.cid;
     if (cid > 0) {
@@ -5571,7 +5571,7 @@ var template = Object.freeze({
     },
 
     /**
-     * Switch dynamic components. May resolve the component
+     * Switch dynamic todo-components. May resolve the component
      * asynchronously, and perform transition based on
      * specified transition mode. Accepts a few additional
      * arguments specifically for vue-router.
@@ -5704,7 +5704,7 @@ var template = Object.freeze({
           _scope: this._scope,
           // pass in the owner fragment of this component.
           // this is necessary so that the fragment can keep
-          // track of its contained components in order to
+          // track of its contained todo-components in order to
           // call attach/detach hooks for them.
           _frag: this._frag
         };
@@ -5796,7 +5796,7 @@ var template = Object.freeze({
     },
 
     /**
-     * Actually swap the components, depending on the
+     * Actually swap the todo-components, depending on the
      * transition mode. Defaults to simultaneous.
      *
      * @param {Vue} target
@@ -6896,7 +6896,7 @@ var template = Object.freeze({
     // only need to compile other attributes for
     // non-fragment instances
     if (el.nodeType !== 11) {
-      // for components, container and replacer need to be
+      // for todo-components, container and replacer need to be
       // compiled separately and linked in different scopes.
       if (options._asComponent) {
         // 2. container attributes
@@ -6925,7 +6925,7 @@ var template = Object.freeze({
       });
       if (names.length) {
         var plural = names.length > 1;
-        warn('Attribute' + (plural ? 's ' : ' ') + names.join(', ') + (plural ? ' are' : ' is') + ' ignored on component ' + '<' + options.el.tagName.toLowerCase() + '> because ' + 'the component is a fragment instance: ' + 'http://vuejs.org/guide/components.html#Fragment_Instance');
+        warn('Attribute' + (plural ? 's ' : ' ') + names.join(', ') + (plural ? ' are' : ' is') + ' ignored on component ' + '<' + options.el.tagName.toLowerCase() + '> because ' + 'the component is a fragment instance: ' + 'http://vuejs.org/guide/todo-components.html#Fragment_Instance');
       }
     }
 
@@ -7904,7 +7904,7 @@ var template = Object.freeze({
     /**
      * Setup instance methods. Methods must be bound to the
      * instance since they might be passed down as a prop to
-     * child components.
+     * child todo-components.
      */
 
     Vue.prototype._initMethods = function () {
@@ -8626,7 +8626,7 @@ var template = Object.freeze({
       // instances. preserve reference to _data so that proxy
       // accessors still work. The only potential side effect
       // here is that mutating the instance after it's destroyed
-      // may affect the state of other components that are still
+      // may affect the state of other todo-components that are still
       // observing the same object, but that seems to be a
       // reasonable responsibility for the user rather than
       // always throwing an error on them.

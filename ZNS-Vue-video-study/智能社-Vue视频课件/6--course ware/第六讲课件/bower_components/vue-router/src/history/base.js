@@ -59,7 +59,7 @@ export class History {
       this.router.beforeHooks,
       // enter guards
       activated.map(m => m.beforeEnter),
-      // async components
+      // async todo-components
       resolveAsyncComponents(activated)
     )
 
@@ -85,7 +85,7 @@ export class History {
       const enterGuards = extractEnterGuards(activated, postEnterCbs, () => {
         return this.current === route
       })
-      // wait until async components are resolved before
+      // wait until async todo-components are resolved before
       // extracting in-component enter guards
       runQueue(enterGuards, iterator, () => {
         if (this.pending === route) {

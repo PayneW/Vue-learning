@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 describe('Options name', () => {
-  it('should contain itself in self components', () => {
+  it('should contain itself in self todo-components', () => {
     const vm = Vue.extend({
       name: 'SuperVue'
     })

@@ -3,10 +3,10 @@ import VueRouter from 'vue-router'
 
 // 1. Use plugin.
 // This installs <router-view> and <router-link>,
-// and injects $router and $route to all router-enabled child components
+// and injects $router and $route to all router-enabled child todo-components
 Vue.use(VueRouter)
 
-// 2. Define route components
+// 2. Define route todo-components
 const Home = { template: '<div>home</div>' }
 const Foo = { template: '<div>foo</div>' }
 const Bar = { template: '<div>bar</div>' }
@@ -24,7 +24,7 @@ const router = new VueRouter({
 
 // 4. Create and mount root instance.
 // Make sure to inject the router.
-// Route components will be rendered inside <router-view>.
+// Route todo-components will be rendered inside <router-view>.
 new Vue({
   router,
   template: `

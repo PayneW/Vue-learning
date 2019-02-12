@@ -7,7 +7,7 @@
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/Footer.vue'
+import HelloWorld from '@/todo-components/Footer.vue'
 
 export default {
   name: 'home',

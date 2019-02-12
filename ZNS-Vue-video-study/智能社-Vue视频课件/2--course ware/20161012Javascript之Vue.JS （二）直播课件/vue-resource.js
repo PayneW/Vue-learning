@@ -322,7 +322,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	/**
-	 * Parse a URL and return its components.
+	 * Parse a URL and return its todo-components.
 	 *
 	 * @param {String} url
 	 */

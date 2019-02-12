@@ -376,7 +376,7 @@ describe('vdom patch: edge cases', () => {
   })
 
   // #7805
-  it('should not cause duplicate init when components share data object', () => {
+  it('should not cause duplicate init when todo-components share data object', () => {
     const Base = {
       render (h) {
         return h('div', this.$options.name)

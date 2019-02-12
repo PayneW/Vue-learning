@@ -45,7 +45,7 @@ const componentVNodeHooks = {
       !vnode.componentInstance._isDestroyed &&
       vnode.data.keepAlive
     ) {
-      // kept-alive components, treat as a patch
+      // kept-alive todo-components, treat as a patch
       const mountedNode: any = vnode // work around flow
       componentVNodeHooks.prepatch(mountedNode, mountedNode)
     } else {
@@ -80,7 +80,7 @@ const componentVNodeHooks = {
     if (vnode.data.keepAlive) {
       if (context._isMounted) {
         // vue-router#1212
-        // During updates, a kept-alive component's child components may
+        // During updates, a kept-alive component's child todo-components may
         // change, so directly walking the tree here may call activated hooks
         // on incorrect children. Instead we push them into a queue which will
         // be processed after the whole patch process ended.
@@ -178,7 +178,7 @@ export function createComponent (
   data.on = data.nativeOn
 
   if (isTrue(Ctor.options.abstract)) {
-    // abstract components do not keep anything
+    // abstract todo-components do not keep anything
     // other than props & listeners & slot
 
     // work around flow

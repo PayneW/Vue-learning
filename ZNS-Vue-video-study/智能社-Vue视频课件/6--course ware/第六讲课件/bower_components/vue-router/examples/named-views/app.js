@@ -12,7 +12,7 @@ const router = new VueRouter({
   base: __dirname,
   routes: [
     { path: '/',
-      // a single route can define multiple named components
+      // a single route can define multiple named todo-components
       // which will be rendered into <router-view>s with corresponding names.
       components: {
         default: Foo,

@@ -99,7 +99,7 @@ export default {
 
       const { cache, keys } = this
       const key: ?string = vnode.key == null
-        // same constructor may get registered as different local components
+        // same constructor may get registered as different local todo-components
         // so cid alone is not enough (#3269)
         ? componentOptions.Ctor.cid + (componentOptions.tag ? `::${componentOptions.tag}` : '')
         : vnode.key

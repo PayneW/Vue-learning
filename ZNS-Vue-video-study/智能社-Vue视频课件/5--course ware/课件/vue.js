@@ -1696,7 +1696,7 @@ function lifecycleMixin (Vue) {
     }, noop);
     hydrating = false;
     // manually mounted instance, call mounted on self
-    // mounted is called for render-created child components in its inserted hook
+    // mounted is called for render-created child todo-components in its inserted hook
     if (vm.$vnode == null) {
       vm._isMounted = true;
       callHook(vm, 'mounted');
@@ -1895,7 +1895,7 @@ function createComponent (
   data.on = data.nativeOn;
 
   if (Ctor.options.abstract) {
-    // abstract components do not keep anything
+    // abstract todo-components do not keep anything
     // other than props & listeners
     data = {};
   }
@@ -1929,7 +1929,7 @@ function createFunctionalComponent (
   }
   var vnode = Ctor.options.render.call(
     null,
-    // ensure the createElement function in functional components
+    // ensure the createElement function in functional todo-components
     // gets a unique context - this is necessary for correct named slot check
     bind$1(createElement, { _self: Object.create(context) }),
     {
@@ -3314,7 +3314,7 @@ var KeepAlive = {
     if (vnode && vnode.componentOptions) {
       var opts = vnode.componentOptions;
       var key = vnode.key == null
-        // same constructor may get registered as different local components
+        // same constructor may get registered as different local todo-components
         // so cid alone is not enough (#3269)
         ? opts.Ctor.cid + '::' + opts.tag
         : vnode.key;
@@ -3843,7 +3843,7 @@ function createPatchFunction (backend) {
         ) {
           warn(
             'Unknown custom element: <' + tag + '> - did you ' +
-            'register the component correctly? For recursive components, ' +
+            'register the component correctly? For recursive todo-components, ' +
             'make sure to provide the "name" option.',
             vnode.context
           );
@@ -5353,7 +5353,7 @@ var Transition = {
     }
 
     // apply transition data to child
-    // use getRealChild() to ignore abstract components e.g. keep-alive
+    // use getRealChild() to ignore abstract todo-components e.g. keep-alive
     var child = getRealChild(rawChild);
     /* istanbul ignore if */
     if (!child) {
@@ -5576,7 +5576,7 @@ Vue$3.config.isReservedTag = isReservedTag;
 Vue$3.config.getTagNamespace = getTagNamespace;
 Vue$3.config.mustUseProp = mustUseProp;
 
-// install platform runtime directives & components
+// install platform runtime directives & todo-components
 extend(Vue$3.options.directives, platformDirectives);
 extend(Vue$3.options.components, platformComponents);
 
@@ -6896,7 +6896,7 @@ function genData (el) {
   if (el.refInFor) {
     data += "refInFor:true,";
   }
-  // record original tag name for components using "is" attribute
+  // record original tag name for todo-components using "is" attribute
   if (el.component) {
     data += "tag:\"" + (el.tag) + "\",";
   }
@@ -6929,7 +6929,7 @@ function genData (el) {
     if ("development" !== 'production' && (
       el.children.length > 1 || ast.type !== 1
     )) {
-      warn$2('Inline-template components must have exactly one child element.');
+      warn$2('Inline-template todo-components must have exactly one child element.');
     }
     if (ast.type === 1) {
       var inlineRenderFns = generate(ast, currentOptions);

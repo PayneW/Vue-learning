@@ -257,7 +257,7 @@ describe('Directive v-bind:style', () => {
     expect(vm.$children[0].$refs.nested.$el.style.color).toBe('blue')
   })
 
-  it('should merge between nested components', (done) => {
+  it('should merge between nested todo-components', (done) => {
     const vm = new Vue({
       template: '<child :style="test"></child>',
       data: {

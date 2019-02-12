@@ -37,7 +37,7 @@ describe('Global API: extend', () => {
     expect('Invalid component name: "Some App"').toHaveBeenWarned()
   })
 
-  it('should work when used as components', () => {
+  it('should work when used as todo-components', () => {
     const foo = Vue.extend({
       template: '<span>foo</span>'
     })

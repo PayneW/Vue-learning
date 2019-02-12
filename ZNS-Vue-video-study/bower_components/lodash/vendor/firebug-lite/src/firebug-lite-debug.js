@@ -10488,7 +10488,7 @@ append(ChromeBase,
 
         // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
         // Remove the interface elements cache (this must happen after calling
-        // the shutdown method of all dependent components to avoid errors)
+        // the shutdown method of all dependent todo-components to avoid errors)
 
         fbTop = null;
         fbContent = null;

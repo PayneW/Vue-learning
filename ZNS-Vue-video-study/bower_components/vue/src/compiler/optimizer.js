@@ -39,7 +39,7 @@ function markStatic (node: ASTNode) {
   node.static = isStatic(node)
   if (node.type === 1) {
     // do not make component slot content static. this avoids
-    // 1. components not able to mutate slot nodes
+    // 1. todo-components not able to mutate slot nodes
     // 2. static slot content fails for hot-reloading
     if (
       !isPlatformReservedTag(node.tag) &&

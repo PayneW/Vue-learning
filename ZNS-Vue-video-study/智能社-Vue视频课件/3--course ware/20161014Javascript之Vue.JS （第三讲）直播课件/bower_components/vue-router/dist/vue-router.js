@@ -46,7 +46,7 @@
             data.routerView = true;
 
             // directly use parent context's createElement() function
-            // so that components rendered by router-view can resolve named slots
+            // so that todo-components rendered by router-view can resolve named slots
             var h = parent.$createElement;
             var name = props.name;
             var route = parent.$route;
@@ -1961,7 +1961,7 @@
             activated.map(function (m) {
                 return m.beforeEnter;
             }),
-            // async components
+            // async todo-components
             resolveAsyncComponents(activated)
         );
 
@@ -2005,7 +2005,7 @@
             var isValid = function () {
                 return this$1.current === route;
             };
-            // wait until async components are resolved before
+            // wait until async todo-components are resolved before
             // extracting in-component enter guards
             var enterGuards = extractEnterGuards(activated, postEnterCbs, isValid);
             var queue = enterGuards.concat(this$1.router.resolveHooks);

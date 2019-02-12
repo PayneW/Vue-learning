@@ -17,7 +17,7 @@ if (!isIE9) {
       document.body.appendChild(el)
     })
 
-    it('dynamic components, simultaneous', done => {
+    it('dynamic todo-components, simultaneous', done => {
       const vm = new Vue({
         template: `<div>
           <transition>
@@ -47,7 +47,7 @@ if (!isIE9) {
       }).then(done)
     })
 
-    it('dynamic components, out-in', done => {
+    it('dynamic todo-components, out-in', done => {
       let next
       const vm = new Vue({
         template: `<div>
@@ -92,7 +92,7 @@ if (!isIE9) {
     })
 
     // #3440
-    it('dynamic components, out-in (with extra re-render)', done => {
+    it('dynamic todo-components, out-in (with extra re-render)', done => {
       let next
       const vm = new Vue({
         template: `<div>
@@ -139,7 +139,7 @@ if (!isIE9) {
       }).then(done)
     })
 
-    it('dynamic components, in-out', done => {
+    it('dynamic todo-components, in-out', done => {
       let next
       const vm = new Vue({
         template: `<div>
@@ -190,7 +190,7 @@ if (!isIE9) {
       }).then(done)
     })
 
-    it('dynamic components, in-out with early cancel', done => {
+    it('dynamic todo-components, in-out with early cancel', done => {
       let next
       const vm = new Vue({
         template: `<div>

@@ -8,7 +8,7 @@
 <script>
     // @ is an alias to /src
     // 导入 Footer.vue 模块
-    import HelloWorld from '@/components/Footer.vue'
+    import HelloWorld from '@/todo-components/Footer.vue'
 
     export default {
         name: 'home',

@@ -10,11 +10,11 @@ import { isFalse, isTrue, isDef, isUndef, isPrimitive } from 'shared/util'
 // generated render function is guaranteed to return Array<VNode>. There are
 // two cases where extra normalization is needed:
 
-// 1. When the children contains components - because a functional component
+// 1. When the children contains todo-components - because a functional component
 // may return an Array instead of a single root. In this case, just a simple
 // normalization is needed - if any child is an Array, we flatten the whole
 // thing with Array.prototype.concat. It is guaranteed to be only 1-level deep
-// because functional components already normalize their own children.
+// because functional todo-components already normalize their own children.
 export function simpleNormalizeChildren (children: any) {
   for (let i = 0; i < children.length; i++) {
     if (Array.isArray(children[i])) {

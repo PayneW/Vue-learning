@@ -9,10 +9,10 @@ const Home = { template: '<div>home</div>' }
 // Webpack will automatically split and lazy-load the split modules.
 // - https://webpack.github.io/docs/code-splitting.html
 
-// Combine that with Vue's async components, we can easily make our route
-// components lazy-loaded only when the given route is matched.
+// Combine that with Vue's async todo-components, we can easily make our route
+// todo-components lazy-loaded only when the given route is matched.
 
-// async components are defined as:
+// async todo-components are defined as:
 // - resolve => resolve(Component)
 // or
 // - () => Promise<Component>
@@ -24,7 +24,7 @@ const Foo = resolve => require(['./Foo.vue'], resolve)
 // If using Webpack 2, you can also do:
 // const Foo = () => System.import('./Foo.vue')
 
-// If you want to group a number of components that belong to the same
+// If you want to group a number of todo-components that belong to the same
 // nested route in the same async chunk, you will need to use
 // require.ensure. The 3rd argument is the chunk name they belong to -
 // modules that belong to the same chunk should use the same chunk name.

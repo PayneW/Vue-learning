@@ -41,7 +41,7 @@ var View = {
     data.routerView = true;
 
     // directly use parent context's createElement() function
-    // so that components rendered by router-view can resolve named slots
+    // so that todo-components rendered by router-view can resolve named slots
     var h = parent.$createElement;
     var name = props.name;
     var route = parent.$route;
@@ -1932,7 +1932,7 @@ History.prototype.confirmTransition = function confirmTransition (route, onCompl
     extractUpdateHooks(updated),
     // in-config enter guards
     activated.map(function (m) { return m.beforeEnter; }),
-    // async components
+    // async todo-components
     resolveAsyncComponents(activated)
   );
 
@@ -1974,7 +1974,7 @@ History.prototype.confirmTransition = function confirmTransition (route, onCompl
   runQueue(queue, iterator, function () {
     var postEnterCbs = [];
     var isValid = function () { return this$1.current === route; };
-    // wait until async components are resolved before
+    // wait until async todo-components are resolved before
     // extracting in-component enter guards
     var enterGuards = extractEnterGuards(activated, postEnterCbs, isValid);
     var queue = enterGuards.concat(this$1.router.resolveHooks);

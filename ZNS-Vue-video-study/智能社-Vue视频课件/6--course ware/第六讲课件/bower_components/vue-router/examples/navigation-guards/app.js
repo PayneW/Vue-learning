@@ -88,7 +88,7 @@ const router = new VueRouter({
     // Qux implements an in-component beforeRouteEnter hook
     { path: '/qux', component: Qux },
 
-   // in-component beforeRouteEnter hook for async components
+   // in-component beforeRouteEnter hook for async todo-components
     { path: '/qux-async', component: resolve => {
       setTimeout(() => {
         resolve(Qux)

@@ -121,7 +121,7 @@ export class History {
       extractUpdateHooks(updated),
       // in-config enter guards
       activated.map(m => m.beforeEnter),
-      // async components
+      // async todo-components
       resolveAsyncComponents(activated)
     )
 
@@ -163,7 +163,7 @@ export class History {
     runQueue(queue, iterator, () => {
       const postEnterCbs = []
       const isValid = () => this.current === route
-      // wait until async components are resolved before
+      // wait until async todo-components are resolved before
       // extracting in-component enter guards
       const enterGuards = extractEnterGuards(activated, postEnterCbs, isValid)
       const queue = enterGuards.concat(this.router.resolveHooks)

@@ -802,7 +802,7 @@ if (!isIE9) {
       }).then(done)
     })
 
-    it('transition on child components', done => {
+    it('transition on child todo-components', done => {
       const vm = new Vue({
         template: `
           <div>
@@ -1127,7 +1127,7 @@ if (!isIE9) {
     })
 
     // #6687
-    it('transition on child components with empty root node', done => {
+    it('transition on child todo-components with empty root node', done => {
       const vm = new Vue({
         template: `
           <div>
