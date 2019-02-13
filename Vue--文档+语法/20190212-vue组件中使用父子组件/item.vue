@@ -15,6 +15,7 @@
 <script>
     export default {
         props: {
+            // props 验证: 验证传入的 props 参数的数据规格，如果不符号数据规格， Vue 会发出警告。
             todo: {
                 type: Object,
                 required: true,
