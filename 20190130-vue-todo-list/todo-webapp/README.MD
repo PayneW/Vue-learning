@@ -2,7 +2,7 @@
 
 - ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- 尼玛实在不能不吐槽: (webpack-4 没有创建成功)
+- 实在不想吐槽了: (webpack-4 没有创建成功)
     + 正常安装 webpack-dev-server 后运行 npm run build 后报错, 错误内容为: 
         - `'NODE_ENV' ▒▒▒▒▒ڲ▒▒▒▒ⲿ▒▒▒Ҳ▒▒▒ǿ▒▒▒▒еĳ▒▒▒ ▒▒▒▒▒▒▒▒▒ļ▒▒▒ events.js:167 
             throw er; // Unhandled 'error' event ^ Error: spawn NODE_ENV ENOENT`
@@ -42,7 +42,7 @@
           所以相应的 webpack 版本也需要最新的。
           
           **............ 到此时真的什么都不想改了，
-          默默拷贝了问答里别人写好的项目中 devDependencies 中的依赖接着下面的写**
+          默默用 vue cli3 脚手架创建了项目**
 - ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
