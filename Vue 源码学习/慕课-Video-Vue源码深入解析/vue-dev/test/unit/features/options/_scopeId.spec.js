@@ -69,7 +69,7 @@ describe('Options _scopeId', () => {
     }).then(done)
   })
 
-  it('should work on functional components', () => {
+  it('should work on functional todo-components', () => {
     const child = {
       functional: true,
       _scopeId: 'child',

@@ -93,7 +93,7 @@ describe('Directive v-bind:class', () => {
     }).then(done)
   })
 
-  it('class merge between multiple nested components sharing same element', done => {
+  it('class merge between multiple nested todo-components sharing same element', done => {
     const vm = new Vue({
       template: `
         <component1 :class="componentClass1">

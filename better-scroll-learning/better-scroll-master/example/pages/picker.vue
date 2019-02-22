@@ -7,7 +7,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Page from 'example/components/page/page.vue'
+  import Page from 'example/todo-components/page/page.vue'
   import PickerRender from 'example/page-render/picker-render.vue'
 
   export default {

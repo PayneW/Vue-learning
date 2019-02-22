@@ -278,7 +278,7 @@ export function createComponent (
   data.on = data.nativeOn
 
   if (Ctor.options.abstract) {
-    // abstract components do not keep anything
+    todo-components
     // other than props & listeners
     data = {}
   }

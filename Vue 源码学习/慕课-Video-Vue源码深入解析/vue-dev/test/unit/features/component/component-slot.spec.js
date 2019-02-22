@@ -440,7 +440,7 @@ describe('Component slot', () => {
   })
 
   // #3437
-  it('should correctly re-create components in slot', done => {
+  it('should correctly re-create todo-components in slot', done => {
     const calls = []
     const vm = new Vue({
       template: `
@@ -687,7 +687,7 @@ describe('Component slot', () => {
   })
 
   // #6372, #6915
-  it('should handle nested components in slots properly', done => {
+  it('should handle nested todo-components in slots properly', done => {
     const TestComponent = {
       template: `
         <component :is="toggleEl ? 'b' : 'i'">

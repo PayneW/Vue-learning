@@ -144,8 +144,8 @@ describe('Component', () => {
     const vm = new Vue({
       template:
         '<div>' +
-          '<component :is="$options.components.test"></component>' +
-          '<component :is="$options.components.async"></component>' +
+          '<component :is="$options.todo-components.test"></component>' +
+          '<component :is="$options.todo-components.async"></component>' +
         '</div>',
       components: {
         test: {

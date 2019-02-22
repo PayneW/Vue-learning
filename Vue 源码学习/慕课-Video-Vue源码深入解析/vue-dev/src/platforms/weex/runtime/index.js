@@ -4,7 +4,7 @@ import Vue from 'core/index'
 import { patch } from 'weex/runtime/patch'
 import { mountComponent } from 'core/instance/lifecycle'
 import platformDirectives from 'weex/runtime/directives/index'
-import platformComponents from 'weex/runtime/components/index'
+import platformComponents from 'weex/runtime/todo-components/index'
 
 import {
   query,
@@ -20,7 +20,7 @@ Vue.config.isReservedTag = isReservedTag
 Vue.config.isRuntimeComponent = isRuntimeComponent
 Vue.config.isUnknownElement = isUnknownElement
 
-// install platform runtime directives and components
+// install platform runtime directives and todo-components
 Vue.options.directives = platformDirectives
 Vue.options.components = platformComponents
 

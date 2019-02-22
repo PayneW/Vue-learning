@@ -45,7 +45,7 @@
   import {playMode} from 'common/js/config'
   import Scroll from 'base/scroll/scroll'
   import Confirm from 'base/confirm/confirm'
-  import AddSong from 'components/add-song/add-song'
+  import AddSong from 'todo-components/add-song/add-song'
   import {playerMixin} from 'common/js/mixin'
 
   export default {

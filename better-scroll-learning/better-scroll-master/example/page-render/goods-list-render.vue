@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import Scroll from 'example/components/scroll/scroll'
+  import Scroll from 'example/todo-components/scroll/scroll'
   import data from 'example/data/goods-list.json'
   import BScroll from 'scroll/index'
 

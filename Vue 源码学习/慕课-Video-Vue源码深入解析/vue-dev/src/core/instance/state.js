@@ -118,7 +118,7 @@ function initData (vm: Component) {
     data = {}
     process.env.NODE_ENV !== 'production' && warn(
       'data functions should return an object:\n' +
-      'https://vuejs.org/v2/guide/components.html#data-Must-Be-a-Function',
+      'https://vuejs.org/v2/guide/todo-components.html#data-Must-Be-a-Function',
       vm
     )
   }

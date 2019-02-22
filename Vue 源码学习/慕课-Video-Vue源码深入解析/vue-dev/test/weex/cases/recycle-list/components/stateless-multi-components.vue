@@ -14,7 +14,7 @@
 
 <script>
   // require('./banner.vue')
-  // require('./footer.vue')
+  // require('./footer.jsx')
   // require('./poster.vue')
   module.exports = {
     data () {

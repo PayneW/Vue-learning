@@ -156,7 +156,7 @@ export function createPatchFunction (backend) {
         if (isUnknownElement(vnode, creatingElmInVPre)) {
           warn(
             'Unknown custom element: <' + tag + '> - did you ' +
-            'register the component correctly? For recursive components, ' +
+            'register the component correctly? For recursive todo-components, ' +
             'make sure to provide the "name" option.',
             vnode.context
           )

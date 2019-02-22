@@ -4,7 +4,7 @@
     <div class="slider" ref="slider">
         <!-- 存放模块的包围容器 slider-group -->
         <div class="slider-group" ref="sliderGroup">
-            <!-- 此插槽里的填充来自 recommend.vue 中的 <Slider>模板内的内容 -->
+            <!-- 此插槽里的填充来自父组件 recommend.vue 中的 <Slider>模板内的内容 -->
             <slot></slot>
         </div>
 
@@ -91,12 +91,16 @@
                     width += sliderWidth;
                 }
 
-                // 为了保存循环切换需要克隆 2 个 DOM
-                // isResize 参数: 如果只是单纯的调整浏览器窗口大小(resize),并不需要克隆2个DOM
-                // 所以这个里要增加判断
+                /* 为了保存循环切换需要克隆 2 个 DOM (注: 为什么是克隆2个？当我们单项一个
+                   方向循环的时候是克隆一个节点，但现在允许左右都可以拖动，所以需要克隆2个)
+                   这个想法不知道是否对？*/
+                // isResize 参数: 如果只是单纯的调整浏览器窗口大小(resize),并不需要
+                // 再次克隆2个 DOM 所以这个里要增加判断
                 if (this.loop && !isResize) {
                     width += 2 * sliderWidth;
                 }
+                // 虽然 slider-group 的总长度是增加了克隆后的 2 个 p 节点，但是在js判断中图片
+                // 滚动的判然仍然是
                 this.$refs.sliderGroup.style.width = width + "px";
             },
 

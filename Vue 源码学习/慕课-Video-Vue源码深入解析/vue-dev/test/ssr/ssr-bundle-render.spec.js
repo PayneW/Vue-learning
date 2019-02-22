@@ -210,7 +210,7 @@ function createAssertions (runInNewContext) {
       renderer.renderToString(context1, (err, res) => {
         expect(err).toBeNull()
         expect(res).toBe(expected)
-        expect(cache.set.calls.count()).toBe(3) // 3 nested components cached
+        expect(cache.set.calls.count()).toBe(3) // 3 nested todo-components cached
         const cached = cache.get(key)
         expect(cached.html).toBe(expected)
         expect(cache.get.calls.count()).toBe(1)

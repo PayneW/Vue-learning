@@ -3,7 +3,12 @@ import { commonParams, options } from './config';
 
 import axios from "axios";
 
+// vue cli 3 中 vue-cli-service serve 默认的模式是 development;
+// build 时默认的模式时 production
 const debug = process.env.NODE_ENV !== "production";
+
+// console.log("process.env.NODE_ENV: ", process.env.NODE_ENV);
+// console.log("debug:", debug);
 
 // 获取轮播图
 export function getRecommend() {

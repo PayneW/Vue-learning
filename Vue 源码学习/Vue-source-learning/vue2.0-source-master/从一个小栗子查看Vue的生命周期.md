@@ -124,7 +124,7 @@ export function resolveConstructorOptions (Ctor: Class<Component>) {
 
 ```JavaScript
 Vue.options = Object.create(null)
-// Vue.options.components、Vue.options.directives、Vue.options.filters
+todo-components
 config._assetTypes.forEach(type => {
   Vue.options[type + 's'] = Object.create(null)
 })
@@ -132,7 +132,7 @@ config._assetTypes.forEach(type => {
 // Vue.options._base
 Vue.options._base = Vue
 
-// Vue.options.components.KeepAlive
+todo-components
 extend(Vue.options.components, builtInComponents)
 ```
 
@@ -167,7 +167,7 @@ export function mergeOptions (
   vm?: Component
 ): Object {
   if (process.env.NODE_ENV !== 'production') {
-  	// 如果有options.components，则判断是否组件名是否合法
+  	todo-components
     checkComponents(child)
   }
   // 格式化child的props

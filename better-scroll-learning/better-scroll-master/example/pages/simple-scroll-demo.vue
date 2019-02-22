@@ -16,8 +16,8 @@
 
 <script type="text/ecmascript-6">
   import Vue from 'vue'
-  import Page from 'example/components/page/page.vue'
-  import Scroll from 'example/components/scroll/scroll.vue'
+  import Page from 'example/todo-components/page/page.vue'
+  import Scroll from 'example/todo-components/scroll/scroll.vue'
 
   import { ease } from '../common/js/ease'
 

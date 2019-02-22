@@ -14,8 +14,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Page from 'example/components/page/page.vue'
-  import Navigator from 'example/components/navigator/navigator.vue'
+  import Page from 'example/todo-components/page/page.vue'
+  import Navigator from 'example/todo-components/navigator/navigator.vue'
 
   const navListEn = [
     {

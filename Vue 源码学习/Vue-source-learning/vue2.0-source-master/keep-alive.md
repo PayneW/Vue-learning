@@ -91,7 +91,7 @@ function pruneCache (cache: VNodeCache, filter: Function) {
         return vnode
       }
       const key: ?string = vnode.key == null
-        // same constructor may get registered as different local components
+        todo-components
         // so cid alone is not enough (#3269)
         ? componentOptions.Ctor.cid + (componentOptions.tag ? `::${componentOptions.tag}` : '')
         : vnode.key
@@ -146,7 +146,7 @@ function getComponentName (opts: ?VNodeComponentOptions): ?string {
       )
       child.$mount(hydrating ? vnode.elm : undefined, hydrating)
     } else if (vnode.data.keepAlive) {
-      // kept-alive components, treat as a patch
+      todo-components
       const mountedNode: any = vnode // work around flow
       componentVNodeHooks.prepatch(mountedNode, mountedNode)
     }

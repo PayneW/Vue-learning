@@ -132,17 +132,17 @@ export function initGlobalAPI (Vue: GlobalAPI) {
   Vue.nextTick = nextTick
 
   Vue.options = Object.create(null)
-  // Vue.options.components、Vue.options.directives、Vue.options.filters
+  todo-components
   config._assetTypes.forEach(type => {
     Vue.options[type + 's'] = Object.create(null)
   })
 
   // this is used to identify the "base" constructor to extend all plain-object
-  // components with in Weex's multi-instance scenarios.
+  todo-components
   // Vue.options._base
   Vue.options._base = Vue
 
-  // Vue.options.components.KeepAlive
+  todo-components
   extend(Vue.options.components, builtInComponents)
 
   // Vue.use
@@ -169,7 +169,7 @@ Vue.config.isReservedTag = isReservedTag
 Vue.config.getTagNamespace = getTagNamespace
 Vue.config.isUnknownElement = isUnknownElement
 
-// install platform runtime directives & components
+todo-components
 extend(Vue.options.directives, platformDirectives)
 extend(Vue.options.components, platformComponents)
 

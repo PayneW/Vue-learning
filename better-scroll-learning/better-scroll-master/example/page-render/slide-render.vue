@@ -36,10 +36,10 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Slide from 'example/components/slide/slide.vue'
-  import SwitchOption from 'example/components/switch-option/switch-option.vue'
-  import InputOption from 'example/components/input-option/input-option.vue'
-  import FreeOption from 'example/components/free-option/free-option.vue'
+  import Slide from 'example/todo-components/slide/slide.vue'
+  import SwitchOption from 'example/todo-components/switch-option/switch-option.vue'
+  import InputOption from 'example/todo-components/input-option/input-option.vue'
+  import FreeOption from 'example/todo-components/free-option/free-option.vue'
 
   const items = [
     [

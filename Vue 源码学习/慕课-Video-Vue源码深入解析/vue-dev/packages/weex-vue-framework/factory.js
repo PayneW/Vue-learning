@@ -502,7 +502,7 @@ if (inBrowser) {
     Object.defineProperty(opts, 'passive', ({
       get: function get () {
         /* istanbul ignore next */
-        
+
       }
     })); // https://github.com/facebook/flow/issues/285
     window.addEventListener('test-passive', null, opts);
@@ -1864,7 +1864,7 @@ if (process.env.NODE_ENV !== 'production') {
     warn(
       "Property or method \"" + key + "\" is not defined on the instance but " +
       'referenced during render. Make sure that this property is reactive, ' +
-      'either in the data option, or for class-based components, by ' +
+      'either in the data option, or for class-based todo-components, by ' +
       'initializing the property. ' +
       'See: https://vuejs.org/v2/guide/reactivity.html#Declaring-Reactive-Properties.',
       target
@@ -2171,11 +2171,11 @@ function checkProp (
 // generated render function is guaranteed to return Array<VNode>. There are
 // two cases where extra normalization is needed:
 
-// 1. When the children contains components - because a functional component
+// 1. When the children contains todo-components - because a functional component
 // may return an Array instead of a single root. In this case, just a simple
 // normalization is needed - if any child is an Array, we flatten the whole
 // thing with Array.prototype.concat. It is guaranteed to be only 1-level deep
-// because functional components already normalize their own children.
+// because functional todo-components already normalize their own children.
 function simpleNormalizeChildren (children) {
   for (var i = 0; i < children.length; i++) {
     if (Array.isArray(children[i])) {
@@ -2788,7 +2788,7 @@ function mountComponent (
   hydrating = false;
 
   // manually mounted instance, call mounted on self
-  // mounted is called for render-created child components in its inserted hook
+  // mounted is called for render-created child todo-components in its inserted hook
   if (vm.$vnode == null) {
     vm._isMounted = true;
     callHook(vm, 'mounted');
@@ -3369,7 +3369,7 @@ function initData (vm) {
     data = {};
     process.env.NODE_ENV !== 'production' && warn(
       'data functions should return an object:\n' +
-      'https://vuejs.org/v2/guide/components.html#data-Must-Be-a-Function',
+      'https://vuejs.org/v2/guide/todo-components.html#data-Must-Be-a-Function',
       vm
     );
   }
@@ -3971,7 +3971,7 @@ function FunctionalRenderContext (
   Ctor
 ) {
   var options = Ctor.options;
-  // ensure the createElement function in functional components
+  // ensure the createElement function in functional todo-components
   // gets a unique context - this is necessary for correct named slot check
   var contextVm;
   if (hasOwn(parent, '_uid')) {
@@ -4226,7 +4226,7 @@ function resolveVirtualComponent (vnode) {
       // const vm: Component = this
 
       // TODO: listen on all events and dispatch them to the
-      // corresponding virtual components according to the componentId.
+      // corresponding virtual todo-components according to the componentId.
       // vm._virtualComponents = {}
       var createVirtualComponent = function (componentId, propsData) {
         // create virtual component
@@ -4292,7 +4292,7 @@ var componentVNodeHooks = {
       !vnode.componentInstance._isDestroyed &&
       vnode.data.keepAlive
     ) {
-      // kept-alive components, treat as a patch
+      // kept-alive todo-components, treat as a patch
       var mountedNode = vnode; // work around flow
       componentVNodeHooks.prepatch(mountedNode, mountedNode);
     } else {
@@ -4328,7 +4328,7 @@ var componentVNodeHooks = {
     if (vnode.data.keepAlive) {
       if (context._isMounted) {
         // vue-router#1212
-        // During updates, a kept-alive component's child components may
+        // During updates, a kept-alive component's child todo-components may
         // change, so directly walking the tree here may call activated hooks
         // on incorrect children. Instead we push them into a queue which will
         // be processed after the whole patch process ended.
@@ -4426,7 +4426,7 @@ function createComponent (
   data.on = data.nativeOn;
 
   if (isTrue(Ctor.options.abstract)) {
-    // abstract components do not keep anything
+    // abstract todo-components do not keep anything
     // other than props & listeners & slot
 
     // work around flow
@@ -5168,7 +5168,7 @@ var KeepAlive = {
       var cache = ref$1.cache;
       var keys = ref$1.keys;
       var key = vnode.key == null
-        // same constructor may get registered as different local components
+        // same constructor may get registered as different local todo-components
         // so cid alone is not enough (#3269)
         ? componentOptions.Ctor.cid + (componentOptions.tag ? ("::" + (componentOptions.tag)) : '')
         : vnode.key;
@@ -5231,7 +5231,7 @@ function initGlobalAPI (Vue) {
   });
 
   // this is used to identify the "base" constructor to extend all plain-object
-  // components with in Weex's multi-instance scenarios.
+  // todo-components with in Weex's multi-instance scenarios.
   Vue.options._base = Vue;
 
   extend(Vue.options.components, builtInComponents);
@@ -5602,7 +5602,7 @@ function createPatchFunction (backend) {
         if (isUnknownElement$$1(vnode, creatingElmInVPre)) {
           warn(
             'Unknown custom element: <' + tag + '> - did you ' +
-            'register the component correctly? For recursive components, ' +
+            'register the component correctly? For recursive todo-components, ' +
             'make sure to provide the "name" option.',
             vnode.context
           );
@@ -6659,12 +6659,12 @@ if (hasTransition) {
   if (window.ontransitionend === undefined &&
     window.onwebkittransitionend !== undefined
   ) {
-    
+
   }
   if (window.onanimationend === undefined &&
     window.onwebkitanimationend !== undefined
   ) {
-    
+
   }
 }
 
@@ -7165,7 +7165,7 @@ var Transition = {
     }
 
     // apply transition data to child
-    // use getRealChild() to ignore abstract components e.g. keep-alive
+    // use getRealChild() to ignore abstract todo-components e.g. keep-alive
     var child = getRealChild(rawChild);
     /* istanbul ignore if */
     if (!child) {
@@ -7447,7 +7447,7 @@ Vue.config.isReservedTag = isReservedTag$1;
 Vue.config.isRuntimeComponent = isRuntimeComponent;
 Vue.config.isUnknownElement = isUnknownElement$1;
 
-// install platform runtime directives and components
+// install platform runtime directives and todo-components
 Vue.options.directives = platformDirectives;
 Vue.options.components = platformComponents;
 

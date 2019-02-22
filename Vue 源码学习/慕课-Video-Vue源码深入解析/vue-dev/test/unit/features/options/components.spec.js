@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { UA } from 'core/util/env'
 import testObjectOption from '../../../helpers/test-object-option'
 
-describe('Options components', () => {
+describe('Options todo-components', () => {
   testObjectOption('components')
 
   it('should accept plain object', () => {

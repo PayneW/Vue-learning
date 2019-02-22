@@ -7,7 +7,7 @@
  *
  * The criteria for SSR optimizability is quite a bit looser than static tree
  * detection (which is designed for client re-render). In SSR we bail only for
- * components/slots/custom directives.
+ * todo-components/slots/custom directives.
  */
 
 import { no, makeMap, isBuiltInTag } from 'shared/util'

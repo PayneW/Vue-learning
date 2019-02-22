@@ -460,7 +460,7 @@ describe('Directive v-on', () => {
     expect(spy).toHaveBeenCalled()
   })
 
-  it('.once modifier should work with child components', () => {
+  it('.once modifier should work with child todo-components', () => {
     vm = new Vue({
       el,
       template: '<bar @custom.once="foo"></bar>',

@@ -5,7 +5,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import MusicList from 'components/music-list/music-list'
+  import MusicList from 'todo-components/music-list/music-list'
   import { getSongList } from 'api/recommend'
   import { ERR_OK } from 'api/config'
   import { mapGetters } from 'vuex'

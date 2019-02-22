@@ -147,7 +147,7 @@ describe('node in render function', () => {
     ])
   })
 
-  it('should be generated with sub components', () => {
+  it('should be generated with sub todo-components', () => {
     const id = String(Date.now() * Math.random())
     const instance = createInstance(id, `
       new Vue({

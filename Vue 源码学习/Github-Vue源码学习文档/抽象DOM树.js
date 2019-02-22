@@ -193,7 +193,7 @@ const listeners = data.on
 data.on = data.nativeOn
 
 if (isTrue(Ctor.options.abstract)) {
-    // abstract components do not keep anything
+    // abstract todo-components do not keep anything
     // other than props & listeners
     data = {}
 }

@@ -22,8 +22,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Picker from 'example/components/picker/picker.vue'
-  import CityPicker from 'example/components/city-picker/city-picker.vue'
+  import Picker from 'example/todo-components/picker/picker.vue'
+  import CityPicker from 'example/todo-components/city-picker/city-picker.vue'
   import { provinceList, cityList, areaList } from '../data/areaData'
 
   let data1 = [

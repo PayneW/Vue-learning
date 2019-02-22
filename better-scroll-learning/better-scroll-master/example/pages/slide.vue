@@ -7,7 +7,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Page from 'example/components/page/page.vue'
+  import Page from 'example/todo-components/page/page.vue'
   import SlideRender from 'example/page-render/slide-render.vue'
 
   export default {

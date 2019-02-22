@@ -24,7 +24,7 @@ export function FunctionalRenderContext (
   Ctor: Class<Component>
 ) {
   const options = Ctor.options
-  // ensure the createElement function in functional components
+  // ensure the createElement function in functional todo-components
   // gets a unique context - this is necessary for correct named slot check
   let contextVm
   if (hasOwn(parent, '_uid')) {

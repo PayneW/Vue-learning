@@ -543,7 +543,7 @@ describe('codegen', () => {
         ''
       )
     } catch (e) {}
-    expect('Inline-template components must have exactly one child element.').toHaveBeenWarned()
+    expect('Inline-template todo-components must have exactly one child element.').toHaveBeenWarned()
     expect(console.error.calls.count()).toBe(2)
   })
 

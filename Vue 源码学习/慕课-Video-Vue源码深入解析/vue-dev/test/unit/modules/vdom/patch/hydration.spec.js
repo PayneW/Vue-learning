@@ -95,7 +95,7 @@ describe('vdom patch: hydration', () => {
   })
 
   // component hydration is better off with a more e2e approach
-  it('should hydrate components when server-rendered DOM tree is same as virtual DOM tree', done => {
+  it('should hydrate todo-components when server-rendered DOM tree is same as virtual DOM tree', done => {
     const dom = createMockSSRDOM('<span>foo</span><div class="b a"><span>foo qux</span></div><!---->')
     const originalNode1 = dom.children[0]
     const originalNode2 = dom.children[1]

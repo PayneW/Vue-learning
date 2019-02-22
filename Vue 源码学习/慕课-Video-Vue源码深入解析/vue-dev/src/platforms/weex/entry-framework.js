@@ -86,7 +86,7 @@ function createVueModuleInstance (
   const instance = instanceOptions[instanceId]
 
   // patch reserved tag detection to account for dynamically registered
-  // components
+  // todo-components
   const weexRegex = /^weex:/i
   const isReservedTag = Vue.config.isReservedTag || (() => false)
   const isRuntimeComponent = Vue.config.isRuntimeComponent || (() => false)

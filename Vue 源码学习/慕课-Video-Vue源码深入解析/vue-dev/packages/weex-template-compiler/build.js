@@ -1799,7 +1799,7 @@ function markStatic (node) {
   node.static = isStatic(node);
   if (node.type === 1) {
     // do not make component slot content static. this avoids
-    // 1. components not able to mutate slot nodes
+    // 1. todo-components not able to mutate slot nodes
     // 2. static slot content fails for hot-reloading
     if (
       !isPlatformReservedTag(node.tag) &&
@@ -3158,7 +3158,7 @@ function genData (el, state) {
   if (el.pre) {
     data += "pre:true,";
   }
-  // record original tag name for components using "is" attribute
+  // record original tag name for todo-components using "is" attribute
   if (el.component) {
     data += "tag:\"" + (el.tag) + "\",";
   }
@@ -3243,7 +3243,7 @@ function genInlineTemplate (el, state) {
   if (process.env.NODE_ENV !== 'production' && (
     el.children.length !== 1 || ast.type !== 1
   )) {
-    state.warn('Inline-template components must have exactly one child element.');
+    state.warn('Inline-template todo-components must have exactly one child element.');
   }
   if (ast.type === 1) {
     var inlineRenderFns = generate(ast, state.options);
@@ -3960,7 +3960,7 @@ var RECYCLE_LIST_MARKER = '@inRecycleList';
 
 /*  */
 
-// mark components as inside recycle-list so that we know we need to invoke
+// mark todo-components as inside recycle-list so that we know we need to invoke
 // their special @render function instead of render in create-component.js
 function postTransformComponent (
   el,

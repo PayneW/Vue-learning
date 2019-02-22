@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import Page from 'example/components/page/page.vue'
+  import Page from 'example/todo-components/page/page.vue'
   import GoodListRender from 'example/page-render/goods-list-render.vue'
 
   export default {

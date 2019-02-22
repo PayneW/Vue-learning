@@ -22,7 +22,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Scroll from 'example/components/scroll/scroll.vue'
+  import Scroll from 'example/todo-components/scroll/scroll.vue'
 
   export default {
     data() {

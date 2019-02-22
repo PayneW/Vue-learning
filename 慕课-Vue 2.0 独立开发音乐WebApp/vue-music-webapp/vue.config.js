@@ -11,10 +11,11 @@ const axios = require("axios");
 const app = express();
 const apiRoutes = express.Router();
 
-
+// 获取歌单列表
 apiRoutes.get("/api/getDiscList", function(req, res) {
     const url = "https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?";
-    debugger;
+    // debugger;
+    console.log("req.query: ", req.query);
     axios.get(url, {
         headers: {
             // 欺骗的手段
@@ -28,6 +29,27 @@ apiRoutes.get("/api/getDiscList", function(req, res) {
         console.log("Error: ", e)
     })
 });
+
+// 获取歌手列表
+/*apiRoutes.get("/getSingerList", function(req, res){
+    const url = "https://u.y.qq.com/cgi-bin/musicu.fcg?";
+    axios.get(url, {
+        headers: {
+            // 欺骗的手段
+            referer: "https://y.qq.com/",
+            host: 'y.qq.com'
+        },
+        // 浏览器请求上面 url 接口时所带的参数，然后应该是拼接到 url 的后面。
+        // 注: 我想应该是 recommend.js 中的 data 参数，但是不确定。
+        params: req.query
+    }).then((response) => {
+        res.join(response.data);
+    }).catch((e) => {
+        console.log("Error: ", e);
+    })
+});*/
+
+
 
 app.use("/api", apiRoutes);
 
@@ -87,7 +109,7 @@ module.exports = {
 
     /** 所有 webpack-dev-server 的选项都支持。*/
     devServer: {
-        open: true,
+        open: false,
         host: "0.0.0.0",
         port: 7400,
         https: false,
@@ -106,8 +128,9 @@ module.exports = {
 
         // devServer.before 配置: 在服务器内部的所有其他中间件之前，提供执行自定义中间件的功能。用来配置自定义处理程序
         before(app) {
+            // 获取歌单列表
             app.get('/api/getDiscList', function (req, res) {
-                const url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
+                const url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg';
                 axios.get(url, {
                     headers: {
                         referer: 'https://c.y.qq.com/',
@@ -119,7 +142,23 @@ module.exports = {
                 }).catch((e) => {
                     console.log(e)
                 })
-            })
+            });
+
+            // 获取歌手列表
+            /*app.get("/getSingerList", function(req,res) {
+                const url = "https://u.y.qq.com/cgi-bin/musicu.fcg?";
+                axios.get(url, {
+                    headers: {
+                        referer: "https://y.qq.com/",
+                        host: 'y.qq.com'
+                    },
+                    params: req.query
+                }).then((response) => {
+                    res.join(response.data);
+                }).catch((e) => {
+                    console.log("Error: ", e);
+                })
+            })*/
         }
     },
 };

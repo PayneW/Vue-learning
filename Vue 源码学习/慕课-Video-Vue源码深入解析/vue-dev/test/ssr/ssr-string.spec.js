@@ -220,7 +220,7 @@ describe('SSR: renderToString', () => {
     })
   })
 
-  it('attrs merging on components', done => {
+  it('attrs merging on todo-components', done => {
     const Test = {
       render: h => h('div', {
         attrs: { id: 'a' }
@@ -238,7 +238,7 @@ describe('SSR: renderToString', () => {
     })
   })
 
-  it('domProps merging on components', done => {
+  it('domProps merging on todo-components', done => {
     const Test = {
       render: h => h('div', {
         domProps: { innerHTML: 'a' }
@@ -310,7 +310,7 @@ describe('SSR: renderToString', () => {
     })
   })
 
-  it('v-show directive merging on components', done => {
+  it('v-show directive merging on todo-components', done => {
     renderVmWithOptions({
       template: '<foo v-show="false"></foo>',
       components: {

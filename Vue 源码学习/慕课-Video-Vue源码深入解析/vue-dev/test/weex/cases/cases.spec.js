@@ -76,14 +76,14 @@ describe('Usage', () => {
     it('v-once', createRenderTestCase('recycle-list/v-once'))
 
     it('stateless component', done => {
-      compileWithDeps('recycle-list/components/stateless.vue', [{
+      compileWithDeps('recycle-list/todo-components/stateless.vue', [{
         name: 'banner',
-        path: 'recycle-list/components/banner.vue'
+        path: 'recycle-list/todo-components/banner.vue'
       }]).then(code => {
         const id = String(Date.now() * Math.random())
         const instance = createInstance(id, code)
         setTimeout(() => {
-          const target = readObject('recycle-list/components/stateless.vdom.js')
+          const target = readObject('recycle-list/todo-components/stateless.vdom.js')
           expect(getRoot(instance)).toEqual(target)
           instance.$destroy()
           done()
@@ -92,14 +92,14 @@ describe('Usage', () => {
     })
 
     it('stateless component with props', done => {
-      compileWithDeps('recycle-list/components/stateless-with-props.vue', [{
+      compileWithDeps('recycle-list/todo-components/stateless-with-props.vue', [{
         name: 'poster',
-        path: 'recycle-list/components/poster.vue'
+        path: 'recycle-list/todo-components/poster.vue'
       }]).then(code => {
         const id = String(Date.now() * Math.random())
         const instance = createInstance(id, code)
         setTimeout(() => {
-          const target = readObject('recycle-list/components/stateless-with-props.vdom.js')
+          const target = readObject('recycle-list/todo-components/stateless-with-props.vdom.js')
           expect(getRoot(instance)).toEqual(target)
           instance.$destroy()
           done()
@@ -107,21 +107,21 @@ describe('Usage', () => {
       }).catch(done.fail)
     })
 
-    it('multi stateless components', done => {
-      compileWithDeps('recycle-list/components/stateless-multi-components.vue', [{
+    it('multi stateless todo-components', done => {
+      compileWithDeps('recycle-list/todo-components/stateless-multi-todo-components.vue', [{
         name: 'banner',
-        path: 'recycle-list/components/banner.vue'
+        path: 'recycle-list/todo-components/banner.vue'
       }, {
         name: 'poster',
-        path: 'recycle-list/components/poster.vue'
+        path: 'recycle-list/todo-components/poster.vue'
       }, {
         name: 'footer',
-        path: 'recycle-list/components/footer.vue'
+        path: 'recycle-list/todo-components/footer.jsx'
       }]).then(code => {
         const id = String(Date.now() * Math.random())
         const instance = createInstance(id, code)
         setTimeout(() => {
-          const target = readObject('recycle-list/components/stateless-multi-components.vdom.js')
+          const target = readObject('recycle-list/todo-components/stateless-multi-todo-components.vdom.js')
           expect(getRoot(instance)).toEqual(target)
           instance.$destroy()
           done()
@@ -132,16 +132,16 @@ describe('Usage', () => {
     it('stateful component', done => {
       const tasks = []
       addTaskHook((_, task) => tasks.push(task))
-      compileWithDeps('recycle-list/components/stateful.vue', [{
+      compileWithDeps('recycle-list/todo-components/stateful.vue', [{
         name: 'counter',
-        path: 'recycle-list/components/counter.vue'
+        path: 'recycle-list/todo-components/counter.vue'
       }]).then(code => {
         const id = String(Date.now() * Math.random())
         const instance = createInstance(id, code)
         // expect(tasks.length).toEqual(3)
         setTimeout(() => {
           // check the render results
-          const target = readObject('recycle-list/components/stateful.vdom.js')
+          const target = readObject('recycle-list/todo-components/stateful.vdom.js')
           expect(getRoot(instance)).toEqual(target)
           tasks.length = 0
 
@@ -188,14 +188,14 @@ describe('Usage', () => {
 
     // it('component lifecycle', done => {
     //   global.__lifecycles = []
-    //   compileWithDeps('recycle-list/components/stateful-lifecycle.vue', [{
+    //   compileWithDeps('recycle-list/todo-components/stateful-lifecycle.vue', [{
     //     name: 'lifecycle',
-    //     path: 'recycle-list/components/lifecycle.vue'
+    //     path: 'recycle-list/todo-components/lifecycle.vue'
     //   }]).then(code => {
     //     const id = String(Date.now() * Math.random())
     //     const instance = createInstance(id, code)
     //     setTimeout(() => {
-    //       const target = readObject('recycle-list/components/stateful-lifecycle.vdom.js')
+    //       const target = readObject('recycle-list/todo-components/stateful-lifecycle.vdom.js')
     //       expect(getRoot(instance)).toEqual(target)
 
     //       instance.$triggerHook(2, 'create', ['y-1'])
@@ -220,14 +220,14 @@ describe('Usage', () => {
     // })
 
     it('stateful component with v-model', done => {
-      compileWithDeps('recycle-list/components/stateful-v-model.vue', [{
+      compileWithDeps('recycle-list/todo-components/stateful-v-model.vue', [{
         name: 'editor',
-        path: 'recycle-list/components/editor.vue'
+        path: 'recycle-list/todo-components/editor.vue'
       }]).then(code => {
         const id = String(Date.now() * Math.random())
         const instance = createInstance(id, code)
         setTimeout(() => {
-          const target = readObject('recycle-list/components/stateful-v-model.vdom.js')
+          const target = readObject('recycle-list/todo-components/stateful-v-model.vdom.js')
           expect(getRoot(instance)).toEqual(target)
           instance.$destroy()
           done()

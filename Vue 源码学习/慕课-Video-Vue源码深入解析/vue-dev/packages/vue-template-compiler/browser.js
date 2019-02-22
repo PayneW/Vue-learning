@@ -3695,7 +3695,7 @@ function markStatic (node) {
   node.static = isStatic(node);
   if (node.type === 1) {
     // do not make component slot content static. this avoids
-    // 1. components not able to mutate slot nodes
+    // 1. todo-components not able to mutate slot nodes
     // 2. static slot content fails for hot-reloading
     if (
       !isPlatformReservedTag(node.tag) &&
@@ -4139,7 +4139,7 @@ function genData$2 (el, state) {
   if (el.pre) {
     data += "pre:true,";
   }
-  // record original tag name for components using "is" attribute
+  // record original tag name for todo-components using "is" attribute
   if (el.component) {
     data += "tag:\"" + (el.tag) + "\",";
   }
@@ -4224,7 +4224,7 @@ function genInlineTemplate (el, state) {
   if ("development" !== 'production' && (
     el.children.length !== 1 || ast.type !== 1
   )) {
-    state.warn('Inline-template components must have exactly one child element.');
+    state.warn('Inline-template todo-components must have exactly one child element.');
   }
   if (ast.type === 1) {
     var inlineRenderFns = generate(ast, state.options);
@@ -4846,7 +4846,7 @@ function genStyleSegments (
  *
  * The criteria for SSR optimizability is quite a bit looser than static tree
  * detection (which is designed for client re-render). In SSR we bail only for
- * components/slots/custom directives.
+ * todo-components/slots/custom directives.
  */
 
 // optimizability constants

@@ -44,3 +44,31 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - 安装 express 和 axios
     + npm install express --save-dev
     + npm install axios --save
+    
+- 原生 JSONP 实现: js-sundry-goods\JS-实现效果\2019-01-20-手写JSONP\ jsonp.html 
+
+- better-scroll 拷贝后的总轮播数量: 1152872 1154037 1146132 1142970 1135055 1152872 1154037
+
+- 4-12 vue-lazyload 图片懒加载插件
+    + npm install vue-lazyload --save
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
