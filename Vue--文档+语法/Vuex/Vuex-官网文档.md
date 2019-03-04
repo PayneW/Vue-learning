@@ -47,7 +47,7 @@
         
         - Getter (getters 从数据库里取数据的 API, 不能更改数据库)
            1. 有时我们需要从 store 中的 state 中派生出一些状态，例如对列表进行过滤并计数:
-            ```base
+            ```javascript
                computed: {
                    doneTodoCount() {
                        // filter() ：对数组中的每一项运行给定函数，返回该函数会返回 true 的项组成的数组。
@@ -58,12 +58,12 @@
                }
            ```
            2. Getter 接受 state 作为第一个参数: 
-           ```base
+           ```javascript
                const store = new Vuex.store({
                    state: {
                        todos: [
                            { id: 1, text: "...", done: true },
-                           { id; 2, text: "...", done: false }
+                           { id: 2, text: "...", done: false }
                        ]
                    },
                    getters: {
@@ -78,11 +78,11 @@
                })
            ```
            3. **通过属性访问:** Getter 会暴露为 store.getters 对象，你可以以属性的形式访问这些值:
-               ```base
+               ```javascript
                     store.getters.doneTodos  // -> [{ id: 1, text: "...", done: true }]
                ```
                + Getter 也可以接受其他 getter 作为第二个参数
-               ```base 
+               ```javascript
                     getters: {
                         // ...
                         doneTodosCount: (state, getters) => {
@@ -93,7 +93,7 @@
                     store.getters.doneTodosCount   // -> 1
                ```
                + 我们可以很容易地再任何组件中使用它:
-               ```base
+               ```javascript
                     computed: {
                         doneTodosCount() {
                             return this.$store.getters.doneTodosCount
@@ -104,7 +104,7 @@
                
            4. **通过方法访问:** 你也可以通过让 getter 返回一个函数，来实现给 getter 传参。 在你对 store
             里的数组进行查询时非常有用。
-            ```base 
+            ```javascript
                 getters: {
                     // ...
                     getTodoById: (state) => {
@@ -121,7 +121,7 @@
             ```  
             5. mapGetters 辅助函数
                 + mapGetters 辅助函数仅仅时将 store 中的 getter 映射到局部计算属性: 
-                ```base
+                ```javascript
                     import { mapGetters } from "vuex"
                     export defult {
                         // ...
@@ -134,7 +134,7 @@
                         }
                     }
                     
-                    如果你想将一个 getter 属性另取一个名字，使用对象形式:
+                    // 如果你想将一个 getter 属性另取一个名字，使用对象形式:
                     mapGetters({
                         // 把 `this.doneCount` 映射为 `this.$store.getters.doneTodosCount`
                         doneCount: "doneTodosCount"
@@ -146,7 +146,7 @@
             1. 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation. Vuex 中的 mutation 非常类似于事件: 每个 mutation
             都有一个字符串的 **事件类型(type)** 和一个 **回调函数(handler)**。这个回调函数就是我们实际进行状态更改的地方，
             并且它会接受 state 作为第一个参数:
-            ```base
+            ```javascript
                 const store = new Vuex.Store({
                     state: {
                         count: 1
@@ -163,7 +163,7 @@
             此函数。" 要唤醒一个 mutation handler, 你需要以响应的 type 调用 store.commit 方法:
             ``` store.commit("increment") ```
             2. **提交负载 (Payload)**: 你可以向 store.commit 传入额外的参数，即 mutation 的 载荷 (payload).
-            ```base
+            ```javascript
                 // ...
                 mutations: {
                     increment (state, n) {
@@ -173,7 +173,7 @@
                 
                 store.commit("increment", 10)
                 
-                在大多数情况下，载荷应该是一个对象，这样可以包含多个字段并记录的 mutation 会更易读。
+                // 在大多数情况下，载荷应该是一个对象，这样可以包含多个字段并记录的 mutation 会更易读。
                 // ...
                 mutations: {
                     increment (state, payload) {
@@ -186,7 +186,7 @@
                 })
             ```
             3. **对象风格的提交方式**: 提交 mutation 的另一种方式是直接使用包含 type 属性的对象:
-            ```base
+            ```javascript
                 store.commit({
                     type: "increment",
                     amount: 10
@@ -200,7 +200,7 @@
             ```
             4. **Mutation 需遵顼 Vue 的响应规则**
             5. **使用常量替代 Mutation 事件类型**
-            ```base
+            ```javascript
                 // mutation-types.js
                 export const SOME_MUTATION = "SOME_MUTATION";
                 
@@ -218,7 +218,7 @@
             ```
             6. **Mutation 必须是同步函数**
                 + 一条重要的原则就是记住 mutation 必须是同步调用，为什么？ 
-                ```base
+                ```javascript
                     mutations: {
                         someMutation (state) {
                             api.callAsyncMethod(() => {
@@ -235,7 +235,7 @@
             7. **在组建中提交 Mutation**: 
                 + 你可以在组件中使用 `this.$store.commit("xxx")` 提交 mutation, 或者使用 mapMutations
                 辅助函数将组件中的 methods 映射到 store.commit 调用 (需要在根节点注入 store)
-                ```base
+                ```javascript
                     import { mapMutations } from "vuex"
                     export default {
                         // ...
@@ -263,7 +263,7 @@
             1. Action 类似于 mutation, 不同在于: 
                 + Action 提交的是 mutation, 而不是直接变更状态。
                 + Action 可以包含任意异步操作。
-                    ```base
+                    ```javascript
                         // 让我们来注册一个简单的 action:
                         const store = new Vuex.store({
                             state: {
