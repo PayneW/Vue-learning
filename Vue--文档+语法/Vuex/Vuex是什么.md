@@ -46,21 +46,21 @@ dispatch /disˈpætʃ/ n.调度 派遣
 ## Vuex: 集中管理数据
   [官方文档](https://vuex.vuejs.org/zh/guide/)
   
-        (触发调度)
-        Dispatch                                  Commit(提交)
-      ----------------> Actions (调度一个"动作") ----------------> 
-      |          [这个Actions(动作)不会直接改变                    |
-      |          State(状态)]                                   |
-      |                                                         |
-      |                                                         |                
- Vue Components                                              Mutations
- 点击组件(e.g: App.vue, Home.vue)                               突变
-      ^                                                         |
-      |                                                         |
-      |                                                         |
-      |                                                         |
-      ---------------- State (状态) <----------------------------
-            Render(渲染)                          Mutate(变化)
+            (触发调度)
+            Dispatch                                  Commit(提交)
+          ----------------> Actions (调度一个"动作") ----------------> 
+          |          [这个Actions(动作)不会直接改变                    |
+          |          State(状态)]                                   |
+          |                                                         |
+          |                                                         |                
+     Vue Components                                              Mutations
+     点击组件(e.g: App.vue, Home.vue)                               突变
+          ^                                                         |
+          |                                                         |
+          |                                                         |
+          |                                                         |
+          ---------------- State (状态) <----------------------------
+                Render(渲染)                          Mutate(变化)
             
             
 1. Vuex 提供了2个非常棒的方法: 
