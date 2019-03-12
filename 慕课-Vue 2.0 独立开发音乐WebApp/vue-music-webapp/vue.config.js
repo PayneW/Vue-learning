@@ -14,8 +14,6 @@ const apiRoutes = express.Router();
 // 获取歌单列表
 apiRoutes.get("/api/getDiscList", function(req, res) {
     const url = "https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?";
-    // debugger;
-    console.log("req.query: ", req.query);
     axios.get(url, {
         headers: {
             // 欺骗的手段
@@ -24,7 +22,8 @@ apiRoutes.get("/api/getDiscList", function(req, res) {
         },
         params: req.query
     }).then((response) => {
-        res.join(response.data);
+        // rs.json([body]) 是 express 中的语法 (express 中 res.json() 和 res.send())
+        res.json(response.data);
     }).catch((e) => {
         console.log("Error: ", e)
     })
@@ -43,15 +42,31 @@ apiRoutes.get("/api/getDiscList", function(req, res) {
         // 注: 我想应该是 recommend.js 中的 data 参数，但是不确定。
         params: req.query
     }).then((response) => {
-        res.join(response.data);
+        res.jn(response.data);
     }).catch((e) => {
         console.log("Error: ", e);
     })
 });*/
 
 
+// 获取歌手信息
+/*apiRoutes.get("/getSingerDetail", function(req, res){
+    const url = "https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?";
+    axios.get(url,  {
+        headers: {
+            referer: "https://y.qq.com/",
+            host: 'y.qq.com'
+        },
+        params: req.query
+    }).then((response) => {
+        res.json(response.data)
+    }).catch((e) => {
+        console.log("获取歌手信息 Error : ", e);
+    })
+});*/
 
-app.use("/api", apiRoutes);
+
+app.use("/api", apiRoutes);  
 
 
 module.exports = {
@@ -122,7 +137,7 @@ module.exports = {
             "/api": {
                 target: "https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?",
                 changeOrigin: true,
-            }
+            },
         },
 
 
@@ -159,6 +174,25 @@ module.exports = {
                     console.log("Error: ", e);
                 })
             })*/
+
+            // 获取歌手信息
+            /*app.get("/getSingerDetail", function(req, res){
+                const url = "https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?";
+                axios.get(url,  {
+                    headers: {
+                        referer: "https://y.qq.com/",
+                        host: 'y.qq.com'
+                    },
+                    params: req.query
+                }).then((response) => {
+                    debugger;
+                    console.log("response: ", response);
+                    res.json(response.data)
+                }).catch((e) => {
+                    console.log("获取歌手信息 Error : ", e);
+                })
+            });*/
+
         }
     },
 };

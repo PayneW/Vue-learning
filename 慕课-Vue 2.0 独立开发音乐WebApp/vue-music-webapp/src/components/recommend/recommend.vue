@@ -45,7 +45,9 @@
                         <li v-for="item in discList" class="item">
                             <p class="icon">
                                 <!-- 4-12 视频 把 :src="item.imgurl" 改为 v-lazy="item.imgurl" 使用
-                                    图片懒加载加载图片 -->
+                                    图片懒加载加载图片, 在 main.js 中把 vue-lazyload 使用 vue.use
+                                    作为全局组件使用，所以无需再次引用，{loading:require("xx.jpg)} 属性，
+                                    是默认图片 -->
                                 <img v-lazy="item.imgurl" width="60" height="60" alt="">
                             </p>
                             <div class="text">
@@ -99,7 +101,7 @@
             // debugger;
             setTimeout(()=> {
                 this._getDiscList();
-            }, 3000)
+            }, 500)
         },
         methods: {
             loadImage() {
@@ -176,6 +178,10 @@
                         flex: 0 0 60px;
                         width: 60px;
                         padding-right: 20px;
+
+                        img {
+                            border-radius: 2px;
+                        }
                     }
                     .text {
                         display: flex;

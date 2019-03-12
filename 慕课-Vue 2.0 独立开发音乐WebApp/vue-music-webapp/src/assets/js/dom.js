@@ -14,3 +14,16 @@ export function hasClass(el, className) {
     let reg = new RegExp("(^|\\s+)" + className + "(\\s+|$)");
     return reg.test(el.className)
 }
+
+
+// add: 5-5 "设置或取得"元素绑定的 data-xxx(E.g.: index) 属性
+export function getData(el, name, val) {
+    const prefix = "data-";
+    name = prefix + name;
+    if (val) {
+        return el.setAttribute(name, val);
+    }
+    else {
+        return el.getAttribute(name);
+    }
+}

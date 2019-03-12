@@ -24,9 +24,9 @@ export function getRecommend() {
     return jsonp(url, data, options)
 }
 
-// 获取歌单列表接口
+// 获取歌单列表接口 (热门歌单)
 export function getDiscList() {
-    // 线上环境地址，同学们根据自己的需要配置修改
+    // 线上环境地址，根据自己的需要配置修改
     // debugger;
     const url = debug ? '/api/getDiscList' : 'http://ustbhuangyi.com/music/api/getDiscList';
     const data = Object.assign({}, commonParams, {
@@ -46,6 +46,7 @@ export function getDiscList() {
     return axios.get(url, {
         params: data
     }).then((res) => {
+        console.log("getDiscList res: ", res);
         return Promise.resolve(res.data)
     })
 }

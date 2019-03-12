@@ -19,7 +19,7 @@ export default function jsonp(url, data, option) {
 function param(data) {
     let str = "";
     for (var k in data) {
-        // 如果 key 的 value 为 undefined 就把赋值为空值
+        // 如果 key 的 value 为 undefined 就赋值为空值
         let value = data[k] !== undefined ? data[k] : "";
         // url += `&${k} = ${encodeURIComponent(value)}`;
         str += "&" + k + "=" + encodeURIComponent(value);
