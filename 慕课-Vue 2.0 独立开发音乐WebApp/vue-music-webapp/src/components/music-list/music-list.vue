@@ -1,7 +1,8 @@
-<!-- 6-8 公共的 "歌曲列表"(music-list) 组件 -->
+<!-- 6-8 公共的 "歌曲列表"(music-list) 组件 : 在歌单排行榜的页面也会用到这个公共组件 -->
 <template>
     <div class="music-list">
-        <p class="back">
+        <!-- 6-14 add: @click = "back" -->
+        <p class="back" @click = "back">
             <i class="icon-back"></i>
         </p>
         <h1 class="title" v-html="title"></h1>
@@ -9,6 +10,16 @@
                 ZNS-Vue-video-study\1-chapter-video -->
         <!-- 6-9 add: ref="bgImage"， 在下面的 mounted 模板编译之后生命周期中使用 -->
         <div class="bg-image" v-bind:style="bgStyle" ref="bgImage">
+
+            <!-- 6-14 add -->
+            <div class="play-wrapper">
+                <!-- 6-14 播放按钮要等歌曲列表全部返回才能显示 v-show -->
+                <p class="play" v-show="songs.length>0" ref="play">
+                    <i class="icon-play"></i>
+                    <span class="text">随机播放全部</span>
+                </p>
+            </div>
+
             <div class="filter" ref="filter"></div>
         </div>
 
@@ -31,7 +42,12 @@
             :probe-type="probeType"
             @scroll="scroll">
             <div class="song-list-wrapper">
-                <song-list :songs="songs"/>
+                <!-- 7-2 add: @select="selectItem" -->
+                <song-list @select="selectItem" :songs="songs"/>
+            </div>
+
+            <div class="loading-container" v-show="!songs.length">
+                <Loading/>
             </div>
         </Scroll>
     </div>
@@ -44,6 +60,13 @@
 
     // 6-10 add: reserved height (预留高度)
     const RESERVED_HEIGHT = 40;
+
+    // 6-13 add
+    import {prefixStyle} from "assets/js/dom";
+    const transform = prefixStyle("transform");
+    const backdrop = prefixStyle("backdrop-filter");
+
+    import Loading from "base/loading/loading"
 
     export default {
         // 6-8
@@ -103,6 +126,16 @@
             scroll(pos) {
                 // console.log("music-list -> methods -> scroll(pos) pos.y: ", pos.y);
                 this.scrollY = pos.y;
+            },
+
+            // 6-14 add
+            back() {
+                this.$router.back();
+            },
+
+            // 7-2 add
+            selectItem(item, index) {
+
             }
         },
 
@@ -132,8 +165,7 @@
                 // (1): 下面的赋值只是实现了 div.layer 背景跟着滑动，但是歌曲列表一般情况下都会很长，如果超过屏幕的
                 // 高度后，layer 就会被滑走了，所以接下来的 (2) 步解决放在上面 mounted 模板编译之后 声明周期中解决。
                 // (4): 接 (3)，把 ${newY} 替换为 translateY
-                this.$refs.layer.style["transform"] = `translate3d(0, ${translateY}px, 0)`;
-                this.$refs.layer.style["webkit-transform"] = `translate3d(0, ${translateY}px, 0)`;
+                this.$refs.layer.style[transform] = `translate3d(0, ${translateY}px, 0)`;
 
                 // 6-11 要解决的问题见视频讲解
                 let zIndex = 0;
@@ -149,24 +181,31 @@
                 } else {
                     blur = Math.min(20 * percent, 20)
                 }
-                this.$refs.filter.style["backdrop-filter"] = `blur(${blur}px)`;
-                this.$refs.filter.style["webkitBackdrop-filter"] = `blur(${blur}px)`;
+                // 6-13 js 封装，修改写法
+                this.$refs.filter.style[backdrop] = `blur(${blur}px)`;
 
                 // 6-11 add:
                 if (newY < this.minTranslateY) {
                     zIndex = 10;
                     this.$refs.bgImage.style.paddingTop = 0;
                     this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`;
+
+                    // 6-14 add:
+                    this.$refs.play.style.display = "none";
+
                 } else {
                     // zIndex = 0;
                     this.$refs.bgImage.style.paddingTop = "70%";
                     this.$refs.bgImage.style.height = 0;
+
+                    // 6-14 add:
+                    this.$refs.play.style.display = "block";
                 }
                 this.$refs.bgImage.style.zIndex = zIndex;
 
                 // 6-12 add
-                this.$refs.bgImage.style["transform"] = `scale(${scale})`;
-                this.$refs.bgImage.style["webkitTransform"] = `scale(${scale})`;
+                // 6-13 修改封装后的写法
+                this.$refs.bgImage.style[transform] = `scale(${scale})`;
             },
         },
 
@@ -175,6 +214,7 @@
         components: {
             Scroll,
             SongList,
+            Loading,
         }
 
     }
@@ -233,6 +273,36 @@
             /*background: lightsalmon;*/
             transform-origin: top;
             background-size: cover;
+
+            /* 6-14 add */
+            .play-wrapper {
+                position: absolute;
+                bottom: 20px;
+                z-index: 50;
+                width: 100%;
+                .play {
+                    box-sizing: border-box;
+                    width: 135px;
+                    padding: 7px 0;
+                    margin: 0 auto;
+                    text-align: center;
+                    border: 1px solid $color-theme;
+                    color: $color-theme;
+                    border-radius: 100px;
+                    font-size: 0;
+                    .icon-play {
+                        display: inline-block;
+                        vertical-align: middle;
+                        margin-right: 6px;
+                        font-size: $font-size-medium-x;
+                    }
+                    .text {
+                        display: inline-block;
+                        vertical-align: middle;
+                        font-size: $font-size-small;
+                    }
+                }
+            }
 
             .filter {
                 position: absolute;
