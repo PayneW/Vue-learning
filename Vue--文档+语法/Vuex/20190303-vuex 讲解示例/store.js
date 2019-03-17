@@ -14,7 +14,8 @@ export default new Vuex.Store({
     // getters 类似于 computed 方法，进行数据的计算
     getters: {},
 
-    // action 放异步数据或者批量处理同步操作 (简单情况可以跳过 action 直接到 mutations)
+    // Actions (调度一个"动作") [这个Actions(动作)不会直接改变tate(状态)]
+    // 异步操作 或 对 mutation 做封装(批量处理同步操作) (简单情况可以跳过 action 直接到 mutations)
     // 两个参数: 上下文环境，参数 -- 使用 context.commit(xx, xx) 方法调用 mutations 里面的方法名。
     actions: {
         changeCity(context, city) {
