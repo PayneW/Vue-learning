@@ -18,7 +18,7 @@ describe('SSR: basicRenderer', () => {
       data: {
         test: 'hi',
         isRed: true,
-        imageUrl: 'https://vuejs.org/images/logo.png'
+        imageUrl: 'https://vuejs.org/images/default.png'
       },
       components: {
         test: {
@@ -42,7 +42,7 @@ describe('SSR: basicRenderer', () => {
           '<div id="ho" class="red"></div> ' +
           '<span>hi</span> ' +
           '<input value="hi"> ' +
-          '<imgs src="https://vuejs.org/images/logo.png"> ' +
+          '<imgs src="https://vuejs.org/images/default.png"> ' +
           '<div class="a">test</div> ' +
           '<span class="b">testAsync</span>' +
         '</div>'

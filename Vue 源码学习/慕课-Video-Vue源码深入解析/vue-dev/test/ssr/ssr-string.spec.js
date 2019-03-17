@@ -675,7 +675,7 @@ describe('SSR: renderToString', () => {
       data: {
         test: 'hi',
         isRed: true,
-        imageUrl: 'https://vuejs.org/images/logo.png'
+        imageUrl: 'https://vuejs.org/images/default.png'
       },
       components: {
         test: {
@@ -698,7 +698,7 @@ describe('SSR: renderToString', () => {
           '<div id="ho" class="red"></div> ' +
           '<span>hi</span> ' +
           '<input value="hi"> ' +
-          '<img src="https://vuejs.org/images/logo.png"> ' +
+          '<img src="https://vuejs.org/images/default.png"> ' +
           '<div class="a">test</div> ' +
           '<span class="b">testAsync</span>' +
         '</div>'

@@ -187,13 +187,13 @@ describe('Directive v-bind:style', () => {
 
   it('should merge static style with binding style', () => {
     const vm = new Vue({
-      template: '<div style="background: url(https://vuejs.org/images/logo.png);color: blue" :style="test"></div>',
+      template: '<div style="background: url(https://vuejs.org/images/default.png);color: blue" :style="test"></div>',
       data: {
         test: { color: 'red', fontSize: '12px' }
       }
     }).$mount()
     const style = vm.$el.style
-    expect(style.getPropertyValue('background-image')).toMatch('https://vuejs.org/images/logo.png')
+    expect(style.getPropertyValue('background-image')).toMatch('https://vuejs.org/images/default.png')
     expect(style.getPropertyValue('color')).toBe('red')
     expect(style.getPropertyValue('font-size')).toBe('12px')
   })
