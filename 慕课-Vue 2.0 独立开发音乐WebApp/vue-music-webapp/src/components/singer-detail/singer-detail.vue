@@ -1,7 +1,7 @@
 <template>
     <transition name="slide">
         <!-- 6-8 music-list 组件开发
-            :songs = "songs" 当前组件绑定一个动态属性 songs (songs 来自下面 data 中的 sings) 给 music-list
+            :songs = "songs" 当前组件绑定一个动态属性 songs (songs 来自下面 data 中的 songs) 给 music-list
             组件，子组件(music-list) 在 props 属性中接收
             :title = "title" 和 :bg-image = "bgImage" 也要传递给子组件(music-list)， title 和 bgImage
             来自于当前 computed 计算属性下的对应方法 -->
@@ -17,10 +17,12 @@
     import {ERR_OK} from "api/config";
 
     // 6-6
-    import {createSong} from "assets/js/song";
+    // 20190325 add (在修改歌曲 url bug 时添加，所以不知道属于哪个视频的，就直接写了日期)
+    import {createSong, isValidMusic, processSongsUrl} from "assets/js/song";
 
     // 6-8 引用 music-list 组件
     import MusicList from "components/music-list/music-list"
+
 
     export default {
 
@@ -34,7 +36,8 @@
         computed: {
             // 6-5 add
             ...mapGetters([
-                // 这个 singer 对应 store.js --> getters 下的 singer 方法(属性)
+                // 这个 singer 对应 vuex 下 store.js --> getters 下的 singer 方法(属性)
+                // store.js 中的 getters 下的 singer 方法是在 singer.vue 中被赋的值
                 "singer"
             ]),
 
@@ -47,6 +50,7 @@
                 return this.singer.name
             },
             bgImage() {
+                // console.log("this.singer.avatar: ", this.singer.avatar);
                 return this.singer.avatar
             }
 
@@ -68,11 +72,18 @@
                     this.$router.push("/singer");
                     return;
                 }
+                console.log("this.singer.id: ", this.singer.id);
                 getSingerDetail(this.singer.id).then((res) => {
                     if (res.code === ERR_OK) {
                         // console.log("_getSingerDetail res.data.list: ", res.data.list);
-                        this.songs = this._normalizeSongs(res.data.list);
+                        /*this.songs = this._normalizeSongs(res.data.list);*/
                         // console.log("songs: ", this.songs);
+
+                        // 20190325 change
+                        processSongsUrl(this._normalizeSongs(res.data.list)).then((songs) => {
+                            this.songs = songs;
+                            // console.log("this.songs: ", this.songs)
+                        })
                     }
                 })
             },
@@ -80,11 +91,13 @@
             // 6-6 add
             _normalizeSongs(list) {
                 let ret = [];
+                // console.log("_normalizeSongs(list): ", list);
                 list.forEach((item) => {
                     // ES6 的对象解构赋值
                     // musicData 看上面的数据输出
                     let {musicData} = item;
-                    if (musicData.songid && musicData.albumid) {
+                    // 20190325 change
+                    if (isValidMusic(musicData)) {
                         ret.push(createSong(musicData))
                     }
                 });

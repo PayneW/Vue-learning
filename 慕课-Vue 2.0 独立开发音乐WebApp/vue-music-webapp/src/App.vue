@@ -16,7 +16,7 @@
     import MHeader from "components/m-header/m-header";
     import Tab from "components/tab/tab";
 
-    // 7-2 播放器
+    // 7-3 播放器
     import Player from "components/player/player";
 
     export default {

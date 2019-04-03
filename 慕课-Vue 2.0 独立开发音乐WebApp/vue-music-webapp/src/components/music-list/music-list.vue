@@ -14,7 +14,9 @@
             <!-- 6-14 add -->
             <div class="play-wrapper">
                 <!-- 6-14 播放按钮要等歌曲列表全部返回才能显示 v-show -->
-                <p class="play" v-show="songs.length>0" ref="play">
+                <!-- 7-18 add: @click="random" 点击随机播放事件，添加随机播放事件后接着就要在
+                     vuex 中的 actions 中添加 randomPlay 封装函数，接下来的讲解见 store.js -->
+                <p class="play" v-show="songs.length > 0" ref="play" @click="random">
                     <i class="icon-play"></i>
                     <span class="text">随机播放全部</span>
                 </p>
@@ -42,7 +44,7 @@
             :probe-type="probeType"
             @scroll="scroll">
             <div class="song-list-wrapper">
-                <!-- 7-2 add: @select="selectItem" -->
+                <!-- 7-3 add: @select="selectItem" -->
                 <song-list @select="selectItem" :songs="songs"/>
             </div>
 
@@ -65,6 +67,10 @@
     import {prefixStyle} from "assets/js/dom";
     const transform = prefixStyle("transform");
     const backdrop = prefixStyle("backdrop-filter");
+
+    // 7-3 引入 vuex 中的 mapActions
+    import {mapActions} from "vuex";
+
 
     import Loading from "base/loading/loading"
 
@@ -133,10 +139,35 @@
                 this.$router.back();
             },
 
-            // 7-2 add
+            // 7-3 add
             selectItem(item, index) {
+                // console.log("item: ", item);
+                // console.log("this.songs", this.songs);
+                // 7-3 add : 上面通过 ...mapActions() 方法引入 selectPlay 后，在此处使用
+                this.selectPlay({
+                    list: this.songs,
+                    index,
+                })
+            },
 
-            }
+            // 7-3 add: 为什么要在这里使用 ...mapActions() ? 答: 首先我们要设置 playlist (歌曲列表) 和
+            // sequenceList (顺序播放列表)，即我们点击歌曲的时实际上是要播放整个歌曲列表，这就是我们设置 playlist
+            // 和 sequenceList 的原因；其次我们根据点击的索引可以设置 currentIndex(SET_CURRENT_INDEX) 和
+            // playing-state(即: SET_PLAYING_STATE); 最后我们默认展开打播放器要设置 SET_FULL_SCREEN.
+            // 这样我们就在一个动作中多次改变 mutation ，所以封装一个 action 用来做统一调度。
+            ...mapActions([
+                // 调用 vuex 中定义的 selectPlay
+                "selectPlay",
+                // 7-18 add: 随机播放 actions 封装
+                "randomPlay",
+            ]),
+
+            // 7-18 随机播放事件
+            random() {
+                this.randomPlay({
+                    list: this.songs,
+                })
+            },
         },
 
         // 6-10

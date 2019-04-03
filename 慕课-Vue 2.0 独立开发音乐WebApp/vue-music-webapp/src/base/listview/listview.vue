@@ -212,7 +212,7 @@
                 // pos.y 都是负值，因为我们是在当前屏幕往上滑动的。当然在 Scroll 组建上滑动也会有大于 0 的值
                 // 存在，但是这个正值是 better-scroll 内的监听元素已经处于最上面了， 我们还继续往下滑动时
                 // better-scroll 添加的一个缓动效果，并没有实际的意义。通过下面的 console 输出可以看到 )
-                console.log("pos.y: ", pos.y);
+                // console.log("pos.y: ", pos.y);
                 this.scrollY = pos.y;
 
             },

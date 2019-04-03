@@ -53,8 +53,11 @@
                 // 6-4 add 在下面通过 ...mapMutations 做了映射之后，就实现了对 mutation 变化的提交
                 // 这种写法等于 this.$store.commit().
                 // 在点击当前歌手 (selectSinger) 的时候把当前 singer (从 listview.vue 中 $emit 得到)
-                // 歌手信息，传入到 singer-detail.vue
-                this.setSinger(singer)
+                // 歌手信息，然后调用 vuex 中 mutations 中的 "SET_SINGER" 方法， 把 singer 赋值给 state.singer
+                this.setSinger(singer);
+
+                // {avatar: "https://xxxx", id: "0025Nh1xxx", name: "xxx"}
+                console.log("singer 数据内容为: ", singer);
             },
 
             _getSingerList() {

@@ -2,7 +2,7 @@
 <template>
     <div class="song-list">
         <ul>
-            <!-- 7-2 add: @click="selectItem(song, index)", 在 components 目录下创建 player/player.vue
+            <!-- 7-3 add: @click="selectItem(song, index)", 在 components 目录下创建 player/player.vue
                 组件后，接着在 App.vue 中引入 player.vue; 然后回到当前歌曲组件，给每个歌曲添加点击跳转播放的事件 -->
             <li @click="selectItem(song, index)" v-for="(song, index) in songs" class="item">
                 <div class="content">
@@ -26,7 +26,7 @@
             }
         },
         methods: {
-            // 7-2 add:
+            // 7-3 add:
             selectItem(item, index) {
                 // 当前 song-list.vue 是个基础组件，不写业务逻辑，只派发事件，告诉父级元素当前元素被点击了，
                 // 以及点击的元素，索引是什么

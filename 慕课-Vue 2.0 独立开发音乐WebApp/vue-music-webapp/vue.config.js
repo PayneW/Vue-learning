@@ -4,69 +4,8 @@ function resolve(dir) {
     return path.join(__dirname, dir);
 }
 
-const express = require("express");
-const webpack = require("webpack");
 const axios = require("axios");
-
-const app = express();
-const apiRoutes = express.Router();
-
-// 获取歌单列表
-apiRoutes.get("/api/getDiscList", function(req, res) {
-    const url = "https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?";
-    axios.get(url, {
-        headers: {
-            // 欺骗的手段
-            referer: "https://c.y.qq.com/",
-            host: 'c.y.qq.com'
-        },
-        params: req.query
-    }).then((response) => {
-        // rs.json([body]) 是 express 中的语法 (express 中 res.json() 和 res.send())
-        res.json(response.data);
-    }).catch((e) => {
-        console.log("Error: ", e)
-    })
-});
-
-// 获取歌手列表
-/*apiRoutes.get("/getSingerList", function(req, res){
-    const url = "https://u.y.qq.com/cgi-bin/musicu.fcg?";
-    axios.get(url, {
-        headers: {
-            // 欺骗的手段
-            referer: "https://y.qq.com/",
-            host: 'y.qq.com'
-        },
-        // 浏览器请求上面 url 接口时所带的参数，然后应该是拼接到 url 的后面。
-        // 注: 我想应该是 recommend.js 中的 data 参数，但是不确定。
-        params: req.query
-    }).then((response) => {
-        res.jn(response.data);
-    }).catch((e) => {
-        console.log("Error: ", e);
-    })
-});*/
-
-
-// 获取歌手信息
-/*apiRoutes.get("/getSingerDetail", function(req, res){
-    const url = "https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?";
-    axios.get(url,  {
-        headers: {
-            referer: "https://y.qq.com/",
-            host: 'y.qq.com'
-        },
-        params: req.query
-    }).then((response) => {
-        res.json(response.data)
-    }).catch((e) => {
-        console.log("获取歌手信息 Error : ", e);
-    })
-});*/
-
-
-app.use("/api", apiRoutes);  
+const bodyParser = require("body-parser");
 
 
 module.exports = {
@@ -130,19 +69,32 @@ module.exports = {
         https: false,
         hotOnly: false,
 
-
-
         // vue-cli proxy 解决开发环境的跨域问题(服务器与服务器之间产生了一个代理跨域问题)
+        // webpack-dev-server 是使用了 http-proxy-middleware 来实现的 proxy。webpack-dev-server 是一个
+        // 小型的 Node.js Express 服务器，它使用 webpack-dev-middleware 来为通过 webpack 打包生成的静态资源
+        // 提供 web 服务。
         proxy: {
             "/api": {
                 target: "https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?",
                 changeOrigin: true,
             },
-        },
 
+            /*"/api/getSingerList": {
+                target:  "https://u.y.qq.com/cgi-bin/musicu.fcg?",
+                changeOrigin: true,
+            },
+
+            "/api/getDiscList": {
+                target: "https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?",
+                changeOrigin: true
+            }*/
+        },
 
         // devServer.before 配置: 在服务器内部的所有其他中间件之前，提供执行自定义中间件的功能。用来配置自定义处理程序
         before(app) {
+            app.use(bodyParser.urlencoded({extended: true}));
+            const querystring = require("querystring");
+
             // 获取歌单列表
             app.get('/api/getDiscList', function (req, res) {
                 const url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg';
@@ -153,6 +105,7 @@ module.exports = {
                     },
                     params: req.query
                 }).then((response) => {
+                    // 将数据返回给前端
                     res.json(response.data)
                 }).catch((e) => {
                     console.log(e)
@@ -160,12 +113,12 @@ module.exports = {
             });
 
             // 获取歌手列表
-            /*app.get("/getSingerList", function(req,res) {
+            /*app.get("api/getSingerList", function(req,res) {
                 const url = "https://u.y.qq.com/cgi-bin/musicu.fcg?";
                 axios.get(url, {
                     headers: {
-                        referer: "https://y.qq.com/",
-                        host: 'y.qq.com'
+                        referer: "https://y.qq.com/portal/singer_list.html",
+                        host: 'u.y.qq.com'
                     },
                     params: req.query
                 }).then((response) => {
@@ -173,25 +126,63 @@ module.exports = {
                 }).catch((e) => {
                     console.log("Error: ", e);
                 })
-            })*/
+            });*/
 
             // 获取歌手信息
-            /*app.get("/getSingerDetail", function(req, res){
+            /*app.get("/api/getSingerDetail", function (req, res) {
                 const url = "https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?";
-                axios.get(url,  {
+                axios.get(url, {
                     headers: {
                         referer: "https://y.qq.com/",
-                        host: 'y.qq.com'
+                        host: 'c.y.qq.com'
                     },
                     params: req.query
                 }).then((response) => {
-                    debugger;
                     console.log("response: ", response);
                     res.json(response.data)
                 }).catch((e) => {
                     console.log("获取歌手信息 Error : ", e);
                 })
             });*/
+
+            app.post("/api/getPurlUrl", bodyParser.json(), function(req, res) {
+                const url = "https://u.y.qq.com/cgi-bin/musicu.fcg";
+                axios.post(url, req.body, {
+                    headers: {
+                        referer: "https://y.qq.com/",
+                        origin: "https://y.qq.com",
+                        "Content-type": "application/x-www-form-urlencoded"
+                    }
+                }).then((response) => {
+                    res.json(response.data);
+                }).catch((e) => {
+                    console.log(e);
+                })
+            });
+
+            app.get("/api/lyric", function(req, res) {
+                const url = "https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg";
+                axios.get(url, {
+                    headers: {
+                        referer: "https://c.y.qq.com/",
+                        host: "c.y.qq.com"
+                    },
+                    params: req.query
+                }).then((response) => {
+                    let ret = response.data;
+                    if (typeof ret === "string") {
+                        const reg = /^\w+\(({.+})\)$/;
+                        const matches = ret.match(reg);
+                        if (matches) {
+                            ret = JSON.parse(matches[1])
+                        }
+                    }
+                    res.json(ret)
+                }).catch((e) => {
+                    console.log("/api/lyric Error: ", e);
+                })
+            })
+
 
         }
     },

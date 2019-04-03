@@ -32,7 +32,7 @@
             },
 
             // 5-6 add: 主要作用是获取当前滚动元素的位置。(e.g.: 歌手列表 singer.vue 组件中
-            // [实际的代码在 listview.vue 中]中滑动歌手列表，右侧的 shortcutList 快捷列表需要
+            // [实际的代码在 listview.vue 中]滑动歌手列表，右侧的 shortcutList 快捷列表需要
             // 知道当前你滑动到哪个歌手，然后把相对应的字母选中)
             // listenScroll 属性的作用就是让下面的 _initScroll 时要不要监听歌手列表上的 scroll
             // 事件，具体的判断在下面 methods 下 _initScroll 方法的 if 判断中。

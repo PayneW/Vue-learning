@@ -19,26 +19,44 @@ export function getSingerList() {
     });
     return jsonp(url, data, options);
 
-   /* const url = debug ? "/getSingerList": "" ;
+    /*const url = debug ? "/api/getSingerList": "" ;
+    let str = "getUCGI";
+    for (var i = 0; i< 16; i++) {
+        str += Math.floor(Math.random()*10);
+    }
     const data = {
-        "-": "getUCGI9005210658149876",
-        g_tk: 5381,
+        comm: {
+            ct: 24,
+            cv: 0,
+        },
+        singerList: {
+            module: "Music.SingerListServer",
+            method: "get_singer_list",
+            param: {
+                area: -100,
+                sex: -100,
+                genre: -100,
+                sin: 0,
+                cur_page: 1,
+                index: -100
+            }
+        }
+    };
+    const params = Object.assign({}, commonParams, {
+        "-": str,
         loginUin: 0,
         hostUin: 0,
-        format: "json",
-        inCharset: "utf-8",
-        outCharset: "utf-8",
-        notice: 0,
         platform: "yqq.json",
         needNewCode: 0,
-        data: '{"comm":{"ct":24,"cv":0},"singerList":{"module":"Music.SingerListServer","method":"get_singer_list","param":{"area":-100,"sex":-100,"genre":-100,"index":-100,"sin":0,"cur_page":1}}}'
-    };
-
+        data: JSON.stringify(data)
+    });
     return axios.get(url, {
-        params: data
+        params: params
     }).then((res) => {
         console.log("res singer list: ", res);
         return Promise.resolve(res.data)
+    }).catch((err) => {
+        console.error(err);
     })*/
 }
 
@@ -58,26 +76,22 @@ export function getSingerDetail(singerId) {
     });
     return jsonp(url, data, options)
 
-    /*const url = debug ? "/getSingerDetail" : "";
-    const data = {
-        g_tk: 5381,
+
+    /*console.log("getSingerDetail 内的接收到的 singerId: ", singerId);
+    const url = debug ? "/api/getSingerDetail" : "";
+    const params = Object.assign({}, commonParams, {
         loginUin: 0,
         hostUin: 0,
-        format: "json",
-        inCharset: "utf-8",
-        outCharset: "utf-8",
-        notice: 0,
-        platform: "yqq.json",
+        platform: "yqq",
         needNewCode: 0,
         ct: 24,
         singermid: singerId,
         order: "listen",
         begin: 0,
-        num: 30,
-        songstatus: 1
-    };
+        num: 10,
+    });
     return axios.get(url, {
-        params: data
+        params: params
     }).then((res) => {
         return Promise.resolve(res.data)
     }).catch((e) => {
