@@ -59,7 +59,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
         - `app.use(bodyParser.json())`
         - `app.use(bodyParser.urlencoded({extended: false}))`;
 
-
+- 7-20 安装 lyric-parser : npm install lyric-parser --save
 
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

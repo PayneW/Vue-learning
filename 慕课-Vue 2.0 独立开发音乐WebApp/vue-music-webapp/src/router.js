@@ -9,6 +9,11 @@ import Singer from "components/singer/singer";
 // 6-2 add
 import SingerDetail from "components/singer-detail/singer-detail";
 
+// 8-1 add
+import Disc from "components/disc/disc";
+
+// 9-2 排行榜歌曲列表页面，rank 排行榜组件的子路由
+import topList from "components/top-list/top-list";
 
 Vue.use(Router);
 
@@ -23,10 +28,23 @@ export default new Router({
         {
             path: "/recommend",
             component: Recommend,
+            // 添加推荐 recommend 下的二级路由
+            children: [
+                {
+                    path: ":id",
+                    component: Disc
+                }
+            ]
         },
         {
             path: "/rank",
             component: Rank,
+            children: [
+                {
+                    path: ':id',
+                    component: topList,
+                }
+            ]
         },
         {
             path: "/search",

@@ -2,6 +2,8 @@
 
 import {getLyric, getSongsUrl} from "api/song";
 import {ERR_OK} from "api/config";
+
+// 7-20 安装 js-base64 (解码 base64 字符串):  npm install js-base64 --save
 import {Base64} from "js-base64"
 
 // 6-6 add : 封装获取歌曲数据的组件
@@ -24,18 +26,23 @@ export default class Song {
         this.album = album;
         this.duration = duration;
         this.image = image;
-        this.filename = `C400${this.mid}.m4a`,
+        this.filename = `C400${this.mid}.m4a`;
         this.url = url;
     };
 
+    // 7-19 add: 在 api/song.js 中定义 getLyric 请求接口，在 vue.config.js 配置后台转换，最后在这里接收歌词数据
     getLyric() {
+        // 7-20: 在每次 currentSong 变化的时候我们就会调用 getLyric (调用发生在: player.vue -> watch ->
+        // currentSong() 方法内) 肯定是不行的，这里添加判断如果已经有 lyric 了, 就直接返回一个 Promise
         if (this.lyric) {
-            return Promise.resolve(ths.lyric);
+            return Promise.resolve(this.lyric);
         }
         return new Promise((resolve, reject) => {
             getLyric(this.mid).then((res) => {
                 if (res.retcode === ERR_OK) {
+                    // 使用 Base64 解码
                     this.lyric = Base64.decode(res.lyric);
+                    // console.log("js/song.js -> getLyric() -> this.lyric: ", this.lyric);
                     resolve(this.lyric);
                 } else {
                     reject("no lyric")
@@ -88,7 +95,6 @@ function filterSinger(singer) {
     });
     return ret.join("/")
 }
-
 
 export function isValidMusic(musicData) {
     return musicData.songid && musicData.albummid && (!musicData.pay || musicData.pay.payalbumprice === 0)

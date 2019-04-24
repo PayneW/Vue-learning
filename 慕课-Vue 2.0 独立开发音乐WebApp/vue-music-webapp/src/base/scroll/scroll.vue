@@ -11,7 +11,7 @@
     import BScroll from "better-scroll";
     // 把 better-scroll 组件初始化相关都放在这里，不用在每个组件中初始化了，达到复用的目的，
     export default {
-        // 设置 better-scroll 组件可以传入的 props (设置 props 也就代表 better-scroll 是父组件)
+        // 设置 better-scroll 组件可以传入的 props (设置 props 代表当前组件为某个组件的子组件)
         // props 验证: 验证传入的 props 参数的数据规格，如果不符号数据规格， Vue 会发出警告。
         props: {
             // probe /prəʊb/ v.探测，探讨
@@ -38,6 +38,12 @@
             // 事件，具体的判断在下面 methods 下 _initScroll 方法的 if 判断中。
             // tips: 记得 listview.vue 中的一定要传值，在当前子组件 props 中接收。
             listenScroll: {
+                type: Boolean,
+                default: false,
+            },
+
+            // 10-5 add: suggest.vue 组件内的搜索列表是可以上拉刷新的，所以我们在此处扩展组件
+            pullup: {
                 type: Boolean,
                 default: false,
             }
@@ -70,6 +76,20 @@
                         me.$emit("scroll", pos)
                     })
                 }
+
+                // 10-5 add: suggest.vue 组件内的搜索列表是可以上拉刷新的，所以我们在此处扩展组件
+                if (this.pullup) {
+                    // scrollEnd 是当前滑动结束时派发一个事件
+                    this.scroll.on("scrollEnd", () => {
+                        // 当前滑动结束的位置的 y 坐标 < xxxx  说明已经快滚动到底部了
+                        console.log("scroll.y: ", this.scroll.y);
+                        console.log("scroll.maxScrollY: ", this.scroll.maxScrollY);
+                        if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+                            // 当前组件通过 $emit 发送名称为 scrollToEnd 的消息给父组件 suggest.vue，消息没有附加参数
+                            this.$emit("scrollToEnd");
+                        }
+                    });
+                }
             },
             // better-scroll 内部分方法的代理
             enable() {
@@ -78,7 +98,10 @@
             disable() {
                 this.scroll && this.scroll.disable();
             },
-            // 刷新 scroll 从新计算高度
+            // 刷新 scroll 从新计算高度:
+            // 7-25 add: tips: 想一想当前 methods 对象中定义的这些方法并没有在当前组件内调用，
+            // 那么这些方法是在哪里被调用的？ A: 当前组件的父组件中被调用。例如父组件 music-list.vue
+            // 中的 this.$refs.list.refresh();
             refresh() {
                 this.scroll && this.scroll.refresh();
             },

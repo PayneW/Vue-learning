@@ -9,6 +9,7 @@
 
 <script>
     export default {
+        // 可以从外部传入一个 props, 类型为字符串(String), 不传的话默为 default 的值
         props: {
             title: {
                 type: String,

@@ -73,13 +73,13 @@ module.exports = {
         // webpack-dev-server 是使用了 http-proxy-middleware 来实现的 proxy。webpack-dev-server 是一个
         // 小型的 Node.js Express 服务器，它使用 webpack-dev-middleware 来为通过 webpack 打包生成的静态资源
         // 提供 web 服务。
-        proxy: {
+        /*proxy: {
             "/api": {
                 target: "https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?",
                 changeOrigin: true,
             },
 
-            /*"/api/getSingerList": {
+            "/api/getSingerList": {
                 target:  "https://u.y.qq.com/cgi-bin/musicu.fcg?",
                 changeOrigin: true,
             },
@@ -87,8 +87,8 @@ module.exports = {
             "/api/getDiscList": {
                 target: "https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?",
                 changeOrigin: true
-            }*/
-        },
+            }
+        },*/
 
         // devServer.before 配置: 在服务器内部的所有其他中间件之前，提供执行自定义中间件的功能。用来配置自定义处理程序
         before(app) {
@@ -112,8 +112,8 @@ module.exports = {
                 })
             });
 
-            // 获取歌手列表
-            /*app.get("api/getSingerList", function(req,res) {
+            // 获取歌手列表 : 🔺 api 前面不要忘记 "/"
+            /*app.get("/api/getSingerList", function(req,res) {
                 const url = "https://u.y.qq.com/cgi-bin/musicu.fcg?";
                 axios.get(url, {
                     headers: {
@@ -161,6 +161,7 @@ module.exports = {
             });
 
             app.get("/api/lyric", function(req, res) {
+                // 7-19 歌词接口并没有改变
                 const url = "https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg";
                 axios.get(url, {
                     headers: {
@@ -171,15 +172,131 @@ module.exports = {
                 }).then((response) => {
                     let ret = response.data;
                     if (typeof ret === "string") {
+                        // \w: 匹配数字字母下划线
                         const reg = /^\w+\(({.+})\)$/;
                         const matches = ret.match(reg);
                         if (matches) {
-                            ret = JSON.parse(matches[1])
+                            ret = JSON.parse(matches[1]);
                         }
                     }
                     res.json(ret)
                 }).catch((e) => {
                     console.log("/api/lyric Error: ", e);
+                })
+            });
+
+
+            // 8-2 add: 获取歌单里的歌曲
+            app.get("/api/getCdInfo", function(req, res) {
+                const url = "https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg";
+                axios.get(url, {
+                    headers: {
+                        referer: "https://c.y.qq.com/",
+                        host: "c.y.qq.com"
+                    },
+                    params: req.query
+                }).then((response) => {
+                    // tips: 我们这里调试的 console 在哪里可以看到输出？ A: 在 gitBash 运行窗口总可以看到输出。
+                    // 如果当前项目在 WebStorm 中的 Terminal 中运行，那么在 terminal 中也可以看到输出。
+                    // console.log("response.data: ", response.data);
+
+                    // 8-2: 为什么我们要在这里再次处理代码？ A: 当前接口是 get 请求，但从上面打印的
+                    // response.data: jsonCallback({"code": 0, "subcode": 0, ......}) 可以看出，返回
+                    // 的值并不是一个 json, 所以不可以直接利用 res.join(response.data) 方法来处理。 之前自己
+                    // 在对比 QQ 官网接口来获取数据时，总是报参数错误，我想有一部分原因也出现在这里。(tips: 这种
+                    // 返回 jsonp 格式的接口，也可以用 jsonp 调用 )
+                    let ret = response.data;
+                    if (typeof ret === "string") {
+                        // \w: 匹配字母，数字，下划线
+                        const reg = /^\w+\(({.+})\)$/;
+                        const matches = ret.match(reg);
+                        if (matches) {
+                            ret = JSON.parse(matches[1]);
+                        }
+                    }
+                    res.json(ret);
+                }).catch((e) => {
+                    console.log(e);
+                })
+            });
+
+
+            // 9-1 add: 获取排行榜下的歌单
+            app.get("/api/getTopList", function(req, res) {
+                const url = "https://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg";
+                axios.get(url, {
+                    headers: {
+                        referer: "https://c.y.qq.com/",
+                        host: "c.y.qq.com"
+                    },
+                    params: req.query
+                }).then((response) => {
+                    let ret = response.data;
+                    console.log(typeof ret);
+                    if (typeof ret === "string") {
+                        ret = ret.replace(/(^\s*)|(\s*$)/g, "");
+
+
+                        let first = ret.indexOf("{");
+                        let last = ret.lastIndexOf("}");
+                        ret = JSON.parse(ret.substring(first, (last+1)));
+
+
+                        // \w: 匹配字母，数字，下划线
+                        // const reg = /^\w+\(({.+})\)$/;
+                        // const matches = ret.match(reg);
+                        // console.log(matches);
+                        // if (matches) {
+                        //     ret = JSON.parse(matches[1]);
+                        // }
+
+                    }
+                    // console.log(ret);
+                    res.json(ret);
+                }).catch((e) => {
+                    console.log(e);
+                })
+            });
+
+            // 10-3 搜索页面下的热门搜索
+            app.get("/api/getHotKey", function(req, res) {
+                const url = "https://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg";
+                axios.get(url, {
+                    headers: {
+                        referer: "https://c.y.qq.com/",
+                        host: "c.y.qq.com"
+                    },
+                    params: req.query
+                }).then((response) => {
+                    res.json(response.data);
+                }).catch((e) => {
+                    console.log(e);
+                });
+            });
+
+            // 10-4: 搜索接口
+            app.get("/api/search", function(req, res) {
+                const  url = "https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp";
+                axios.get(url, {
+                    headers: {
+                        referer: "https://c.y.qq.com/",
+                        host: "c.y.qq.com"
+                    },
+                    params: req.query
+                }).then((response) => {
+                    let ret = response.data;
+                    if (typeof ret === "string") {
+                        ret = ret.replace(/(^\s*)|(\s*$)/g, "");
+
+                        let first = ret.indexOf("{");
+                        let last = ret.lastIndexOf("}");
+                        ret = JSON.parse(ret.substring(first, (last+1)));
+
+                    }
+                    // console.log(ret);
+                    res.json(ret);
+                }).catch((e) => {
+                    console.log(e);
                 })
             })
 

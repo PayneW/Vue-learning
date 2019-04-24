@@ -45,7 +45,8 @@
             @scroll="scroll">
             <div class="song-list-wrapper">
                 <!-- 7-3 add: @select="selectItem" -->
-                <song-list @select="selectItem" :songs="songs"/>
+                <!-- 9-5 add: rank -->
+                <song-list :rank="rank" @select="selectItem" :songs="songs"/>
             </div>
 
             <div class="loading-container" v-show="!songs.length">
@@ -74,7 +75,17 @@
 
     import Loading from "base/loading/loading"
 
+    // 7-25 引入 mixin
+    import {playlistMixin} from "assets/js/mixin"
+
     export default {
+
+        // 7-25 add: 插入 mixin
+        mixins: [
+            // tips: 组件中的同名方法会覆盖掉 mixin 中的方法。
+            playlistMixin,
+        ],
+
         // 6-8
         props: {
             // 背景图
@@ -90,7 +101,14 @@
             title: {
                 type: String,
                 default: ""
+            },
+
+            // 9-5 add: 添加排行需要的信息
+            rank: {
+                type: Boolean,
+                default: false,
             }
+
         },
 
         // 6-10 add
@@ -143,7 +161,9 @@
             selectItem(item, index) {
                 // console.log("item: ", item);
                 // console.log("this.songs", this.songs);
-                // 7-3 add : 上面通过 ...mapActions() 方法引入 selectPlay 后，在此处使用
+                // 7-3 add : 上面通过 ...mapActions() 方法引入 selectPlay 后，在此处使用。
+                // important notes: 参数 {list: xxx, index} 是共 vuex -> actions ->
+                // selectPlay() 内几个方法使用的
                 this.selectPlay({
                     list: this.songs,
                     index,
@@ -168,6 +188,14 @@
                     list: this.songs,
                 })
             },
+
+            // 7-25 add: 实现 mixin: playlist 为 mixin.js 内部通过 vuex 取得的
+            handlePlaylist(playlist) {
+                const bottom = playlist.length > 0 ? "60px" : "";
+                this.$refs.list.$el.style.bottom = bottom;
+                // 最后再调用 scroll.vue 组件中的 refresh() 方法，父组件可以直接通过这种方式调用子组件的方法。
+                this.$refs.list.refresh();
+            }
         },
 
         // 6-10

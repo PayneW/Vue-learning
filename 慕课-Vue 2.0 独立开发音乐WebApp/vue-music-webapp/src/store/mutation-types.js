@@ -14,3 +14,8 @@ export const SET_PLAY_MODE = "SET_PLAY_MODE";
 
 export const SET_CURRENT_INDEX = "SET_CURRENT_INDEX";
 
+// 8-1 add
+export const SET_DISC = "SET_DISC";
+
+// 9-3 add
+export const SET_TOP_LIST = "SET_TOP_LIST";

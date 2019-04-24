@@ -21,7 +21,7 @@ import {playMode} from 'assets/js/config';
 // 7-18 导入 util.js 中的 shuffle 洗牌函数
 import {shuffle} from "assets/js/util";
 
-// 7-18 add
+// 7-18 add: 找到我们 "顺序播放的列表" 对应 "随机播放列表" 中的哪一首
 function findIndex(list, song) {
     return list.findIndex((item) => {
         return item.id === song.id;
@@ -49,7 +49,14 @@ export default new Vuex.Store({
         // 播放模式
         mode: playMode.sequence,
         // 当前播放的索引
-        currentIndex: -1
+        currentIndex: -1,
+
+        // 8-1 add: 用来保存歌单详情的对象
+        disc: {},
+
+        // 9-3 add: 榜单详情页的歌曲列表
+        topList: [],
+
     },
 
     // 取数据的API即是获取数据: getters
@@ -81,6 +88,16 @@ export default new Vuex.Store({
         currentSong: (state) => {
             return state.playlist[state.currentIndex] || {};
         },
+
+        // 8-1 add 保存点击的 歌单详情
+        disc: (state) => {
+            return state.disc;
+        },
+
+        // 9-3 add: 返回保存的排行榜帮点击跳转后的榜单列表
+        topList: (state) => {
+            return state.topList;
+        }
     },
 
     // Actions (调度一个"动作") [这个Actions(动作)不会直接改变 state (状态)]
@@ -97,17 +114,22 @@ export default new Vuex.Store({
             // 调度 是否全屏
             commit(types.SET_FULL_SCREEN, true);
 
-            // 7-18 add: Q.此处添加判断的原因是什么？ A: 当我们点击 singer-detail.vue 中的
-            // music-list.vue 歌曲列表打开 player.vue 播放组件，然后在当前组件内把歌曲播放模式切换为
-            // "随机播放"
+            // 7-18 add: Q.此处添加判断的原因是什么？ A: 当我们点击歌手详情(singer-detail.vue) 中
+            // 歌曲列表(music-list.vue) 中的歌曲，打开 player.vue 播放组件，等歌曲播放几秒后暂停歌曲，
+            // 把歌曲播放模式切换为 "随机播放", 然后点击左上角的 back 按钮显示出 歌手详情 组件，
+            // 在当前窗口再次点击一首歌曲，然后就发现播放的歌曲不是当前点击的歌曲，这个问题是因为在 music.list
+            // 中我们默认调用的 actions 封装是当前 selectPlay，但是当前 selectPlay 中的 播放模式(mode)
+            // 我们都是按照 sequence 顺序播放列表来的，所以我们在此处增加判断，判断当前是"顺序播放"还是"随机播放"
             if (state.mode === playMode.random) {
                 let randomList = shuffle(list);
+                // 提交 commit SET_PLAYLIST 为 randomList
                 commit(types.SET_PLAYLIST, randomList);
+                // 找到我们顺序播放的歌曲，对应到 randomList 列表中的那一首
                 index = findIndex(randomList, list[index]);
+            } else {
+                // 调度 播放列表
+                commit(types.SET_PLAYLIST, list);
             }
-
-            // 调度 播放列表
-            commit(types.SET_PLAYLIST, list);
             // 调度 播放顺序
             commit(types.SET_SEQUENCE_LIST, list);
             // 调度 当前播放的索引
@@ -128,7 +150,13 @@ export default new Vuex.Store({
             // 全屏 + 播放状态 都为 true 和上面一样
             commit(types.SET_PLAYING_STATE, true);
             commit(types.SET_FULL_SCREEN, true);
-        }
+        },
+
+        // 10-5
+        insertSong: function({commit, state}, song) {
+            let playlist = state.playlist.slice();
+
+        },
     },
 
     // mutations 放置用来改变数据的方法，更改 Vuex 的 store 中的状态的唯一方法时提交 mutation.
@@ -165,6 +193,16 @@ export default new Vuex.Store({
         [types.SET_CURRENT_INDEX](state, index) {
             // 当前播放的索引
             state.currentIndex = index
+        },
+
+        // 8-1 add
+        [types.SET_DISC](state, disc) {
+            state.disc = disc;
+        },
+
+        // 9-3 add: 排行榜榜单点击进入后的歌曲排行列表
+        [types.SET_TOP_LIST](state, topList) {
+            state.topList = topList
         }
     },
 })

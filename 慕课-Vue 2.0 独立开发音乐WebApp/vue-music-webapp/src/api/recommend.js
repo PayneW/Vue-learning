@@ -50,3 +50,25 @@ export function getDiscList() {
         return Promise.resolve(res.data)
     })
 }
+
+// 8-2 add: 获取歌单里的歌曲 (我们点开一个歌单进去到页面中，找到获取当前歌单歌曲的请求地址 )
+export function getDiscSongList(disstid) {
+    const url = debug ? '/api/getCdInfo' : 'http://ustbhuangyi.com/music/api/getDiscList';
+    const data = Object.assign({}, commonParams, {
+        disstid,
+        type: 1,
+        json: 1,
+        utf8: 1,
+        onlysong: 0,
+        hostUin: 0,
+        platform: "yqq",
+        needNewCode: 0,
+    });
+
+    return axios.get(url, {
+        params: data
+    }).then((res) => {
+        // console.log("getDiscList res: ", res);
+        return Promise.resolve(res.data)
+    })
+}

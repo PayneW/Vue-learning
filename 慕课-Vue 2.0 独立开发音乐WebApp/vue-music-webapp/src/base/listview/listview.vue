@@ -86,8 +86,6 @@
     const TITLE_HEIGHT = 30;
 
 
-
-
     export default {
         props: {
             // 父组件 singer.vue 传入的 data 数据，当前子组件在 props 属性中声明
@@ -259,6 +257,12 @@
                 this.$refs.listView.scrollToElement(this.$refs.listGroup[index], 0);
 
                 this.scrollY = this.$refs.listView.scroll.y;
+            },
+
+            // 7-25 add: 添加一个 refresh() 方法(内部调用 better-scroll 的 refresh() 方法)，
+            // 给 singer.vue 中添加的 mixin 使用
+            refresh() {
+                this.$refs.listView.refresh();
             }
 
         },

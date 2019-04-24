@@ -1,8 +1,10 @@
 <template>
-    <div class="singer">
+    <!-- 7-25 add: ref="singer" 为添加 mixin 使用 -->
+    <div class="singer" ref="singer">
         <!-- 6-2 add: 监听 listview.vue 中 $emit 发送的事件 select 并附带一个 item 参数
             当前组件接收 select 事件之后，在 methods 中做接下来的操作 -->
-        <ListView :data="singers" @select="selectSinger"></ListView>
+        <!-- 7-25 add: ref="list" 为 mixin 使用 -->
+        <ListView :data="singers" @select="selectSinger" ref="list"></ListView>
 
         <!-- 6-2 add: 歌手详情页的路由配置, 路由的跳转是根据 `base\listview\listview.vue`
         中歌手列表 li 点击来跳转的，所以需要给 listview.vue 中的 li 添加 @click="selectItem(item)"
@@ -18,7 +20,7 @@
 
     import Singer from "assets/js/singer";
 
-    import ListView from "base/listview/listview"
+    import ListView from "base/listview/listview";
 
     // 6-4 add: vuex
     import {mapMutations} from "vuex";
@@ -26,7 +28,13 @@
     const HOT_NAME = "热门";
     const HOT_SINGER_LEN = 10;
 
+    // 7-25 add:
+    import {playlistMixin} from "assets/js/mixin";
+
     export default {
+
+        mixins: [playlistMixin],
+
         data() {
             return {
                 singers: [],
@@ -158,7 +166,15 @@
             // 6-4: 更具体的语法参考: Vue-learning\Vue--文档+语法\Vuex\20190303-vuex 讲解示例\use.vue
             ...mapMutations({
                 setSinger: "SET_SINGER",
-            })
+            }),
+
+
+            // 7-25 add: 实现 mixin: playlist 为 mixin.js 内部通过 vuex 取得的
+            handlePlaylist(playlist) {
+                const bottom = playlist.length > 0 ? "60px" : "";
+                this.$refs.singer. style.bottom = bottom;
+                this.$refs.list.refresh();
+            }
         }
     }
 </script>

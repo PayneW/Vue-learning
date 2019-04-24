@@ -1,6 +1,7 @@
 <template>
     <!--<div>推荐页面</div>-->
-    <div class="recommend">
+    <!-- 7-25 add: 添加 ref="recommend" 以便使用 mixin -->
+    <div class="recommend" ref="recommend">
         <!-- 在 "4-10 scroll 组件的抽象和应用(上)" 视频时把 <div class="recommend-content">
          更新为 <Scroll class="recommend-content" >。
             绑定的 data 属性是父组件通过 props (props 属性在子组件内定义) 传值给 scroll.vue
@@ -42,7 +43,8 @@
                 <div class="recommend-list">
                     <h1 class="list-title">热门歌单推荐</h1>
                     <ul>
-                        <li v-for="item in discList" class="item">
+                        <!-- 8-1 add: 给当前歌单添加点击事件 selectItem(), 并把当前歌单的数据传入 -->
+                        <li v-for="item in discList" class="item" @click="selectItem(item)">
                             <p class="icon">
                                 <!-- 4-12 视频 把 :src="item.imgurl" 改为 v-lazy="item.imgurl" 使用
                                     图片懒加载加载图片, 在 main.js 中把 vue-lazyload 使用 vue.use
@@ -66,6 +68,9 @@
                 <Loading/>
             </div>
         </Scroll>
+
+        <!-- 8-1 add: 添加路由跳转,对应到 router.js 下 "/recommend" 下的二级路由 -->
+        <router-view></router-view>
     </div>
 </template>
 
@@ -80,7 +85,17 @@
 
     import Loading from "base/loading/loading.vue";
 
+    // 7-25 引入 mixin
+    import {playlistMixin} from "assets/js/mixin";
+
+    // 8-1 add
+    import {mapMutations} from "vuex";
+
     export default {
+
+        // 7-25 add
+        mixins: [playlistMixin],
+
         data() {
             return {
                 recommends: [],
@@ -116,7 +131,6 @@
                 }
             },
 
-
             _getRecommend() {
                 getRecommend().then((res) => {
                     if (res.code === ERR_OK) {
@@ -133,6 +147,35 @@
                     }
                 })
             },
+
+            // 7-25 add: 实现 mixin: playlist 为 mixin.js 内部通过 vuex 取得的
+            handlePlaylist(playlist) {
+                const bottom = playlist.length > 0 ? "60px" : "";
+                this.$refs.recommend.style.bottom = bottom;
+                // 最后再调用 scroll.vue 组件中的 refresh() 方法，当前父组件可以直接通过这种方式调用子组件的方法。
+                this.$refs.scroll.refresh();
+            },
+
+            // 8-1 add 歌单点击事件
+            selectItem(item) {
+                // 主要用的参数就是 item.dissid
+                // console.log("item: ", item);
+
+                // debugger;
+                // 通过 vue-router 的 api 进行跳转
+                this.$router.push({
+                    path: `/recommend/${item.dissid}`,
+                });
+
+                // (2).触发 mutations 对象中的 [types.SET_DISC] 回调，设置 disc
+                this.setDisc(item);
+            },
+
+            // 8-1: 扩展 mapMutations:
+            ...mapMutations({
+                // (1).自定义的语义化方法名(setDisc) 对应 mutation-types.js 中的 SET_DISC
+                setDisc: "SET_DISC",
+            })
 
         }
     }

@@ -34,8 +34,14 @@
                 </div>
 
                 <!-- normal 播放器中部 -->
-                <div class="middle">
-                    <div class="middle-l">
+                <!-- 7-22 add: 给 div.middle 添加三个触摸事件 -->
+                <div class="middle"
+                     @touchstart="middleTouchStart"
+                     @touchmove.prevent="middleTouchMove"
+                     @touchend="middleTouchEnd"
+                >
+                    <!-- 7-23 add: 歌词板块滑动出来，div.middle-l 渐隐，所以需要给当前元素添加 ref 以便引用 -->
+                    <div class="middle-l" ref="middleL">
                         <!-- 7-7 add: 添加 ref="cdWrapper" 给 animations.runAnimation() 使用 -->
                         <div class="cd-wrapper" ref="cdWrapper">
                             <!-- 7-8 add:  :class="cdCls" -->
@@ -43,11 +49,41 @@
                                 <img class="image" :src="currentSong.image">
                             </div>
                         </div>
+
+                        <!-- 7-24 add: 在圆形logo下 添加显示一行歌词的 DOM -->
+                        <div class="playing-lyric-wrapper">
+                            <div class="playing-lyric">{{playingLyric}}</div>
+                        </div>
                     </div>
+                    <!-- 7-20 添加歌词的 DOM 结构 -->
+                    <!-- 7-21 把歌词 DOM 外围的 div 更改为 Scroll 组件, 因为歌词需要向上滚动; 绑定 data 数据传给
+                         scroll 组件(子组件在 props 中接收)，用于 scroll 组件调用 refresh()来刷新页面获取当前组件
+                         的高度，这个在课程一开始就讲了，不过多解说。-->
+                    <Scroll class="middle-r" ref="lyricList" :data="currentLyric && currentLyric.lines">
+                        <div class="lyric-wrapper">
+                            <div v-if="currentLyric">
+                                <!-- 7-21 添加绑定歌词高亮的 class -->
+                                <p class="text"
+                                   ref="lyricLine"
+                                   :class="{'current': currentLineNum === index}"
+                                   v-for="(line, index) in currentLyric.lines">
+                                    {{line.txt}}
+                                </p>
+                            </div>
+                        </div>
+                    </Scroll>
                 </div>
 
                 <!-- normal 播放器底部 -->
                 <div class="bottom">
+
+                    <!-- 7-22 add 左右滑动的圆点 -->
+                    <div class="dot-wrapper">
+                        <!-- 7-22 动态绑定的 active 是根据 data 中 currentShow 等于的值来判断的 -->
+                        <span class="dot" :class="{'active': currentShow==='cd'}"></span>
+                        <span class="dot" :class="{'active': currentShow==='lyric'}"></span>
+                    </div>
+
                     <!-- 7-11 add: 歌曲播放进度条+时间 -->
                     <div class="progress-wrapper">
                         <span class="time time-l">{{format(currentTime)}}</span>
@@ -145,6 +181,8 @@
     // 7-7 add
     import {prefixStyle} from "assets/js/dom";
     const transform = prefixStyle("transform");
+    // 7-23
+    const transitionDuration = prefixStyle("transitionDuration");
 
     // 7-12 add: 导入创建的 progress-bar.vue 基础组件
     import progressBar from "base/progress-bar/progress-bar";
@@ -158,6 +196,13 @@
     // 7-17 add
     import {shuffle} from "assets/js/util";
 
+    // 7-20 add: 安装歌词解析插件: npm install lyric-parser --save
+    import Lyric from "lyric-parser";
+
+    // 7-21 add: 导入 Scroll 组件: 因为歌词需要滚动
+    import Scroll from "base/scroll/scroll";
+
+
     export default {
 
         // 7-9 add
@@ -169,12 +214,29 @@
                 currentTime: 0,
                 // 7-15 add: 在当前组件设置进度条圆环的 radius
                 radius: 32,
+                // 7-20 add: 默认歌词为 null
+                currentLyric: null,
+                // 7-21 add: 当前歌词的行数
+                currentLineNum: 0,
+                // 7-22 add: 当前播放组件，页面中部靠下的 2 个圆点，左右滑动的交互展示
+                currentShow: "cd",
+                // 7-24 add: 上面 div.playing-lyric 使用
+                playingLyric: "",
             }
         },
 
         components: {
             progressBar,
             progressCircle,
+            // 7-21 add: Scroll 组件
+            Scroll,
+        },
+
+        // 7-22 add: 我们在之前的 progress-bar.vue 中已经实现过元素的 touchstart/touchmove/touchend
+        // 事件的效果，滑动展示 "播放器/歌词" 和之前的类似
+        created() {
+            // 添加一个 touch 属性，用来关联 touchstart/touchmove/touchend 事件
+            this.touch = {}
         },
 
         computed: {
@@ -343,9 +405,19 @@
             },
 
             // 7-8 add: 添加点击播放/暂停事件
-             togglePlaying() {
+            togglePlaying() {
+                if (!this.songReady) return;
+
                 // 调用上面 ...mapMutations({}) 中的 setPlayingState, 调度 mutations 中的方法
                 this.setPlayingState(!this.playing);
+
+                // 7-24 add: 因为我们在 7-20 ~~ 7-23 增加了歌词的滚动，所以我们在点击 播放/暂停 按钮
+                // 时，歌词也要 滚动/暂停
+                if (this.currentLyric) {
+                    // this.currentLyric 在下面 getLyric 中已经被赋值，togglePlay() 是 Lyric 构造
+                    // 函数内提供的内置方法
+                    this.currentLyric.togglePlay();
+                }
             },
 
             // 7-9 add
@@ -355,40 +427,52 @@
                 if(!this.songReady) {
                     return
                 }
-                let index = this.currentIndex + 1;
-                // playlist
-                console.log("player.vue -> methods -> next() -> index: ", index);
-                // 到最后一首歌时，把 index 置为 0
-                if (index === this.playlist.length) {
-                    index = 0;
+                // 7-24 add: 假如 playlist 只有一首歌的时候
+                if (this.playlist.length === 1) {
+                    this.loop();
+                } else {
+                    let index = this.currentIndex + 1;
+                    console.log("next() -> index: ", index);
+                    // 到最后一首歌时，把 index 置为 0
+                    if (index === this.playlist.length) {
+                        index = 0;
+                    }
+
+                    // 调用 mapMutations 中的 setCurrentIndex()
+                    this.setCurrentIndex(index);
+                    // 如果当前是暂停状态，那么切换到下一首时应该播放
+                    if (!this.playing) {
+                        this.togglePlaying();
+                    }
+                    // 只有当 this.ready() 执行时才会把值设置为 true,
+                    this.songReady = false;
                 }
-                // 调用 mapMutations 中的 setCurrentIndex()
-                this.setCurrentIndex(index);
-                // 如果当前是暂停状态，那么切换到下一首时应该播放
-                if (!this.playing) {
-                    this.togglePlaying();
-                }
-                // 只有当 this.ready() 执行时才会把值设置为 true,
-                this.songReady = false;
             },
             prev() {
                 if(!this.songReady) {
                     return
                 }
-                let index = this.currentIndex - 1;
-                if (index === -1) {
-                    index = this.playlist.length -1;
-                }
-                this.setCurrentIndex(index);
+                // 7-24 add:
+                if (this.playlist.length === 1) {
+                    this.loop();
+                } else {
+                    let index = this.currentIndex - 1;
+                    if (index === -1) {
+                        index = this.playlist.length -1;
+                    }
+                    this.setCurrentIndex(index);
 
-                if (!this.playing) {
-                    this.togglePlaying();
-                }
+                    if (!this.playing) {
+                        this.togglePlaying();
+                    }
 
-                this.songReady = false;
+                    this.songReady = false;
+                }
             },
 
-            // 7-9 add: 中有当前歌曲加载完毕，ready 执行，才会把 songReady 设置为 true, 这样就解决快速上下切换歌曲的问题
+            // 7-9 add: 当前歌曲加载完毕，ready 执行，才会把 songReady 设置为 true, 这样就解决快速上下切换歌曲的问题
+            // 那么这个 ready() 函数是怎么执行的？ A: audio 标签如果资源可以播放的话会自动触发其上的 canready 事件，
+            // 所以 canready 事件执行时，我们当前设定 this.songReady = true 就会执行了
             ready() {
                 this.songReady = true;
             },
@@ -422,11 +506,17 @@
             // 7-13 add
             onProgressBarChange(percent) {
                 // audio 的 currentTime 是可读写可设置的属性
-                console.log("player.vue -> methods -> onProgressBarChange() -> this.$refs.audio.currentTime: ", this.$refs.audio.currentTime);
-                this.$refs.audio.currentTime = this.currentSong.duration * percent;
+                console.log("audio.currentTime: ", this.$refs.audio.currentTime);
+                const currentTime = this.currentSong.duration * percent;
+                this.$refs.audio.currentTime = currentTime;
                 // 拖动后如果当前状态是非播放状态，那么就让他播放
                 if (!this.playing) {
                     this.togglePlaying();
+                }
+
+                // 7-24 add: 解决当我们拖动滚动条时歌词没有滚动到相应位置的问题。
+                if (this.currentLyric) {
+                    this.currentLyric.seek(currentTime * 1000);
                 }
             },
 
@@ -485,8 +575,166 @@
             loop() {
                 this.$refs.audio.currentTime = 0;
                 this.$refs.audio.play();
+
+                // 7-24 add: 播放音乐切换到展示歌词界面时，稍微听一会然后把歌曲播放模式切换到"单曲循环"，接着把
+                // 进度调拉到末尾，重复播放歌曲时，发现歌词并没有从头开始滚动，这里就要解决这个问题
+                if (this.currentLyric) {
+                    // seek() 方法为 Lyric 插件提供的内置方法
+                    this.currentLyric.seek(0);
+                }
             },
 
+            // 7-20 add: getLyric
+            getLyric() {
+                // output:  this.currentSong.__proto__: {constructor: ƒ, getLyric: ƒ}
+                console.log("this.currentSong.__proto__: ", this.currentSong.__proto__);
+                // ▲▲▲ Important notes:
+                // (1).这个 this.currentSong 为什么会有 getLyric() 方法？ A: 因为 currentSong 是
+                // assets/js/song.js 中 Song 类的一个实例，构造函数的实例当然可以调用构造函数的方法。
+                // (2).currentSong 是 Song 构造函数的实例是怎么实现的？ A: 我们在 singer-detail.vue 中引入
+                // assets/js/song.js，在 _normalizeSongs() 标准化方法中传入 createSong (即: song.js 中封
+                // 装实例化 Song 的工厂方法), 过滤掉收费歌曲后把当前 singer.id 歌手相对应的歌曲放入到 ret 数组中，
+                // (重点提示: 此时 ret 数组中存的每一项都已经是 Song 构造函数的实例, 输出测试见 singer-detail.vue
+                // 组件)，接着我们把 ret 数组传入到 processSongsUrl() 方法中给每首歌曲添加 url, 然后通过
+                // Promise.then() 把每一首歌曲组成的数组 songs 复制给 this.songs (即 data 下定义的 songs 方法)，
+                // this.songs 得到当前 singer.id 的完整歌曲组成的歌曲数组，接着我们在 singer-detail.vue 中把 songs
+                // 传给子组件 music-list.vue，子组件在 props 内接收，接着我们在 music-list.vue 中把歌曲循环出来，
+                // 当我们点击当前歌曲时(tips: 点击事件封装在 music-list.vue 导入的子组件 song-list.vue 中)，
+                // 我们调用 vuex 中 actions 内的 selectPlay() 封装调度方法，把 songs 和当前歌曲的 index 传给当前
+                // 调度方法，因为在 vuex 中的 getters() 内 currentSong 是通过 state.playlist[state.currentIndex]
+                // 计算取得的，此时 currentSong 代表的也即是 Songs 实例数组的哪一项而已。 这就是 currentSong 变成 Song
+                // 构造函数的实例完整过程。
+                this.currentSong.getLyric().then((lyric) => {
+
+                    // 一个歌词组成的数组
+                    //console.log("lyric: ", lyric);
+
+                    // 7-20 add: 在上面 data 中添加 currentLyric; Lyric 构造函数去 github 熟悉一下。
+                    // 7-21 add: 添加 在初始化 Lyric 时传入一个 this.handleLyric 回调函数
+                    this.currentLyric = new Lyric(lyric, this.handleLyric);
+
+                    // output: 输出一个 Lyric 对象 ; function Lyric {...}
+                    // console.log("this.currentLyric: ", this.currentLyric);
+                    // console.log("this.handleLyric: ", this.handleLyric);
+
+                    // 7-21 add: 如果歌曲正在播放
+                    if (this.playing) {
+                        // 歌词也要执行
+                        this.currentLyric.play();
+                    }
+                }).catch(() => {
+                    // catch 为当我们获取不到歌词时，添加的判断
+                    this.currentLyric = null;
+                    this.playingLyric= "";
+                    this.currentLineNum = 0;
+                });
+            },
+
+            // 7-21: 当歌词每一行发生改变时，就回调一下, 回调包含了每一行的 lineNum 和 歌词的内容 text
+            // 在 lyric-parser 插件中 this.handle({txt: xxx, lineNum: i}) 所以直接
+            // handlerLyric({lineNum, txt}) 是可以的，
+            handleLyric({lineNum, txt}) {
+                this.currentLineNum = lineNum;
+                // 歌词大于 5 行才执行滚动
+                if (lineNum > 5) {
+                    // 因为 $refs.lyricLine 是循环的 p 标签，所以那就是一组 p 标签
+                    let lineEl = this.$refs.lyricLine[lineNum - 5];
+                    this.$refs.lyricList.scrollToElement(lineEl, 1000);
+                } else {
+                    // 歌词小于 5 行，我们直接滚动到顶部
+                    this.$refs.lyricList.scrollToElement(0 ,0);
+                }
+
+                // 7-24 add: div.playing-lyric 里面绑定值，把当前高亮的歌词显示
+                this.playingLyric = txt;
+            },
+
+            // 7-22 add
+            middleTouchStart(e) {
+                // 这里和 progress.vue 中的写法一样，表示初始化完成
+                this.touch.initial = true;
+                // js高程-- touches: 表示当前跟踪的触摸操作的 Touch 对象的数组
+                const touch = e.touches[0];
+                this.touch.startX = touch.pageX;
+                console.log("touchStart.pageX: ", Math.floor(touch.pageX));
+                this.touch.startY = touch.pageY;
+            },
+            middleTouchMove(e) {
+                // console.log("this.i++: ", this.i++);
+
+                if (!this.touch.initial) return;
+                const touch = e.touches[0];
+                const deltaX = touch.pageX - this.touch.startX;
+                const deltaY = touch.pageY - this.touch.startY;
+                // 这个判断是什么意思？ A: 因为"歌词"是可以上下滑动的，所以添加判断，如果检测到滑动的距离 Y 轴
+                // 大于 X 轴，我们就判断为上下滑动的歌词，而不是左右滑动切换 "播放/歌词" 板块
+                if (Math.abs(deltaY) > Math.abs(deltaX)) return;
+
+                // 我们设置歌词板块(div.middle-r) left 距离的 2 种状态，如果当前 this.currentShow === "cd"
+                // 那么设置 left 等于 0, 如果当前歌词板块显示就设置 left = -window.innerWidth;
+                const left = this.currentShow === "cd" ? 0 : -window.innerWidth;
+
+                // console.log("left: ", left);
+
+                // 用 console 打印出来就很好看了
+                // console.log("---start---");
+                // console.log("touchMove.pageX: ", Math.floor(touch.pageX));
+                // console.log("deltaX: ", Math.floor(deltaX));
+
+                // console.log("left + deltaX: ", Math.floor(left + deltaX));
+                // console.log("---end---");
+
+                // 因为 Math.max() 中得到的值永远都是负的，所以我们用 Math.min(0 , 负数)，设置最大也不能大于 0.
+                const offsetWidth = Math.min(0, Math.max(-window.innerWidth, left + deltaX));
+
+
+                // 7-23 取得滑动的百分比
+                this.touch.percent = Math.abs(offsetWidth / window.innerWidth);
+                // 7-23
+                this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px, 0, 0)`;
+                this.$refs.lyricList.$el.style[transitionDuration] = 0;
+                // 修改 div.middle-l 的渐隐渐显效果
+                this.$refs.middleL.style.opacity = 1 - this.touch.percent;
+                this.$refs.middleL.style[transitionDuration] = 0;
+            },
+            // 7-23
+            middleTouchEnd(e) {
+                let offsetWidth;
+
+                let opacity;
+
+                // 从右向左滑
+                if (this.currentShow === "cd") {
+                    //  0.1 既是滑动大于 10%
+                    if (this.touch.percent > 0.1) {
+                        offsetWidth = -window.innerWidth;
+                        opacity = 0;
+                        this.currentShow = "lyric"
+                    } else {
+                        offsetWidth = 0;
+                        opacity= 1;
+                    }
+                }
+                // 从左向右滑
+                else {
+                    //
+                    if (this.touch.percent < 0.9) {
+                        offsetWidth = 0;
+                        this.currentShow = "cd";
+                        opacity= 1;
+                    } else {
+                        offsetWidth = - window.innerWidth;
+                        opacity= 0;
+                    }
+                }
+                this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px, 0, 0)`;
+                // 给滑动添加更平滑的效果
+                const time = 300;
+                this.$refs.lyricList.$el.style[transitionDuration] = `${time}ms`;
+
+                this.$refs.middleL.style.opacity = opacity;
+                this.$refs.middleL.style[transitionDuration] = `${time}ms`;
+            },
         },
 
         watch: {
@@ -496,21 +744,47 @@
             // links: https://cn.vuejs.org/v2/api/#watch
             currentSong(newSong, oldSong) {
                 // tips: 上面 changeMode() 内通过 this.resetCurrentIndex() 重新设置了 currentIndex的，
-                // 虽然解决了点击切换播放模式按钮切换歌曲时可以保持 currentSong 不变的问题，但不能解决当
+                // 虽然解决了点击播放模式按钮切换歌曲时可以保持 currentSong 不变的问题，但不能解决当
                 // 我们点击暂停按钮后再次切换播放模式时，音乐会自动播放的问题，那么为什么我们点击了暂停按钮，再次点击切换
-                // 播放模式时音乐会自动播放呢？ 答: 因为我们在下面 watch 对象中监听了 currentSong, 只要 currentSong
-                // 有变化就会触发 audio 的 play() 方法， 所以解决方法是在下面 currentSong() 函数内添加 newSong 和
-                // oldSong 来判断
-                // 加入 id 没有变 我们就不做操作
-                console.log("player.vue -> watch -> currentSong() -> newSong.id: ", newSong.id);
-                console.log("player.vue -> watch -> currentSong() -> oldSong.id: ", oldSong.id);
-                if (newSong.id === oldSong.id) return;
+                // 播放模式时音乐会自动播放呢？ 答: 因为我们在当前 watch 对象中监听了 currentSong, 只要 currentSong
+                // 有变化就会触发 audio 的 play() 方法， 所以解决方法是利用 vue 给当前 currentSong() 函数内提供的
+                // newSong 和 oldSong 参数来判断。
+                // 如果歌曲 id 没有变，就直接返回不做操作
+                // console.log("newSong.id: ", newSong.id);
+                // console.log("oldSong.id: ", oldSong.id);
+                // 7-24 add: 在做歌词滚动这块内容的时候，发现黄老师源码 master 中 if 判断有增加判断条件，所以更改。
+                if ( !newSong.id || !newSong.url || newSong.id === oldSong.id) {
+                    return;
+                }
 
                 // 添加 this.$nextTick() 延时的原因: 我们必须等上面 auto 标签，动态绑定 src 完成后才能播放
+                // 7-24 add: 更改 this.$nextTick() 为 setTimeout() 原因是在微信端播放时，把微信放到手机后台时，
+                // 虽然此时应用程序还在运行，但是 js 不会执行， 但是问题出在，微信处于后台状态，当前歌曲是可以播放
+                // 完的，如果当前歌曲播放完，audio 上的 end 事件就会调用 next() 方法，
+                // next 方法会首先判断 this.songReady 是不是为 true,
                 this.$nextTick(() => {
-                    // 当 currentSong 变化时调用 play() 方法，实际上即动态添加了 src 时
+                    // 当 currentSong 变化时调用 auto 的 play() 方法，即动态添加了 src 后
                     this.$refs.audio.play();
-                })
+
+                    // 7-19 add: 取得歌词
+                    this.getLyric();
+                });
+
+                // 7-24 add: 添加歌词展示后，歌词可以正常滚动了，但是此时我们执行切换下以首的操作(重复切换几次)，
+                // 暂停后歌词的高亮会出现上下跳动的问题，那么这个问题出现在哪里？ A: 问题出在上面 methods 对象
+                // 中 getLyric() 方法下 this.currentLyric = new Lyric(), 每个歌词加载实例化一次 Lyric
+                // 构造函数，那么我们在切换下一曲切 + 切换下一曲时，就会生成很多个 Lyric 的实例，所以我们要停止
+                // 当前实例的执行
+                if (this.currentLyric) {
+                    this.currentLyric.stop();
+
+                    // 7-24 这里对比源码后，添加的更新
+                    // 重置为 null
+                    this.currentLyric = null;
+                    this.currentTime = 0;
+                    this.playingLyric = "";
+                    this.currentLineNum = 0;
+                }
             },
 
             // 观察 ...mapGetters() 内的 playing 变化 true/false

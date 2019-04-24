@@ -6,6 +6,7 @@ import {ERR_OK} from "api/config";
 
 const debug = process.env.NODE_ENV !== "production";
 
+// 7-19 add:
 export function getLyric(mid) {
     const url = debug ? "/api/lyric" : "http://ustbhuangyi.com/music/api/lyric";
 
@@ -22,6 +23,7 @@ export function getLyric(mid) {
     return axios.get(url, {
         params: data
     }).then((res) => {
+        // 将现有对象转换为 Promise 对象
         return Promise.resolve(res.data);
     })
 }

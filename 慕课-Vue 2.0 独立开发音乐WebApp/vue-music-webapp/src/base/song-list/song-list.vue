@@ -5,6 +5,12 @@
             <!-- 7-3 add: @click="selectItem(song, index)", 在 components 目录下创建 player/player.vue
                 组件后，接着在 App.vue 中引入 player.vue; 然后回到当前歌曲组件，给每个歌曲添加点击跳转播放的事件 -->
             <li @click="selectItem(song, index)" v-for="(song, index) in songs" class="item">
+
+                <!-- 9-5 add: 排行榜 -->
+                <div class="rank" v-show="rank">
+                    <span :class="getRankCls(index)">{{getRankText(index)}}</span>
+                </div>
+
                 <div class="content">
                     <!-- 歌曲标题 -->
                     <h2 class="name">{{song.name}}</h2>
@@ -23,6 +29,11 @@
             songs: {
                 type: Array,
                 default: []
+            },
+            // 9-5 add: 扩展排行榜展示需要的信息
+            rank: {
+                type: Boolean,
+                default: false,
             }
         },
         methods: {
@@ -35,7 +46,21 @@
 
             getDesc(song) {
                  return `${song.singer}。${song.album}`
-            }
+            },
+
+            // 9-5 add:
+            getRankCls(index) {
+                if (index <=2 ) {
+                    return `icon icon${index}`;
+                } else {
+                    return `text`
+                }
+            },
+            getRankText(index) {
+                if (index > 2) {
+                    return index + 1;
+                }
+            },
         }
     }
 </script>

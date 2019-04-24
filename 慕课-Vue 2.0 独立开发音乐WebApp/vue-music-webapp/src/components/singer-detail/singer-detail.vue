@@ -72,17 +72,17 @@
                     this.$router.push("/singer");
                     return;
                 }
-                console.log("this.singer.id: ", this.singer.id);
+                // console.log("this.singer.id: ", this.singer.id);
                 getSingerDetail(this.singer.id).then((res) => {
                     if (res.code === ERR_OK) {
                         // console.log("_getSingerDetail res.data.list: ", res.data.list);
-                        /*this.songs = this._normalizeSongs(res.data.list);*/
+                        // this.songs = this._normalizeSongs(res.data.list);
                         // console.log("songs: ", this.songs);
 
                         // 20190325 change
                         processSongsUrl(this._normalizeSongs(res.data.list)).then((songs) => {
                             this.songs = songs;
-                            // console.log("this.songs: ", this.songs)
+                            // console.log("singer-detail.vue -> _getSingerDetail() -> this.songs: ", this.songs)
                         })
                     }
                 })
@@ -101,6 +101,13 @@
                         ret.push(createSong(musicData))
                     }
                 });
+
+                // tips: 此时 ret 数组中存的每一项都已经是 Song (assets/js/song.js) 构造函数的实例
+                // output: item.__proto__.constructor: ƒ Song(_ref){ //... }
+                ret.forEach((item) => {
+                    // console.log("item.__proto__.constructor: ", item.__proto__.constructor);
+                });
+
                 return ret;
             }
         },
