@@ -162,8 +162,7 @@
                 // console.log("item: ", item);
                 // console.log("this.songs", this.songs);
                 // 7-3 add : 上面通过 ...mapActions() 方法引入 selectPlay 后，在此处使用。
-                // important notes: 参数 {list: xxx, index} 是共 vuex -> actions ->
-                // selectPlay() 内几个方法使用的
+                // important notes: 参数 {list: xxx, index} 是共 vuex -> actions -> selectPlay() 内几个方法使用的
                 this.selectPlay({
                     list: this.songs,
                     index,

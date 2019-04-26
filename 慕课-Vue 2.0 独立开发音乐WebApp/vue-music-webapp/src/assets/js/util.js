@@ -13,14 +13,29 @@ export function shuffle (arr) {
     return _arr;
 }
 
-export function debounce(func, delay) {
+// export function debounce(func, delay) {
+//     let timer;
+//     return function (...args) {
+//         if (timer) {
+//             clearTimeout(timer);
+//         }
+//         timer = setTimeout(() => {
+//             func.apply(this, args);
+//         }, delay)
+//     };
+// }
+
+// 10-10 add: 函数防抖
+export function debounce(func, wait) {
     let timer;
-    return function (...args) {
+    return function() {
+        let args = arguments;
+        let context = this;
         if (timer) {
             clearTimeout(timer);
         }
-        timer = setTimeout(() => {
-            func.apply(this, args);
-        }, delay)
-    };
+        timer = setTimeout(function() {
+            func.apply(context, args);
+        }, wait)
+    }
 }

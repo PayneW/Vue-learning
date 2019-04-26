@@ -3,6 +3,7 @@
 <template>
     <!-- 注意: 这里定义的是 ref 为了下面 better-scroll 插件获取元素使用，不是 class. -->
     <div ref="wrapper">
+        <!-- 当前组件的父组件(e.g.: suggest.vue) <Scroll> xxx </Scroll> 内的代码会替换掉当前 <slot> 插槽 -->
         <slot></slot>
     </div>
 </template>
@@ -46,6 +47,12 @@
             pullup: {
                 type: Boolean,
                 default: false,
+            },
+
+            // 10-10 add: 来自 suggest.vue
+            beforeScroll: {
+                type: Boolean,
+                default: false,
             }
         },
 
@@ -79,16 +86,25 @@
 
                 // 10-5 add: suggest.vue 组件内的搜索列表是可以上拉刷新的，所以我们在此处扩展组件
                 if (this.pullup) {
-                    // scrollEnd 是当前滑动结束时派发一个事件
+                    // scrollEnd 是当前滑动操作结束时触发的事件，这个事件是 better-scroll 组件内封装的，
+                    // 应该是监听的 touchend 事件，
                     this.scroll.on("scrollEnd", () => {
-                        // 当前滑动结束的位置的 y 坐标 < xxxx  说明已经快滚动到底部了
-                        console.log("scroll.y: ", this.scroll.y);
-                        console.log("scroll.maxScrollY: ", this.scroll.maxScrollY);
+                        // 当前滑动结束的位置的 y 坐标 < (最大滚动距离 + 50 像素), 既说是不是滚动到了底部偏 50 像素, 如果是的，说明已经快滚动到底部了
+                        // console.log("scroll.y: ", this.scroll.y);
+                        // console.log("scroll.maxScrollY: ", this.scroll.maxScrollY);
                         if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
                             // 当前组件通过 $emit 发送名称为 scrollToEnd 的消息给父组件 suggest.vue，消息没有附加参数
+                            // 接下来的操作在父组件 suggest.vue 中完成
                             this.$emit("scrollToEnd");
                         }
                     });
+                }
+
+                // 10-10: beforeScroll 为 better-scroll 封装在滚动离开时派发一个 beforeScrollStart 名称的事件
+                if (this.beforeScroll) {
+                    this.scroll.on("beforeScrollStart", () => {
+                        this.$emit("beforeScroll");
+                    })
                 }
             },
             // better-scroll 内部分方法的代理

@@ -47,10 +47,6 @@ export default new Router({
             ]
         },
         {
-            path: "/search",
-            component: Search,
-        },
-        {
             path: "/singer",
             component: Singer,
             // 6-2 add:  配置子路由
@@ -61,6 +57,19 @@ export default new Router({
                     component: SingerDetail
                 }
             ]
-        }
+        },
+        {
+            path: "/search",
+            component: Search,
+            // 10-6 add: 这里的搜索跳转，默认二级路由跳转是点击搜索列表中歌手来跳转的；如果点击的是歌曲，
+            // 不存在 id 值那么 url 默认还是到 search (e.g.: localhost: 7400/#/search)，但是我们写了
+            // 当前的二级路由，页面还是会跳转到 singer-detail.vue 组件来。
+            children: [
+                {
+                    path: ":id",
+                    component: SingerDetail
+                }
+            ]
+        },
     ]
 })

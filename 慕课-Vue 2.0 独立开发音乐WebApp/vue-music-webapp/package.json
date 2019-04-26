@@ -12,6 +12,7 @@
     "better-scroll": "^1.14.1",
     "body-parser": "^1.18.3",
     "create-keyframe-animation": "^0.1.0",
+    "good-storage": "^1.1.0",
     "js-base64": "^2.5.1",
     "jsonp": "^0.2.1",
     "lyric-parser": "^1.0.1",

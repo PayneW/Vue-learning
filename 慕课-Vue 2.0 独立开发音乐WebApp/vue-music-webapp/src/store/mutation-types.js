@@ -19,3 +19,6 @@ export const SET_DISC = "SET_DISC";
 
 // 9-3 add
 export const SET_TOP_LIST = "SET_TOP_LIST";
+
+// 10-11 add
+export const SET_SEARCH_HISTORY = "SET_SEARCH_HISTORY";

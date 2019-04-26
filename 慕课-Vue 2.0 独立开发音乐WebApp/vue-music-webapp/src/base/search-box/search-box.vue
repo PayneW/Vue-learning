@@ -2,12 +2,16 @@
 <template>
     <div class="search-box">
         <i class="icon-search"></i>
-        <input class="box" :placeholder="placeholder" v-model="query" >
+        <input class="box" :placeholder="placeholder" v-model="query" ref="query">
         <i class="icon-dismiss" v-show="query" @click="clear"></i>
     </div>
 </template>
 
 <script>
+
+    // 10-10 引入函数防抖
+    import {debounce} from "assets/js/util";
+
     export default {
         // 10-2
         props: {
@@ -33,6 +37,11 @@
             // 10-3 : 子组件的方法，父组件通过 this.$refs.searchBox.setQuery() 就可以调用了
             setQuery(query) {
                 this.query = query;
+            },
+
+            // 10-10: 定义的当前方法并不在上面 input 中调用，而是父级组件 search.vue 直接调用
+            blur() {
+                this.$refs.query.blur();
             }
         },
 
@@ -41,9 +50,10 @@
         // 把值当作参数传出。
         created() {
             // 只要搜索框内容有改变，$watch 函数就会执行，接着派发一个 query 事件给外围
-            this.$watch("query", (newQuery) => {
+            // 10-10 add: 添加函数防抖，减少请求次数
+            this.$watch("query", debounce((newQuery) => {
                 this.$emit("query", newQuery)
-            });
+            }, 200));
         }
     }
 </script>
