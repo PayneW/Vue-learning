@@ -22,3 +22,6 @@ export const SET_TOP_LIST = "SET_TOP_LIST";
 
 // 10-11 add
 export const SET_SEARCH_HISTORY = "SET_SEARCH_HISTORY";
+
+// 11-13 add
+export const SET_PLAY_HISTORY = "SET_PLAY_HISTORY";

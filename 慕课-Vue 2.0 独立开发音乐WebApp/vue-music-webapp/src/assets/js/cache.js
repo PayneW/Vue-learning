@@ -13,7 +13,6 @@ const SEARCH_KEY = "__search__";
 const SEARCH_MAX_LENGTH = 15;
 
 
-
 function insertArray(arr, val, compare, maxLen) {
     // ES6 的数组方法 findIndex() 返回查找到的值的索引。这个方法都接受2个参数:
     // 1.一个回调函数; 2.可选参数，用于指定回调函数中 this 的值。 执行回调函数时，传入的参数分别为:
@@ -79,4 +78,26 @@ export function deleteSearch(query) {
 export function clearSearch() {
     storage.remove(SEARCH_KEY);
     return [];
+}
+
+
+
+// 11-13 add: 保存播放历史到本地存储。 首先定义一个保存到 localstorage 对象
+// 中的属性 key 名
+const PLAY_KEY = "__play__";
+// 最多显示 200 条播放历史
+const PLAY_MAX_LENGTH = 200;
+
+// 11-13 保存播放列表
+export function savePlay(song) {
+    let songs = storage.get(PLAY_KEY, []);
+    insertArray(songs, song, (item) => {
+        return item.id === song.id;
+    }, PLAY_MAX_LENGTH);
+    storage.set(PLAY_KEY, songs);
+    return songs;
+}
+// 读取播放列表
+export function loadPlay() {
+    return storage.get(PLAY_KEY, []);
 }

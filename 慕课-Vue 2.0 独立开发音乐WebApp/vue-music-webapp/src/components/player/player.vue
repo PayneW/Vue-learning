@@ -12,8 +12,7 @@
             @enter="enter"
             @after-enter="afterEnter"
             @leave="leave"
-            @after-leave="afterLeave"
-        >
+            @after-leave="afterLeave">
             <!-- div.normal-player 为展开的大播放器 -->
             <div class="normal-player" v-show="fullScreen">
                 <!-- 7-4 add -->
@@ -151,28 +150,38 @@
                         <i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon"></i>
                     </progress-circle>
                 </div>
-                <div class="control">
+
+                <!-- 11-2 add: @click="showPlaylist" 添加点击事件以便播放列表展示和隐藏 -->
+                <!-- 11-4 add: 给 click 事件添加 .stop 阻止事件冒泡，因为当前元素的父级元素也有
+                     @click="open" 事件，所以我们此处阻止冒泡，不因此动作让父元素的事件执行 -->
+                <div class="control" @click.stop="showPlaylist">
                     <i class="icon-playlist"></i>
                 </div>
             </div>
         </transition>
 
+        <!-- 11-1 加载 playlist 组件 -->
+        <playlist ref="playlist"></playlist>
+
+
         <!-- 7-8 add: 播放音频是通过 H5 的 audio 标签实现的 -->
         <!-- 7-9 add: @canplay @error 控制快速切换上一曲/下一曲的操作 -->
         <!-- 7-11 add: @timeupdate 更新已经播放的时间， audio 标签默认提供的事件 timeupdate -->
         <!-- 7-18 add: @ended 事件，audio 标签原生事件 -->
-        <audio ref="audio"
-               :src="currentSong.url"
-               @canplay="ready"
-               @error="error"
-               @timeupdate="updateTime"
-               @ended = "end"
-        ></audio>
+        <audio
+            ref="audio"
+            :src="currentSong.url"
+            @canplay="ready"
+            @error="error"
+            @timeupdate="updateTime"
+            @ended = "end">
+        </audio>
     </div>
 </template>
 
 <script>
-    import {mapGetters, mapMutations} from "vuex";
+    // 11-13 add: mapActions 保存播放列表
+    import {mapGetters, mapMutations, mapActions} from "vuex";
 
     // 7-6 add
     // 安装 npm install create-keyframe-animation --save
@@ -194,7 +203,7 @@
     import {playMode} from "assets/js/config";
 
     // 7-17 add
-    import {shuffle} from "assets/js/util";
+    // import {shuffle} from "assets/js/util";
 
     // 7-20 add: 安装歌词解析插件: npm install lyric-parser --save
     import Lyric from "lyric-parser";
@@ -202,8 +211,17 @@
     // 7-21 add: 导入 Scroll 组件: 因为歌词需要滚动
     import Scroll from "base/scroll/scroll";
 
+    // 11-1 add: 导入歌曲列表组件
+    import Playlist from "components/playlist/playlist";
+
+    // 11-8 add: 引入 playerMixin
+    import {playerMixin} from "assets/js/mixin";
+
 
     export default {
+
+        // 11-8 add
+        mixins: [playerMixin],
 
         // 7-9 add
         data() {
@@ -230,6 +248,8 @@
             progressCircle,
             // 7-21 add: Scroll 组件
             Scroll,
+            // 11-1
+            Playlist,
         },
 
         // 7-22 add: 我们在之前的 progress-bar.vue 中已经实现过元素的 touchstart/touchmove/touchend
@@ -243,25 +263,17 @@
             // 7-3 add
             ...mapGetters([
                 "fullScreen",
-                "playlist",
-                // 7-4 add: currentSong 在 getters 中的定义为 state.playlist[state.currentIndex]
-                // playlist 在 music-list.vue 中通过 vuex 的 mapActions 已经设值
-                "currentSong",
                 // 7-8 add: 映射到 store --> getters 内的 playing: false(默认)
                 "playing",
                 // 7-9 add: 映射 getters 中的 currentIndex
                 "currentIndex",
-                // 7-16 add: 播放模式，映射到 getters 中的 mode (tips: 在 vuex 中我们
-                // 默认引入 assets/js/config 中配置的 playMode 的 sequence )
-                "mode",
-                // 7-17 add: 渠道 getters 中的 sequenceList
-                "sequenceList",
             ]),
 
             // 7-8 add: 改变歌曲 播放/暂停 的按钮图标
             playIcon() {
                 return this.playing ? "icon-pause": "icon-play"
             },
+
             miniIcon() {
                 return this.playing ? "icon-pause-mini" : "icon-play-mini";
             },
@@ -283,17 +295,6 @@
                 return this.currentTime / this.currentSong.duration;
             },
 
-            // 7-16: 播放模式图标更改
-            iconMode() {
-                // this.mode 即为上面 ...mapGetters() 内引入的
-                // playMode 为上面 import 引入 assets/js/config
-                // 因为有 3 种播放模式，下面为 2 个三目运算符来解决: 如果当前的 this.mode 等于 playMode.sequence
-                // 那么就添加 "icon-sequence" class, 否则就执行第二种情况，第二种情况又是一个判断，如果 this.mode 等于
-                // playMode.loop 那么就添加 "icon-loop", 否则就添加 "icon-random"
-                return this.mode === playMode.sequence ? "icon-sequence" :
-                    this.mode === playMode.loop ? "icon-loop" : "icon-random";
-            }
-
         },
 
         methods: {
@@ -304,23 +305,10 @@
             open() {
                 this.setFullScreen(true);
             },
+
+            // 7-4 add
             ...mapMutations({
                 setFullScreen: "SET_FULL_SCREEN",
-
-                // 7-8 add: 设置播放器的播放状态 true/false, 映射到 mutation-types.js 中的 SET_PLAYING_STATE
-                setPlayingState: "SET_PLAYING_STATE",
-
-                // 7-9 add: 映射到 mutation-types.js 中的 SET_CURRENT_INDEX
-                setCurrentIndex: "SET_CURRENT_INDEX",
-
-                // 7-16 add: 映射到 mutation-types.js 中的 SET_PLAY_MODE
-                // 通过提交 mutation 来修改 playMode
-                setPlayMode: "SET_PLAY_MODE",
-
-                // 7-17 add: 我们在下面 changeMode() 中设置了是播放列表是"顺序播放"还是"随机播放"
-                // 但是我们真正的修改 playlist 还是要通过 vuex 中 mutations 中的 types.SET_PLAYLIST
-                // 方法来实现，所以此时我们设置映射 mutation-types.js 中的 SET_PLAYLIST
-                setPlaylist: "SET_PLAYLIST",
             }),
 
 
@@ -475,7 +463,17 @@
             // 所以 canready 事件执行时，我们当前设定 this.songReady = true 就会执行了
             ready() {
                 this.songReady = true;
+
+                // 11-13 add: add-song.vue 中点击 "最近播放" 就可以查看最近的播放历史，我们点击歌手详情
+                // 中的歌曲或者点击搜索的的歌曲，都是最近播放的歌曲，各个组件共享的数据，放在 vuex 中。
+                // 在当前方法中把当前可以正常播放的歌曲保存到 playHistory 中。
+                // 首先引入 mapAction 下的 savePlayHistory
+                this.savePlayHistory(this.currentSong)
             },
+            // 11-13 add:
+            ...mapActions([
+                "savePlayHistory",
+            ]),
 
             // 7-10 add: error 事件是为防止网络突然有问题时添加的判断
             error() {
@@ -520,45 +518,6 @@
                 }
             },
 
-            // 7-16 点击改变播放模式
-            changeMode() {
-                console.log("this.mode: ", this.mode);
-                // 每点一次按钮的时候我们都要改变一次 mode, 这里的 this.mode 在 config.js 中配置的 0/1/2 三种状态
-                // 所以 this.mode + 1 最大等于 3. 因为我们又是通过 % 求余数，所以余数就是 0/1/2 中其一
-                const mode = (this.mode + 1) % 3;
-                console.log("changeMode mode: ", mode);
-                // 这个 mode 通过 vuex 的 mutation 设置到 state 上
-                this.setPlayMode(mode);
-
-                // 7-17 add
-                let list = null;
-                if (mode === playMode.random) {
-                    // 把数组重新洗牌
-                    list = shuffle(this.sequenceList);
-                } else {
-                    // 如果是顺序播放就正常赋值
-                    list = this.sequenceList;
-                }
-
-                // 7-17 add annotation: 在 store.js 中 currentSong 是根据 state.playlist 和 state.currentIndex 计算而来
-                // 但是当我们切换播放按钮的图标设置 随机播放/顺序播放/单曲循环 时，由于我们利用 shuffle() 方法打乱了
-                // 播放列表，那么 playlist 被打乱后，当前 currentSong 势必也会更改，所以我们需要在 player.vue 中
-                // 通过 changMode() 改变播放列表后，再次设置当前 currentIndex
-                // tips: 接下来要解决的问题，见 watch 对象下的 currentSong() 函数
-                this.resetCurrentIndex(list);
-
-                // 接着我们调用上面的 ...mapMutations 下映射的 setPlaylist 来修改当前播放列表
-                this.setPlaylist(list);
-            },
-
-            resetCurrentIndex(list) {
-                // ES6 语法 findIndex() 方法返回查找到的值的索引。
-                let index = list.findIndex((item) => {
-                    return item.id === this.currentSong.id;
-                });
-                // 调用 mutations 的 setCurrentIndex;
-                this.setCurrentIndex(index);
-            },
 
             // 7-18 add: 监听播放完的事件
             end() {
@@ -735,6 +694,12 @@
                 this.$refs.middleL.style.opacity = opacity;
                 this.$refs.middleL.style[transitionDuration] = `${time}ms`;
             },
+
+            // 11-2
+            showPlaylist() {
+                // 父组件调用子组件的方法
+                this.$refs.playlist.show();
+            }
         },
 
         watch: {
@@ -753,6 +718,7 @@
                 // console.log("newSong.id: ", newSong.id);
                 // console.log("oldSong.id: ", oldSong.id);
                 // 7-24 add: 在做歌词滚动这块内容的时候，发现黄老师源码 master 中 if 判断有增加判断条件，所以更改。
+                // 11-6 add: !newSong.id 的判断
                 if ( !newSong.id || !newSong.url || newSong.id === oldSong.id) {
                     return;
                 }

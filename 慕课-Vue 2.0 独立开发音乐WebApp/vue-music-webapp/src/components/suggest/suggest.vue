@@ -1,4 +1,5 @@
 <!-- 10-4 created 搜索页面框中输入搜索得内容 (query) ，生成搜索检索的列表  -->
+<!-- tips: 当前组件的父组件有 search.vue / add-song.vue -->
 <template>
     <!-- 10-5 add: 上拉刷新是要扩展 better-scroll 组件的，传递 pullup 属性给 scroll 组件，
          在 scroll 组件中 $emit scrollToEnd 到当前组件，父组件接收到 scrollToEnd 消息之后

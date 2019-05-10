@@ -5,7 +5,6 @@
             <!-- 7-3 add: @click="selectItem(song, index)", 在 components 目录下创建 player/player.vue
                 组件后，接着在 App.vue 中引入 player.vue; 然后回到当前歌曲组件，给每个歌曲添加点击跳转播放的事件 -->
             <li @click="selectItem(song, index)" v-for="(song, index) in songs" class="item">
-
                 <!-- 9-5 add: 排行榜 -->
                 <div class="rank" v-show="rank">
                     <span :class="getRankCls(index)">{{getRankText(index)}}</span>
@@ -39,8 +38,8 @@
         methods: {
             // 7-3 add:
             selectItem(item, index) {
-                // 当前 song-list.vue 是个基础组件，不写业务逻辑，只派发事件，告诉父级元素当前元素被点击了，
-                // 以及点击的元素，索引是什么
+                // 当前 song-list.vue 是个基础组件，不写业务逻辑只派发事件，告诉父级元素当前元素被点击了，
+                // 以及点击的元素索引是什么
                 this.$emit("select", item, index)
             },
 
@@ -70,7 +69,6 @@
     @import "~assets/stylus/mixin";
 
     .song-list {
-        /* 6-9: 实话说在这里面写 stylus/scss/less 真的好吗？ .item 前面忘记点点，找了半天为什么没有样式。 */
         .item {
             display: flex;
             align-items: center;

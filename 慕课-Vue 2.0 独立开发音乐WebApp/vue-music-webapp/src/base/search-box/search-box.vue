@@ -1,4 +1,7 @@
-<!-- 10-2 created 搜索页面基础组件 search-box, 在 components/search/search.vue 中被引入 -->
+<!-- 10-2 created 搜索页面基础组件 search-box, 在
+     components/search/search.vue,
+     components/add-song/add-song.vue 中被引用
+     中被引入 -->
 <template>
     <div class="search-box">
         <i class="icon-search"></i>

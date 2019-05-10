@@ -1,7 +1,8 @@
 <!-- 10-16 add: 搜索页面 删除搜索列表 confirm 确认组件  -->
 <template>
     <transition class="confirm-fade">
-        <div class="confirm" v-show="showFlag">
+        <!-- 11-7 @click.stop 阻止内部的 取消/确定 按钮冒泡 -->
+        <div class="confirm" v-show="showFlag" @click.stop>
             <div class="confirm-wrapper">
                 <div class="confirm-content">
                     <p class="text">{{text}}</p>

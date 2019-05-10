@@ -78,7 +78,8 @@
 
     // 10-12
     // 10-14 add: mapGetters 因为我们要使用 state.searchHistory;
-    import {mapActions, mapGetters} from 'vuex';
+    // 11-11 add: 在 assets/js/mixin.js 中创建 searchMixin 对象 所以此处就不要再需要 mapGetters
+    import {mapActions,} from 'vuex';
 
     // 10-14
     import SearchList from "base/search-list/search-list";
@@ -89,13 +90,15 @@
     // 10-17
     import Scroll from "base/scroll/scroll";
 
-    // 10-18 add: 导入 mixin
-    import {playlistMixin} from "assets/js/mixin";
+    // 10-18 add: 导入 playlistMixin
+    // 11-11 add: 导入 searchMixin
+    import {playlistMixin, searchMixin} from "assets/js/mixin";
 
     export default {
 
         // 10-18 add: 插入 mixin
-        mixins: [playlistMixin],
+        // 11-11 add: 添加 searchMixin
+        mixins: [playlistMixin, searchMixin],
 
         created() {
             this._getHotKey();
@@ -111,15 +114,17 @@
                 // 当前搜索框的内容(query) 改变来调用查询呢？ A: 在上面 <suggest :query="query"></suggest>
                 // 中我们把改变后的 query 查询值传给 suggest 组件， suggest 组件在 watch 观察者属性内实时
                 // 观察 query 的变化，来调用搜索内容的结果，并展示。
-                query: "",
+                /* 11-11 edit: query 挪入到 assets/js/mixin.js 中的 searchMixin 对象中 */
+                // query: "",
             }
         },
 
         // 10-14
         computed: {
-            ...mapGetters([
-                "searchHistory",
-            ]),
+            // 11-11 edit: 在 assets/js/mixin.js 中创建 searchMixin 对象,这里的代码挪到那里,
+            // ...mapGetters([
+            //     "searchHistory",
+            // ]),
 
             // 10-17 add: 为什么我们专门定义了一个 shortcut 计算属性传给 Scroll 组件？ A: 因为 scroll 组件
             // 要根据当前父组件传递的 data 值来实时 refresh 以获取 scroll 组件的正确高度，但是此时我们可以看到，
@@ -145,27 +150,30 @@
             // 把点击的热门搜索的值添加点到 搜索框中 (即传入到: search-box.vue 中的 input 内)
             // 此处定义了 addQuery， 在 search-box.vue 中添加一个接受的 setQuery, 接着就在
             // 当前组建内调用子组件的方法
-            addQuery(query) {
-                this.$refs.searchBox.setQuery(query);
-            },
+            // 11-11 edit: 放入到 assets/js/mixin.js 中的 searchMixin 对象中
+            // addQuery(query) {
+            //     this.$refs.searchBox.setQuery(query);
+            // },
 
-            // 10-4
-            onQueryChange(query) {
-                this.query = query;
-            },
+            /* 统一放入到 assets/js/mixin.js 中的 searchMixin 对象中
+                // 10-4
+                onQueryChange(query) {
+                    this.query = query;
+                },
 
-            // 10-10: 这个回调函数经过了 2 层传递。(1)首先 scroll.vue 中 this.$emit("beforeScroll")
-            // (2)接着 suggest.vue 中在 listenScroll 回调中又 this.$emit("listenScroll");
-            // (3)当前 blurInput 要做的就是让 search-box.vue 中的 input 失去焦点
-            blurInput() {
-                this.$refs.searchBox.blur();
-            },
+                // 10-10: 这个回调函数经过了 2 层传递。(1)首先 scroll.vue 中 this.$emit("beforeScroll")
+                // (2) 接着 suggest.vue 中在 listenScroll 回调中又 this.$emit("listenScroll");
+                // (3) 当前 blurInput 要做的就调用 search-box.vue 中的 input 失去焦点事件
+                blurInput() {
+                    this.$refs.searchBox.blur();
+                },
 
-            // 10-11 add: 保存搜索结果. 因为我们的搜索结果是可以保存到本地缓存，而且在组件其他部分也是可以共用的
-            // 所以我们首先在 vuex 中封装一个 action
-            saveSearch() {
-                this.saveSearchHistory(this.query);
-            },
+                // 10-11 add: 保存搜索结果. 因为我们的搜索结果是可以保存到本地缓存，而且在组件其他部分也是可以共用的
+                // 所以我们首先在 vuex 中封装一个 action
+                saveSearch() {
+                    this.saveSearchHistory(this.query);
+                },
+            */
 
             // 10-15 add
             deleteOne(item) {
@@ -180,8 +188,10 @@
             // 10-12
             // 10-15 add: deleteSearchHistory
             ...mapActions([
-                "saveSearchHistory",
-                "deleteSearchHistory",
+                //  11-11 edit: 放入到 assets/js/mixin.js 中的 searchMixin 对象中
+                // "saveSearchHistory",
+                // "deleteSearchHistory",
+
                 "clearSearchHistory"
             ]),
 

@@ -232,7 +232,7 @@ module.exports = {
                     params: req.query
                 }).then((response) => {
                     let ret = response.data;
-                    console.log(typeof ret);
+                    // console.log(typeof ret);
                     if (typeof ret === "string") {
                         ret = ret.replace(/(^\s*)|(\s*$)/g, "");
 

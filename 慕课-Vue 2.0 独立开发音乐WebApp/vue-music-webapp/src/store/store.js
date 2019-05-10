@@ -4,7 +4,7 @@ import createLogger from 'vuex/dist/logger'
 
 Vue.use(Vuex);
 
-console.log("Vuex: ", Vuex);
+/*console.log("Vuex: ", Vuex);*/
 
 /**
  * + 全局变量: store
@@ -33,7 +33,8 @@ function findIndex(list, song) {
 
 // 10-12 add: loadSearch, saveSearch
 // 10-15 add: deleteSearch, clearSearch
-import {loadSearch, saveSearch, deleteSearch, clearSearch} from "assets/js/cache";
+// 11-13 add: savePLay, loadPlay 保存播放历史
+import {loadSearch, saveSearch, deleteSearch, clearSearch, savePlay, loadPlay} from "assets/js/cache";
 
 export default new Vuex.Store({
     // 开启严格模式，检测对 state 的修改是不是通过 mutations 操作的
@@ -70,6 +71,9 @@ export default new Vuex.Store({
 
         // 10-11 add: 添加保存搜索历史需要的属性
         searchHistory: loadSearch(),
+
+        // 11-13 add: 播放历史
+        playHistory: loadPlay(),
     },
 
     // 取数据的API即是获取数据: getters
@@ -115,6 +119,14 @@ export default new Vuex.Store({
         // 10-11
         searchHistory: (state) => {
             return state.searchHistory;
+        },
+
+        // 11-13 add: add-song.vue 中点击 "最近播放" 就可以查看最近的播放历史，我们点击歌手详情
+        // 中的歌曲或者点击搜索的的歌曲，都是最近播放的歌曲，各个组件共享的数据，放在 vuex 中。
+        // tips: 接下来我们就要到 player.vue  的 ready() 方法中把当前可以正常可以播放的歌曲保存
+        // 到 playHistory 中 ---> 穿梭到 player.vue
+        playHistory: (state) => {
+            return state.playHistory;
         },
     },
 
@@ -173,10 +185,11 @@ export default new Vuex.Store({
         // 10-6: 封装 "搜索歌曲" 点击歌曲把其插入到播放列表的 action
         // 🔺🔺🔺 这个真的好难啊
         insertSong: function({commit, state}, song) {
+            // 获取 播放列表(playlist), 循环列表(sequenceList) 和 当前播放歌曲的index(currentIndex)
             let playlist = state.playlist.slice();
             let sequenceList = state.sequenceList.slice();
-
             let currentIndex = state.currentIndex;
+
             // 第一次默认为 -1
             // console.log("insertSong currentIndex: ", currentIndex);
 
@@ -234,6 +247,68 @@ export default new Vuex.Store({
         // 10-15 add: 删除整个搜索历史列表
         clearSearchHistory: function({commit}) {
             commit(types.SET_SEARCH_HISTORY, clearSearch());
+        },
+
+        // 11-5 点击 playlist.vue 中每首歌后面的叉号删除歌曲，参数 song 就是要删除的歌曲
+        deleteSong: function({commit, state}, song) {
+            // 这三个和 insertSong 中的获取是一样，分别是 播放列表(playlist), 循环列表(sequenceList)
+            // 和 当前播放歌曲的索引(currentIndex)
+            let playlist = state.playlist.slice();
+            let sequenceList = state.sequenceList.slice();
+            let currentIndex = state.currentIndex;
+
+            // 找到当前要删除的歌曲在 playlist 中的索引
+            let pIndex = findIndex(playlist, song);
+            // 然后从 playlist 中删除当前这首歌
+            playlist.splice(pIndex, 1);
+
+            // 找到当前要删除的歌曲在 sequenceList 中的索引，然后删除
+            let sIndex = findIndex(sequenceList, song);
+            sequenceList.splice(sIndex, 1);
+
+            // 1、删除完之后，我们要判断当前播放的歌曲是不是大于 pIndex, 如果大于的话我们要把 currentIndex--,
+            // 为什么要 -- 呢?  A: currentIndex > pIndex 就是代表当前播放的歌曲在要删除的歌曲之后;
+            // 试想如果播放列表一共有 10 首歌，我们突然把第 3 首删除，当前播放的是第 7 首，删除一首后播放列表
+            // 还有 9 首歌，那么此时播放的歌曲就应该变成第 6 首了，要不然我们播放第 10 首时哪还有歌曲。
+            // 2、另外一种情况是我们删除歌曲后，当前 currentIndex 等于 10 (playlist.length) 也就是说，
+            // 我们删除歌曲后当前播放的歌曲成了最后一首了，那么 currentIndex 也要 减减(--), 当前歌曲从 10
+            // 首变成 9 首了，我们当前播放的索引肯定要减一啊，道理和第一种情况一样。
+            if (currentIndex > pIndex || currentIndex === playlist.length) {
+                currentIndex--;
+            }
+
+            commit(types.SET_PLAYLIST, playlist);
+            commit(types.SET_SEQUENCE_LIST, sequenceList);
+            commit(types.SET_CURRENT_INDEX, currentIndex);
+
+            // 如果我们删除了当前播放列表的所有歌曲，播放的操作要暂停
+            if (!playlist.length) {
+                commit(types.SET_PLAYING_STATE, false);
+            } else {
+                // 11-6 add: 当我们点击删除的时候，播放状态是暂停态，但是删除之后播放列表仍然还有歌曲，
+                // 这时就要把播放状态从新设置为开始
+                commit(types.SET_PLAYING_STATE, true);
+            }
+
+            // 上面的 if/else 可以写成这种简写形式
+            // let playingState = playlist.length > 0;
+            // commit(types.SET_PLAYING_STATE, playingState);
+
+        },
+
+        // 11-7 add
+        deleteSongList: function({commit}) {
+            // 即把这些值设置为初始值
+            commit(types.SET_PLAYLIST, []);
+            commit(types.SET_SEQUENCE_LIST, []);
+            commit(types.SET_CURRENT_INDEX, -1);
+            commit(types.SET_PLAYING_STATE, false);
+        },
+
+        // 11-13 add: 保存播放历史
+        savePlayHistory: function({commit}, song) {
+            // 接下来的操作到 cache.js 中添加 savePlay / loadPlay 然后再上面导入
+            commit(types.SET_PLAY_HISTORY, savePlay(song));
         }
     },
 
@@ -287,5 +362,10 @@ export default new Vuex.Store({
         [types.SET_SEARCH_HISTORY](state, history){
             state.searchHistory = history;
         },
+
+        // 11-13 最近播放
+        [types.SET_PLAY_HISTORY](state, history) {
+            state.playHistory = history;
+        }
     },
 })
