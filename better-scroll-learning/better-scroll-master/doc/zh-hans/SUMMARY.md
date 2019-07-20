@@ -1,7 +1,7 @@
 # Summary
 
 - [介绍](README.md)
-  - [better-scroll 是什么](README.md#better-scroll 是什么)
+  - [better-scroll 是什么](README-易错代码总结.md#better-scroll 是什么)
   - [起步](README.md#起步)
   - [滚动原理](README.md#滚动原理)
   - [better-scroll 在 MVVM 框架的应用](README.md#better-scroll-在-mvvm-框架的应用)

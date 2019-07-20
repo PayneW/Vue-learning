@@ -74,7 +74,7 @@
   import Vue from 'vue'
   import OptionalDemo from 'example/todo-components/optional-demo/optional-demo.vue'
   import Scroll from 'example/todo-components/scroll/scroll.vue'
-  import SwitchOption from 'example/todo-components/switch-option/switch-option.vue'
+  import SwitchOption from 'example/todo-components/switches-option/switches-option.vue'
   import InputOption from 'example/todo-components/input-option/input-option.vue'
   import SelectOption from 'example/todo-components/select-option/select-option.vue'
 

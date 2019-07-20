@@ -902,7 +902,7 @@ if (inBrowser) {
     Object.defineProperty(opts, 'passive', ({
       get: function get () {
         /* istanbul ignore next */
-        
+
       }
     })); // https://github.com/facebook/flow/issues/285
     window.addEventListener('test-passive', null, opts);
@@ -941,10 +941,10 @@ var hasSymbol =
 /* istanbul ignore if */ // $flow-disable-line
 if (typeof Set !== 'undefined' && isNative(Set)) {
   // use native Set when available.
-  
+
 } else {
   // a non-standard Set polyfill that only works with primitive keys.
-  
+
 }
 
 /*  */
@@ -2917,7 +2917,7 @@ function flushCallbacks () {
 // events triggered in the same loop is by using MessageChannel.
 /* istanbul ignore if */
 if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
-  
+
 } else if (typeof MessageChannel !== 'undefined' && (
   isNative(MessageChannel) ||
   // PhantomJS
@@ -2925,19 +2925,19 @@ if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
 )) {
   var channel = new MessageChannel();
   channel.port1.onmessage = flushCallbacks;
-  
+
 } else {
   /* istanbul ignore next */
-  
+
 }
 
 // Determine microtask defer implementation.
 /* istanbul ignore next, $flow-disable-line */
 if (typeof Promise !== 'undefined' && isNative(Promise)) {
-  
+
 } else {
   // fallback to macro
-  
+
 }
 
 /**
@@ -3431,7 +3431,7 @@ function transformSpecialNewlines (text) {
 // typeof, instanceof and in are allowed
 var prohibitedKeywordRE = new RegExp('\\b' + (
   'do,if,for,let,new,try,var,case,else,with,await,break,catch,class,const,' +
-  'super,throw,while,yield,delete,export,import,return,switch,default,' +
+  'super,throw,while,yield,delete,export,import,return,switches,default,' +
   'extends,finally,continue,debugger,function,arguments'
 ).split(',').join('\\b|\\b') + '\\b');
 
@@ -3904,7 +3904,7 @@ var append = {
 /**
  * Map the following syntax to corresponding attrs:
  *
- * <recycle-list for="(item, i) in longList" switch="cellType">
+ * <recycle-list for="(item, i) in longList" switches="cellType">
  *   <cell-slot case="A"> ... </cell-slot>
  *   <cell-slot case="B"> ... </cell-slot>
  * </recycle-list>
@@ -4329,7 +4329,7 @@ var directives = {
 
 var isReservedTag = makeMap(
   'template,script,style,element,content,slot,link,meta,svg,view,' +
-  'a,div,img,image,text,span,input,switch,textarea,spinner,select,' +
+  'a,div,img,image,text,span,input,switches,textarea,spinner,select,' +
   'slider,slider-neighbor,indicator,canvas,' +
   'list,cell,header,loading,loading-indicator,refresh,scrollable,scroller,' +
   'video,web,embed,tabbar,tabheader,datepicker,timepicker,marquee,countdown',
@@ -4339,7 +4339,7 @@ var isReservedTag = makeMap(
 // Elements that you can, intentionally, leave open (and which close themselves)
 // more flexible than web
 var canBeLeftOpenTag$1 = makeMap(
-  'web,spinner,switch,video,textarea,canvas,' +
+  'web,spinner,switches,video,textarea,canvas,' +
   'indicator,marquee,countdown',
   true
 );

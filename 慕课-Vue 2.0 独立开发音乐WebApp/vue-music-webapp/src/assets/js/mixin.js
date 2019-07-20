@@ -136,6 +136,8 @@ export const searchMixin = {
     data() {
       return {
           query: "",
+          // 11-17 add: refreshDelay 具体解释见: scroll.vue
+          refreshDelay: 100,
       }
     },
 

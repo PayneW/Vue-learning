@@ -27,7 +27,8 @@
                     </h1>
                 </div>
 
-                <Scroll class="list-content" :data="sequenceList" ref="listContent">
+                <!-- 11-17 add: :refreshDelay -->
+                <Scroll :refreshDelay="refreshDelay" class="list-content" :data="sequenceList" ref="listContent">
                     <!-- 11-7 把 ul 改为 transition-group -->
                     <transition-group name="list" tag="ul">
                         <!-- transition-group 需要子元素有一个 :key  -->
@@ -103,6 +104,8 @@
             return {
                 showFlag: false,
                 i: 0,
+                // 11-17 add
+                refreshDelay: 100,
             }
         },
 

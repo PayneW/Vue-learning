@@ -53,6 +53,27 @@
             beforeScroll: {
                 type: Boolean,
                 default: false,
+            },
+
+            // 11-17 add: 为什么此时增加一个 "延时刷新" 的方法？ A: 问题发生在当我们在 playlist.vue 点击
+            // "+添加歌曲到队列"后，我们在 add-song.vue 中搜索歌曲点击插入后，会发现当前播放列表中默认显示
+            // 的第一首音乐并不是我们当前播放的，这里就是因为计算的高度不对引起的，那么为什么高度计算不对呢？ 因为
+            // 我们 playlist.vue 此处代码 ` <Scroll class="list-content" :data="sequenceList" ref=
+            // "listContent"><transition-group name="list" tag="ul">......</transition-group></Scroll>`
+            // 给列表内的 li 添加了动画，这个动画是需要时间执行的。 解决方法是什么呢？ 就是把默认延迟的 20ms 改成
+            // 动态的值 refreshDelay (下面 watch: 方法需要更改)
+            refreshDelay: {
+                type: Number,
+                default: 20,
+            },
+        },
+
+        // watch 对象观察上面 props 中 data 的变化，如果 data 变化，刷新 scroll
+        watch: {
+            data() {
+                setTimeout(() => {
+                    this.refresh();
+                }, this.delay)
             }
         },
 
@@ -131,14 +152,6 @@
             }
         },
 
-        // watch 对象观察上面 props 中 data 的变化，如果 data 变化，刷新 scroll
-        watch: {
-            data() {
-                setTimeout(() => {
-                    this.refresh();
-                }, 20)
-            }
-        }
     }
 </script>
 

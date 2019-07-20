@@ -2,9 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createLogger from 'vuex/dist/logger'
 
-Vue.use(Vuex);
-
-/*console.log("Vuex: ", Vuex);*/
+/* console.log("Vuex: ", Vuex); */
 
 /**
  * + 全局变量: store
@@ -14,14 +12,21 @@ Vue.use(Vuex);
  * + 数据存入到数据库中时一般情况下要处理成需要的形式，这个处理就是: actions (行动，活动)
  * */
 import * as types from './mutation-types';
-// 调试工具可以帮助我们检测对 state 的修改是不是通过 mutations 操作的
-const debug = process.env.NODE_ENV !== "production";
 
 // 7-2 播放器 Vuex 数据设计 add
-import {playMode} from 'assets/js/config';
+import { playMode } from 'assets/js/config';
 
 // 7-18 导入 util.js 中的 shuffle 洗牌函数
-import {shuffle} from "assets/js/util";
+import { shuffle } from "assets/js/util";
+
+// 10-12 add: loadSearch, saveSearch
+// 10-15 add: deleteSearch, clearSearch
+// 11-13 add: savePLay, loadPlay 保存播放历史
+import { loadSearch, saveSearch, deleteSearch, clearSearch, savePlay, loadPlay } from "assets/js/cache";
+
+Vue.use(Vuex);
+// 调试工具可以帮助我们检测对 state 的修改是不是通过 mutations 操作的
+const debug = process.env.NODE_ENV !== "production";
 
 // 7-18 add: 找到我们 "顺序播放的列表" 对应 "随机播放列表" 中的哪一首,
 // 10-6 add explain: 插入歌曲也要用到这个方法，用来判断，插入的歌曲是否已经存在了播放列表中
@@ -31,15 +36,10 @@ function findIndex(list, song) {
     })
 }
 
-// 10-12 add: loadSearch, saveSearch
-// 10-15 add: deleteSearch, clearSearch
-// 11-13 add: savePLay, loadPlay 保存播放历史
-import {loadSearch, saveSearch, deleteSearch, clearSearch, savePlay, loadPlay} from "assets/js/cache";
-
 export default new Vuex.Store({
     // 开启严格模式，检测对 state 的修改是不是通过 mutations 操作的
     strict: debug,
-    plugins: debug ? [createLogger()]: [],
+    plugins: debug ? [createLogger()] : [],
     // state 放公共数据
     state: {
         // 当前歌手
@@ -73,11 +73,10 @@ export default new Vuex.Store({
         searchHistory: loadSearch(),
 
         // 11-13 add: 播放历史
-        playHistory: loadPlay(),
+        playHistory: loadPlay()
     },
 
-    // 取数据的API即是获取数据: getters
-    // getters 类似于 computed 方法，进行数据的计算
+    // 取数据的 API 即是获取数据: getters
     getters: {
         singer: (state) => {
             return state.singer;
@@ -127,7 +126,7 @@ export default new Vuex.Store({
         // 到 playHistory 中 ---> 穿梭到 player.vue
         playHistory: (state) => {
             return state.playHistory;
-        },
+        }
     },
 
     // Actions (调度一个"动作") [这个Actions(动作)不会直接改变 state (状态)]
@@ -137,7 +136,7 @@ export default new Vuex.Store({
         // 7-3 add
         // select play 选择播放
         // 次方法在 music-list.vue 中调用
-        selectPlay: function({commit, state}, {list, index}) {
+        selectPlay: function({ commit, state }, { list, index }) {
             /* 下面的 commit 调度是对 mutation 的封装 */
             // 调度 播放状态
             commit(types.SET_PLAYING_STATE, true);
@@ -168,7 +167,7 @@ export default new Vuex.Store({
 
         // 7-18 添加 music-list.vue 中点击 "随机播放" 按钮所需要的封装事件 randomPlay
         // index 参数不需要，因为随机播放不牵扯到当前播放项。
-        randomPlay: function({commit}, {list}) {
+        randomPlay: function({ commit }, { list }) {
             // 设置播放模式: 直接设置上面导入的 playMode 对象中的 random
             commit(types.SET_PLAY_MODE, playMode.random);
             // 设置顺序播放列表
@@ -184,7 +183,7 @@ export default new Vuex.Store({
 
         // 10-6: 封装 "搜索歌曲" 点击歌曲把其插入到播放列表的 action
         // 🔺🔺🔺 这个真的好难啊
-        insertSong: function({commit, state}, song) {
+        insertSong: function({ commit, state }, song) {
             // 获取 播放列表(playlist), 循环列表(sequenceList) 和 当前播放歌曲的index(currentIndex)
             let playlist = state.playlist.slice();
             let sequenceList = state.sequenceList.slice();
@@ -208,7 +207,7 @@ export default new Vuex.Store({
                     playlist.splice(fpIndex, 1);
                     currentIndex--;
                 } else {
-                    playlist.splice(fpIndex+1, 1);
+                    playlist.splice(fpIndex + 1, 1);
                 }
             }
 
@@ -235,22 +234,22 @@ export default new Vuex.Store({
 
         // 10-11 add: 保存搜索结果. 因为我们的搜索结果是可以保存到本地缓存，而且在组件其他部分也是可以共用的
         // 所以我们首先在 vuex 中封装一个 action. query 是保存搜索结果。接着在 assets/js/ 下创建 cache.js
-        saveSearchHistory: function({commit}, query) {
+        saveSearchHistory: function({ commit }, query) {
             commit(types.SET_SEARCH_HISTORY, saveSearch(query));
         },
 
         // 10-15 add: 删除搜索历史列表
-        deleteSearchHistory: function({commit}, query) {
+        deleteSearchHistory: function({ commit }, query) {
             commit(types.SET_SEARCH_HISTORY, deleteSearch(query));
         },
 
         // 10-15 add: 删除整个搜索历史列表
-        clearSearchHistory: function({commit}) {
+        clearSearchHistory: function({ commit }) {
             commit(types.SET_SEARCH_HISTORY, clearSearch());
         },
 
         // 11-5 点击 playlist.vue 中每首歌后面的叉号删除歌曲，参数 song 就是要删除的歌曲
-        deleteSong: function({commit, state}, song) {
+        deleteSong: function({ commit, state }, song) {
             // 这三个和 insertSong 中的获取是一样，分别是 播放列表(playlist), 循环列表(sequenceList)
             // 和 当前播放歌曲的索引(currentIndex)
             let playlist = state.playlist.slice();
@@ -293,11 +292,10 @@ export default new Vuex.Store({
             // 上面的 if/else 可以写成这种简写形式
             // let playingState = playlist.length > 0;
             // commit(types.SET_PLAYING_STATE, playingState);
-
         },
 
         // 11-7 add
-        deleteSongList: function({commit}) {
+        deleteSongList: function({ commit }) {
             // 即把这些值设置为初始值
             commit(types.SET_PLAYLIST, []);
             commit(types.SET_SEQUENCE_LIST, []);
@@ -306,7 +304,7 @@ export default new Vuex.Store({
         },
 
         // 11-13 add: 保存播放历史
-        savePlayHistory: function({commit}, song) {
+        savePlayHistory: function({ commit }, song) {
             // 接下来的操作到 cache.js 中添加 savePlay / loadPlay 然后再上面导入
             commit(types.SET_PLAY_HISTORY, savePlay(song));
         }
@@ -359,7 +357,7 @@ export default new Vuex.Store({
         },
 
         // 10-11 add: 搜索历史
-        [types.SET_SEARCH_HISTORY](state, history){
+        [types.SET_SEARCH_HISTORY](state, history) {
             state.searchHistory = history;
         },
 
@@ -367,5 +365,5 @@ export default new Vuex.Store({
         [types.SET_PLAY_HISTORY](state, history) {
             state.playHistory = history;
         }
-    },
+    }
 })

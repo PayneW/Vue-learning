@@ -117,7 +117,7 @@ namespace VelocityStatic {
 	export let lastTick: number = 0;
 
 	/* Inactive browser tabs pause rAF, which results in all active animations immediately sprinting to their completion states when the tab refocuses.
-	 To get around this, we dynamically switch rAF to setTimeout (which the browser *doesn't* pause) when the tab loses focus. We skip this for mobile
+	 To get around this, we dynamically switches rAF to setTimeout (which the browser *doesn't* pause) when the tab loses focus. We skip this for mobile
 	 devices to avoid wasting battery power on inactive tabs. */
 	/* Note: Tab focus detection doesn't work on older versions of IE, but that's okay since they don't support rAF to begin with. */
 	if (!State.isMobile && document.hidden !== undefined) {

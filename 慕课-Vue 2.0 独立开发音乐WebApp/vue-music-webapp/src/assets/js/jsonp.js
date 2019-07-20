@@ -29,3 +29,4 @@ function param(data) {
     // 就把 "" 空值赋值给 url
     return str ? str.substring(1): ""
 }
+

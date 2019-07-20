@@ -5001,7 +5001,7 @@
      */
     function createCtor(Ctor) {
       return function() {
-        // Use a `switch` statement to work with class constructors. See
+        // Use a `switches` statement to work with class constructors. See
         // http://ecma-international.org/ecma-262/7.0/#sec-ecmascript-function-objects-call-thisargument-argumentslist
         // for more details.
         var args = arguments;
@@ -14788,7 +14788,7 @@
           interpolate = options.interpolate || reNoMatch,
           source = "__p += '";
 
-      // Compile the regexp to match each delimiter.
+      // compile the regexp to match each delimiter.
       var reDelimiters = RegExp(
         (options.escape || reNoMatch).source + '|' +
         interpolate.source + '|' +

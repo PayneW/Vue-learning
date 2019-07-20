@@ -2763,7 +2763,7 @@ var path = Object.freeze({
   var allowedKeywordsRE = new RegExp('^(' + allowedKeywords.replace(/,/g, '\\b|') + '\\b)');
 
   // keywords that don't make sense inside expressions
-  var improperKeywords = 'break,case,class,catch,const,continue,debugger,default,' + 'delete,do,else,export,extends,finally,for,function,if,' + 'import,in,instanceof,let,return,super,switch,throw,try,' + 'var,while,with,yield,enum,await,implements,package,' + 'protected,static,interface,private,public';
+  var improperKeywords = 'break,case,class,catch,const,continue,debugger,default,' + 'delete,do,else,export,extends,finally,for,function,if,' + 'import,in,instanceof,let,return,super,switches,throw,try,' + 'var,while,with,yield,enum,await,implements,package,' + 'protected,static,interface,private,public';
   var improperKeywordsRE = new RegExp('^(' + improperKeywords.replace(/,/g, '\\b|') + '\\b)');
 
   var wsRE = /\s/g;
@@ -2880,7 +2880,7 @@ var path = Object.freeze({
   }
 
   /**
-   * Compile a setter function for the expression.
+   * compile a setter function for the expression.
    *
    * @param {String} exp
    * @return {Function|undefined}
@@ -5775,7 +5775,7 @@ var template = Object.freeze({
     remove: function remove(child, cb) {
       var keepAlive = this.keepAlive;
       if (child) {
-        // we may have a component switch when a previous
+        // we may have a component switches when a previous
         // component is still being transitioned out.
         // we want to trigger only one lastest insertion cb
         // when the existing transition finishes. (#1119)
@@ -5874,7 +5874,7 @@ var template = Object.freeze({
   var settablePathRE = /^[A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*|\[[^\[\]]+\])*$/;
 
   /**
-   * Compile props on a root element and return
+   * compile props on a root element and return
    * a props link function.
    *
    * @param {Element|DocumentFragment} el
@@ -6729,7 +6729,7 @@ var template = Object.freeze({
   var DEFAULT_TERMINAL_PRIORITY = 2000;
 
   /**
-   * Compile a template and return a reusable composite link
+   * compile a template and return a reusable composite link
    * function, which recursively contains more link functions
    * inside. This top level compile function would normally
    * be called on instance root nodes, but can also be used
@@ -6856,7 +6856,7 @@ var template = Object.freeze({
   }
 
   /**
-   * Compile link props on an instance.
+   * compile link props on an instance.
    *
    * @param {Vue} vm
    * @param {Element} el
@@ -6874,7 +6874,7 @@ var template = Object.freeze({
   }
 
   /**
-   * Compile the root element of an instance.
+   * compile the root element of an instance.
    *
    * 1. attrs on context container (context scope)
    * 2. attrs on the component template root node, if
@@ -6952,7 +6952,7 @@ var template = Object.freeze({
   }
 
   /**
-   * Compile a node and return a nodeLinkFn based on the
+   * compile a node and return a nodeLinkFn based on the
    * node type.
    *
    * @param {Node} node
@@ -6972,7 +6972,7 @@ var template = Object.freeze({
   }
 
   /**
-   * Compile an element and return a nodeLinkFn.
+   * compile an element and return a nodeLinkFn.
    *
    * @param {Element} el
    * @param {Object} options
@@ -7013,7 +7013,7 @@ var template = Object.freeze({
   }
 
   /**
-   * Compile a textNode and return a nodeLinkFn.
+   * compile a textNode and return a nodeLinkFn.
    *
    * @param {TextNode} node
    * @param {Object} options
@@ -7134,7 +7134,7 @@ var template = Object.freeze({
   }
 
   /**
-   * Compile a node list and return a childLinkFn.
+   * compile a node list and return a childLinkFn.
    *
    * @param {NodeList} nodeList
    * @param {Object} options
@@ -7325,7 +7325,7 @@ var template = Object.freeze({
   }
 
   /**
-   * Compile the directives on an element and return a linker.
+   * compile the directives on an element and return a linker.
    *
    * @param {Array|NamedNodeMap} attrs
    * @param {Object} options

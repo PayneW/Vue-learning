@@ -36,7 +36,7 @@
 - .editorconfig                    // 编辑器的配置项
 - .gitignore                       // 存放的是会忽略语法检查的目录
     + .postcssrc.js                // 通过JS插件装换样式的工具
-- README.md                        // 项目说明
+- README-易错代码总结.md                        // 项目说明
 - favicon.ico
 - index.html                       // 入口页面
 - package.json                     // 项目的描述和依赖

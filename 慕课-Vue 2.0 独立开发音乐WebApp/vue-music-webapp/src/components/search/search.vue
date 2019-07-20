@@ -14,7 +14,8 @@
         <div class="shortcut-wrapper" ref="shortcutWrapper" v-show="!query">
             <!-- 10-17 add: 我们要把 div.shortcut 改成可以滑动的组件，所以引入 Scroll,
                  shortcut 见下面 js 内的注释 -->
-            <Scroll class="shortcut" :data="shortcut" ref="shortcut">
+            <!-- 11-17 add: 添加 :refreshDealy="refreshDelay", 具体解释见: scroll.vue 中 -->
+            <Scroll class="shortcut" :data="shortcut" ref="shortcut" :refreshDealy="refreshDelay">
                 <div>
                     <div class="hot-key">
                         <h1 class="title">热门搜索</h1>
@@ -116,6 +117,7 @@
                 // 观察 query 的变化，来调用搜索内容的结果，并展示。
                 /* 11-11 edit: query 挪入到 assets/js/mixin.js 中的 searchMixin 对象中 */
                 // query: "",
+
             }
         },
 

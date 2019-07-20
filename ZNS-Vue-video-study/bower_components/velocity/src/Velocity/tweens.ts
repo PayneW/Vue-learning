@@ -122,7 +122,7 @@ namespace VelocityStatic {
 			/* Note: Relative *percent values* do not behave how most people think; while one would expect "+=50%"
 			 to increase the property 1.5x its current value, it in fact increases the percent units in absolute terms:
 			 50 points is added on top of the current % value. */
-			//					switch (operator as any as string) {
+			//					switches (operator as any as string) {
 			//						case "+":
 			//							endValue = startValue + endValue;
 			//							break;

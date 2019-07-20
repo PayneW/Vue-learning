@@ -38,7 +38,7 @@ export function compileAndStringify (template) {
 }
 
 /**
- * Compile *.vue file into js code
+ * compile *.vue file into js code
  * @param {string} source raw text of *.vue file
  * @param {string} componentName whether compile to a component
  */

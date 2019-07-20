@@ -772,7 +772,7 @@
     }
 
     /**
-     * Compile a string to a template function for the path.
+     * compile a string to a template function for the path.
      *
      * @param  {string}             str
      * @param  {Object=}            options
@@ -810,10 +810,10 @@
      * Expose a method for transforming tokens into the path function.
      */
     function tokensToFunction(tokens) {
-        // Compile all the tokens into regexps.
+        // compile all the tokens into regexps.
         var matches = new Array(tokens.length);
 
-        // Compile all the patterns before compilation.
+        // compile all the patterns before compilation.
         for (var i = 0; i < tokens.length; i++) {
             if (typeof tokens[i] === 'object') {
                 matches[i] = new RegExp('^(?:' + tokens[i].pattern + ')$');

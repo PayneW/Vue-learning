@@ -30,10 +30,7 @@
         /* 講解為什麼要把 .fade-enter 和 .fade-leave-to 放在一起定義？
          * 1. 默认样式为 class="ele", 所以第一次点击时，元素从当前显示状态到离开【】添加上 fade-leave-to 样式，
          * 在整个离开过渡的阶段中应用 fade-leave-active，在离开过渡被触发时立刻生效，在过渡/动画完成之后移除。
-         * 2. 上面执行完毕之后接着执行 js 给当前元素添加 display:none;
-         * 3. 此时当前元素上只有默认的 ele 样式和 js 设置的 display: none;
-         * 4. 再次点击时: (1)首先移除 ele style上的 display: none;
-         *  (2)其次给当前元素设置 fade-enter 这样 ele 元素就添加了 fade-enter 的样式, 元素的宽和高
+         * 2再次点击时: 给当前元素设置 fade-enter 这样 ele 元素就添加了 fade-enter 的样式, 元素的宽和高
          * 变成 12rem, translateX(200px); 接着 .fade-enter-active 起作用先移除 fade-enter，接着执行过渡
          * 完毕之后移除 fade-enter-active; [注: fade-enter 设置的 translateX(200px) 过渡到 translateX(0)
          *  ，我想应该是 Vue 给设置的，这里不能确定，是个疑问？]

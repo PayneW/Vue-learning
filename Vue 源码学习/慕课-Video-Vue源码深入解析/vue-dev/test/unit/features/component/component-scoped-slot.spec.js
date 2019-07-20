@@ -462,7 +462,7 @@ describe('Component scoped slot', () => {
 
     expect(vm.$el.textContent.trim()).toBe('A a B b')
 
-    // switch slots
+    // switches slots
     vm.a = 'b'
     vm.b = 'a'
     waitForUpdate(() => {

@@ -125,7 +125,7 @@
     switch (loader) {
       case 'curl':      result = 'node_modules/curl-amd/dist/curl-kitchen-sink/curl.js'; break;
       case 'dojo':      result = 'node_modules/dojo/dojo.js'; break;
-      case 'requirejs': result = 'node_modules/requirejs/require.js'; break;
+      case 'requirejs': result = 'node_modules/requirejs/require 无依赖模块.js'; break;
       case null:        loader = 'none'; return '';
       default:          return loader;
     }

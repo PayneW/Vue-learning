@@ -93,9 +93,9 @@ export default class VNode {
 
         // DEPRECATED: alias for componentInstance for backwards compat.
         // istanbul ignore next
-        get child(): Component| void {
+        /*get child(): Component| void {
             return this.componentInstance;
-        }
+        }*/
     }
 
 };
@@ -202,14 +202,14 @@ if (isTrue(Ctor.options.abstract)) {
 mergeHooks(data)
 
 // return a placeholder vnode
-const name = Ctor.options.name || tag
+/*const name = Ctor.options.name || tag
 const vnode = new VNode(
     `vue-component-${Ctor.cid}${name ? `-${name}` : ''}`,
     data, undefined, undefined, undefined, context,
     { Ctor, propsData, listeners, tag, children }
 )
 return vnode
-}
+}*/
 
 
 

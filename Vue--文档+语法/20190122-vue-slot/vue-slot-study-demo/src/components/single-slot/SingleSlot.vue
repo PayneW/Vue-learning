@@ -2,7 +2,7 @@
     <div id="single-slot">
         <h3>Single slots 单个插槽</h3>
         <!-- 父组件离的 span 会替换掉 slot, 所以这里的 123 是看不见的
-             如果父组件在使用子组件 testSlot 的时候不在里面添加内容这里的
+             如果父组件在使用子组件的时候不在里面添加内容，这里的
              slot 会显示出来 -->
         <slot>123</slot>
     </div>

@@ -218,7 +218,7 @@ if (!isIE9) {
           '<div class="test">one</div>' +
           '<div class="test test-enter-active test-enter-to">two</div>'
         )
-        // switch again before enter finishes,
+        // switches again before enter finishes,
         // this cancels both enter and leave.
         vm.view = 'one'
       }).then(() => {

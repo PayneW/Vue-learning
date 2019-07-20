@@ -30,7 +30,12 @@
                     <!-- 11-14 add: class="list-scroll" -->
                     <!-- 11-15 add: ref="songList" 我们当前使用了 scroll 组件，"最近播放/搜索历史" 只要
                          数据发生改变，我们都会从新渲染高度，添加 ref 再当前组件内调用 refresh() 时使用 -->
-                    <scroll ref="songList" class="list-scroll" v-if="currentIndex === 0" :data="playHistory">
+                    <!---->
+                    <scroll ref="songList"
+                            class="list-scroll"
+                            v-if="currentIndex === 0"
+                            :data="playHistory"
+                            :refreshDelay="refreshDelay">
                         <div class="list-inner">
                             <!-- 搜索历史 -->
                             <!-- 11-14 add: 点击当前搜索历史中的歌曲把其添加到播放列表, 就是监听 song-list
@@ -42,7 +47,12 @@
                     <!-- 11-15 add: 搜索历史. searchHistory 搜索历史使用 mixin.js 下 searchMixin 对象内的
                          mapActions 内的引用 -->
                     <!-- 11-15 add: ref="searchList" 解释同上 -->
-                    <scroll ref="searchList" class="list-scroll" v-if="currentIndex === 1" :data="searchHistory">
+                    <!-- 11-17 add: :refreshDelay -->
+                    <scroll ref="searchList"
+                            class="list-scroll"
+                            v-if="currentIndex === 1"
+                            :data="searchHistory"
+                            :refreshDelay="refreshDelay">
                         <div class="list-inner">
                             <!-- 引入搜索历史组件 -->
                             <search-list @delete="deleteSearchHistory" @select="addQuery" :searches="searchHistory"></search-list>

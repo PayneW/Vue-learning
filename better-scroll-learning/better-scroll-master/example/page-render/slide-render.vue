@@ -37,7 +37,7 @@
 
 <script type="text/ecmascript-6">
   import Slide from 'example/todo-components/slide/slide.vue'
-  import SwitchOption from 'example/todo-components/switch-option/switch-option.vue'
+  import SwitchOption from 'example/todo-components/switches-option/switches-option.vue'
   import InputOption from 'example/todo-components/input-option/input-option.vue'
   import FreeOption from 'example/todo-components/free-option/free-option.vue'
 

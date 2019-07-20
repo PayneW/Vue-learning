@@ -47,7 +47,7 @@
              */
 
             // observer 检查者
-            // obj 为 Vue 构造函数内的 this.data, vm 代表构造函数 Vue
+            // obj 为 Vue 构造函数内的 this.data, vm 为 Vue 构造函数的实例
             function observe (obj, vm) {
                 // Object.keys(): JS-book-learning\《js高级程序设计》\js高程部分方法\js高程---Object.keys().js
                 Object.keys(obj).forEach(function (key) {
@@ -58,16 +58,16 @@
                 })
             }
 
-            // 响应函数: 注意: 1st 参数 obj 为 Vue 构造函数； key 可以看出分别指代的为 data 对象中的键名
+            // 响应函数: 注意: 1st 参数 obj 为 Vue 构造函数的实例； key 可以看出分别指代的为 data 对象中的键名
             function defineReactive (obj, key, val) {
 
                 // 首先實例化-依賴對象 Dependence (就是图里的: Dep)
                 const dep = new Dependence();
 
                 // Object.defineProperty() 方法讲解: 见:
-                // JS-book-learning\《js高级程序设计》\js高程部分方法\js高程---Object.defineProperty.html
+                // JS-book-learning\《js高级程序设计》\js高程部分方法\js高程 Object.defineProperty.html
 
-                // 在 obj (注: obj 为 Vue 构造函数)上定义访问器属性 key.
+                // 在 obj (注: obj 为 Vue 构造函数的实例)上定义访问器属性 key.
                 // 注: 这里的巧妙之处是会把 data 数据中的键名拿来作为访问器属性的名, 并定义到 Vue 构造函数上
                 // Note(1-0): 初始化页面代码时这个 defineProperty() 方法不会被调用，被调用的代码见同注释。
                 Object.defineProperty(obj, key, {
@@ -113,7 +113,7 @@
 
 
             /* 观察者 Watcher (注: 在  compile() 的第二个 if 语句中调用)
-             * vm(Vue),
+             * vm(Vue 构造函数的实例),
              * node(#container 下的 NodeList 中的一个),
              * val(劫持的文本节点的值),
              * nodeType(下面 compiler() 传入的 "text")
@@ -144,7 +144,7 @@
             Watcher.prototype = {
                 // 更新节点中的数据
                 update: function () {
-                    // 首先取得 Vue 下 data 属性中的数据
+                    // 首先取得 Vue实例 下 data 属性中的数据
                     this.get();
 
                     // 调用过 get 方法后我们输出当前 Watcher 构造函数有没有 get() 方法中
@@ -258,7 +258,7 @@
                 this.data = options.data;
                 let data = this.data;
 
-                // 1.实例化 Vue 后取得 options.data 中的所有属性，this 为 Vue 构造函数本身
+                // 1.实例化 Vue 后取得 options.data 中的所有属性，this 为 Vue 构造函数的实例
                 observe(data, this);    // 第一次执行代码时的输出 data = { font: "Hello world!" }
 
                 // 2.把 #container 下的节点劫持，利用 nodeToFragment 转换为虚拟节点

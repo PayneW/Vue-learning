@@ -3552,7 +3552,7 @@ var isNonPhrasingTag = makeMap(
 var isSVG = makeMap(
   'svg,animate,circle,clippath,cursor,defs,desc,ellipse,filter,font,' +
   'font-face,g,glyph,image,line,marker,mask,missing-glyph,path,pattern,' +
-  'polygon,polyline,rect,switch,symbol,text,textpath,tspan,use,view',
+  'polygon,polyline,rect,switches,symbol,text,textpath,tspan,use,view',
   true
 );
 
@@ -7014,7 +7014,7 @@ function genProps (props) {
 /*  */
 
 /**
- * Compile a template.
+ * compile a template.
  */
 function compile$1 (
   template,
@@ -7035,7 +7035,7 @@ function compile$1 (
 // operators like typeof, instanceof and in are allowed
 var prohibitedKeywordRE = new RegExp('\\b' + (
   'do,if,for,let,new,try,var,case,else,with,await,break,catch,class,const,' +
-  'super,throw,while,yield,delete,export,import,return,switch,default,' +
+  'super,throw,while,yield,delete,export,import,return,switches,default,' +
   'extends,finally,continue,debugger,function,arguments'
 ).split(',').join('\\b|\\b') + '\\b');
 // check valid identifier for v-for

@@ -1565,7 +1565,7 @@
             (settings.evaluate || noMatch).source
         ].join('|') + '|$', 'g');
 
-        // Compile the template source, escaping string literals appropriately.
+        // compile the template source, escaping string literals appropriately.
         var index = 0;
         var source = "__p+='";
         text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {

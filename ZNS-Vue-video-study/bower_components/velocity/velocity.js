@@ -923,58 +923,58 @@ function getValue(args) {
         /**
          * Detect if this is a NodeJS or web browser
          */
-        State.isClient = window && window === window.window, 
+        State.isClient = window && window === window.window,
         /**
          * Detect mobile devices to determine if mobileHA should be turned
          * on.
          */
-        State.isMobile = State.isClient && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent), 
+        State.isMobile = State.isClient && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
         /**
          * The mobileHA option's behavior changes on older Android devices
          * (Gingerbread, versions 2.3.3-2.3.7).
          */
-        State.isAndroid = State.isClient && /Android/i.test(navigator.userAgent), 
+        State.isAndroid = State.isClient && /Android/i.test(navigator.userAgent),
         /**
          * The mobileHA option's behavior changes on older Android devices
          * (Gingerbread, versions 2.3.3-2.3.7).
          */
-        State.isGingerbread = State.isClient && /Android 2\.3\.[3-7]/i.test(navigator.userAgent), 
+        State.isGingerbread = State.isClient && /Android 2\.3\.[3-7]/i.test(navigator.userAgent),
         /**
          * Chrome browser
          */
-        State.isChrome = State.isClient && window.chrome, 
+        State.isChrome = State.isClient && window.chrome,
         /**
          * Firefox browser
          */
-        State.isFirefox = State.isClient && /Firefox/i.test(navigator.userAgent), 
+        State.isFirefox = State.isClient && /Firefox/i.test(navigator.userAgent),
         /**
          * Create a cached element for re-use when checking for CSS property
          * prefixes.
          */
-        State.prefixElement = State.isClient && document.createElement("div"), 
+        State.prefixElement = State.isClient && document.createElement("div"),
         /**
          * Retrieve the appropriate scroll anchor and property name for the
          * browser: https://developer.mozilla.org/en-US/docs/Web/API/Window.scrollY
          */
-        State.windowScrollAnchor = State.isClient && window.pageYOffset !== undefined, 
+        State.windowScrollAnchor = State.isClient && window.pageYOffset !== undefined,
         /**
          * Cache the anchor used for animating window scrolling.
          */
-        State.scrollAnchor = State.windowScrollAnchor ? window : !State.isClient || document.documentElement || document.body.parentNode || document.body, 
+        State.scrollAnchor = State.windowScrollAnchor ? window : !State.isClient || document.documentElement || document.body.parentNode || document.body,
         /**
          * Cache the browser-specific property names associated with the
          * scroll anchor.
          */
-        State.scrollPropertyLeft = State.windowScrollAnchor ? "pageXOffset" : "scrollLeft", 
+        State.scrollPropertyLeft = State.windowScrollAnchor ? "pageXOffset" : "scrollLeft",
         /**
          * Cache the browser-specific property names associated with the
          * scroll anchor.
          */
-        State.scrollPropertyTop = State.windowScrollAnchor ? "pageYOffset" : "scrollTop", 
+        State.scrollPropertyTop = State.windowScrollAnchor ? "pageYOffset" : "scrollTop",
         /**
          * The className we add / remove when animating.
          */
-        State.className = CLASSNAME, 
+        State.className = CLASSNAME,
         /**
          * Keep track of whether our RAF tick is running.
          */
@@ -1236,7 +1236,7 @@ var VelocityStatic;
     (function(CSS) {
         // TODO: This is still a complete mess
         function computePropertyValue(element, property) {
-            var data = Data(element), 
+            var data = Data(element),
             // If computedStyle is cached, use it.
             computedStyle = data && data.computedStyle ? data.computedStyle : window.getComputedStyle(element, null);
             var computedValue = 0;
@@ -2172,8 +2172,8 @@ var VelocityStatic;
  */ var VelocityStatic;
 
 (function(VelocityStatic) {
-    VelocityStatic.inlineRx = /^(b|big|i|small|tt|abbr|acronym|cite|code|dfn|em|kbd|strong|samp|let|a|bdo|br|img|map|object|q|script|span|sub|sup|button|input|label|select|textarea)$/i, 
-    VelocityStatic.listItemRx = /^(li)$/i, VelocityStatic.tableRowRx = /^(tr)$/i, VelocityStatic.tableRx = /^(table)$/i, 
+    VelocityStatic.inlineRx = /^(b|big|i|small|tt|abbr|acronym|cite|code|dfn|em|kbd|strong|samp|let|a|bdo|br|img|map|object|q|script|span|sub|sup|button|input|label|select|textarea)$/i,
+    VelocityStatic.listItemRx = /^(li)$/i, VelocityStatic.tableRowRx = /^(tr)$/i, VelocityStatic.tableRx = /^(table)$/i,
     VelocityStatic.tableRowGroupRx = /^(tbody)$/i;
     function display(element, propertyValue) {
         var style = element.style;
@@ -3041,7 +3041,7 @@ var VelocityStatic;
     /* Animate the expansion/contraction of the elements' parent's height for In/Out effects. */
     function animateParentHeight(elements, direction, totalDuration, stagger) {
         var totalHeightDelta = 0, parentNode;
-        /* Sum the total height (including padding and margin) of all targeted elements. */        
+        /* Sum the total height (including padding and margin) of all targeted elements. */
         /* Sum the total height (including padding and margin) of all targeted elements. */
         (elements.nodeType ? [ elements ] : elements).forEach(function(element, i) {
             if (stagger) {
@@ -3123,7 +3123,7 @@ var VelocityStatic;
                     //						if (redirectOptions.display !== undefined && redirectOptions.display !== "none") {
                     //							opts.display = redirectOptions.display;
                     //						} else if (/In$/.test(effectName)) {
-                    //							/* Inline elements cannot be subjected to transforms, so we switch them to inline-block. */
+                    //							/* Inline elements cannot be subjected to transforms, so we switches them to inline-block. */
                     //							let defaultDisplay = CSS.Values.getDisplayType(element);
                     //							opts.display = (defaultDisplay === "inline") ? "inline-block" : defaultDisplay;
                     //						}
@@ -3326,7 +3326,7 @@ var VelocityStatic;
     }
     /**************
      Timing
-     **************/    var FRAME_TIME = 1e3 / 60, 
+     **************/    var FRAME_TIME = 1e3 / 60,
     /**
     * Shim for window.performance in case it doesn't exist
     */
@@ -3339,7 +3339,7 @@ var VelocityStatic;
             };
         }
         return perf;
-    }(), 
+    }(),
     /**
      * Proxy function for when rAF is not available - try to be as accurate
      * as possible with the setTimeout calls, however they are far less
@@ -3351,7 +3351,7 @@ var VelocityStatic;
         return setTimeout(function() {
             callback(performance.now());
         }, Math.max(0, FRAME_TIME - (performance.now() - VelocityStatic.lastTick)));
-    }, 
+    },
     /* rAF shim. Gist: https://gist.github.com/julianshapiro/9497513 */
     rAFShim = window.requestAnimationFrame || rAFProxy;
     /**
@@ -3363,7 +3363,7 @@ var VelocityStatic;
      * for missing rAF (ie, when not in focus etc).
      */    VelocityStatic.lastTick = 0;
     /* Inactive browser tabs pause rAF, which results in all active animations immediately sprinting to their completion states when the tab refocuses.
-     To get around this, we dynamically switch rAF to setTimeout (which the browser *doesn't* pause) when the tab loses focus. We skip this for mobile
+     To get around this, we dynamically switches rAF to setTimeout (which the browser *doesn't* pause) when the tab loses focus. We skip this for mobile
      devices to avoid wasting battery power on inactive tabs. */
     /* Note: Tab focus detection doesn't work on older versions of IE, but that's okay since they don't support rAF to begin with. */    if (!VelocityStatic.State.isMobile && document.hidden !== undefined) {
         document.addEventListener("visibilitychange", function updateTicker(event) {
@@ -3808,7 +3808,7 @@ var VelocityStatic;
             /* Note: Relative *percent values* do not behave how most people think; while one would expect "+=50%"
              to increase the property 1.5x its current value, it in fact increases the percent units in absolute terms:
              50 points is added on top of the current % value. */
-            //					switch (operator as any as string) {
+            //					switches (operator as any as string) {
             //						case "+":
             //							endValue = startValue + endValue;
             //							break;
@@ -4173,19 +4173,19 @@ function VelocityFn() {
     for (var _i = 0; _i < arguments.length; _i++) {
         __args[_i] = arguments[_i];
     }
-    var 
+    var
     /**
      * A shortcut to the default options.
      */
-    defaults = VelocityStatic.defaults, 
+    defaults = VelocityStatic.defaults,
     /**
      * Shortcut to arguments for file size.
      */
-    _arguments = arguments, 
+    _arguments = arguments,
     /**
      * Cache of the first argument - this is used often enough to be saved.
      */
-    args0 = _arguments[0], 
+    args0 = _arguments[0],
     /**
      * To allow for expressive CoffeeScript code, Velocity supports an
      * alternative syntax in which "elements" (or "e"), "properties" (or
@@ -4198,17 +4198,17 @@ function VelocityFn() {
      */
     // TODO: Confirm which browsers - if <=IE8 the we can drop completely
     syntacticSugar = isPlainObject(args0) && (args0.p || (isPlainObject(args0.properties) && !args0.properties.names || isString(args0.properties)));
-    var 
+    var
     /**
      *  When Velocity is called via the utility function (Velocity()),
      * elements are explicitly passed in as the first parameter. Thus,
      * argument positioning varies.
      */
-    argumentIndex = 0, 
+    argumentIndex = 0,
     /**
      * The list of elements, extended with Promise and Velocity.
      */
-    elements, 
+    elements,
     /**
      * The properties being animated. This can be a string, in which case it
      * is either a function for these elements, or it is a "named" animation
@@ -4217,24 +4217,24 @@ function VelocityFn() {
      * after finishing. When used as a transtition then there is no special
      * handling after finishing.
      */
-    propertiesMap, 
+    propertiesMap,
     /**
      * Options supplied, this will be mapped and validated into
      * <code>options</code>.
      */
-    optionsMap, 
+    optionsMap,
     /**
      * If called via a chain then this contains the <b>last</b> calls
      * animations. If this does not have a value then any access to the
      * element's animations needs to be to the currently-running ones.
      */
-    animations, 
+    animations,
     /**
      * The promise that is returned.
      */
-    promise, 
+    promise,
     // Used when the animation is finished
-    resolver, 
+    resolver,
     // Used when there was an issue with one or more of the Velocity arguments
     rejecter;
     //console.log("Velocity", _arguments)

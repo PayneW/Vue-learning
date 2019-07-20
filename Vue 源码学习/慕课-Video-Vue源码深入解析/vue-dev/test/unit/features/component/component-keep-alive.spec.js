@@ -393,7 +393,7 @@ describe('Component keep-alive', () => {
     }).then(done)
   })
 
-  it('prune cache on include/exclude change + view switch', done => {
+  it('prune cache on include/exclude change + view switches', done => {
     const vm = new Vue({
       template: `
         <div>
@@ -1009,7 +1009,7 @@ describe('Component keep-alive', () => {
           '<div class="test">one</div>' +
           '<div class="test test-enter-active test-enter-to">two</div>'
         )
-        // switch again before enter finishes,
+        // switches again before enter finishes,
         // this cancels both enter and leave.
         vm.view = 'one'
       }).then(() => {

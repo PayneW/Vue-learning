@@ -60,7 +60,7 @@ const Qux = {
     //
     // simulate an async data fetch.
     // this pattern is useful when you want to stay at current route
-    // and only switch after the data has been fetched.
+    // and only switches after the data has been fetched.
     setTimeout(() => {
       next(vm => {
         vm.msg = 'Qux'

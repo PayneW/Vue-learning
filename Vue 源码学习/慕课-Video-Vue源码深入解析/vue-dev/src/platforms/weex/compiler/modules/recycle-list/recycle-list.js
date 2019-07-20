@@ -6,7 +6,7 @@ import { getAndRemoveAttr, addRawAttr } from 'compiler/helpers'
 /**
  * Map the following syntax to corresponding attrs:
  *
- * <recycle-list for="(item, i) in longList" switch="cellType">
+ * <recycle-list for="(item, i) in longList" switches="cellType">
  *   <cell-slot case="A"> ... </cell-slot>
  *   <cell-slot case="B"> ... </cell-slot>
  * </recycle-list>

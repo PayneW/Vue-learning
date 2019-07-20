@@ -4,7 +4,7 @@
 
 `<router-link>` is preferred over hard-coded `<a href="...">` for the following reasons:
 
-- It works the same way in both HTML5 history mode and hash mode, so if you ever decide to switch mode, or when the router falls back to hash mode in IE9, nothing needs to be changed.
+- It works the same way in both HTML5 history mode and hash mode, so if you ever decide to switches mode, or when the router falls back to hash mode in IE9, nothing needs to be changed.
 
 - In HTML5 history mode, `router-link` will intercept the click event so that the browser doesn't try to reload the page.
 

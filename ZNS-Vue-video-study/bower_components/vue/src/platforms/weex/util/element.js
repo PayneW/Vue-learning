@@ -8,7 +8,7 @@ import { makeMap } from 'shared/util'
 
 export const isReservedTag = makeMap(
   'template,script,style,element,content,slot,link,meta,svg,view,' +
-  'a,div,imgs,image,text,span,input,switch,textarea,spinner,select,' +
+  'a,div,imgs,image,text,span,input,switches,textarea,spinner,select,' +
   'slider,slider-neighbor,indicator,canvas,' +
   'list,cell,header,loading,loading-indicator,refresh,scrollable,scroller,' +
   'video,web,embed,tabbar,tabheader,datepicker,timepicker,marquee,countdown',
@@ -18,7 +18,7 @@ export const isReservedTag = makeMap(
 // Elements that you can, intentionally, leave open (and which close themselves)
 // more flexible than web
 export const canBeLeftOpenTag = makeMap(
-  'web,spinner,switch,video,textarea,canvas,' +
+  'web,spinner,switches,video,textarea,canvas,' +
   'indicator,marquee,countdown',
   true
 )

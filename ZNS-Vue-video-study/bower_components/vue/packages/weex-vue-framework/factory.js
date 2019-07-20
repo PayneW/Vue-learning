@@ -5447,7 +5447,7 @@ var isHTMLTag = makeMap(
 var isSVG = makeMap(
   'svg,animate,circle,clippath,cursor,defs,desc,ellipse,filter,font-face,' +
   'foreignObject,g,glyph,image,line,marker,mask,missing-glyph,path,pattern,' +
-  'polygon,polyline,rect,switch,symbol,text,textpath,tspan,use,view',
+  'polygon,polyline,rect,switches,symbol,text,textpath,tspan,use,view',
   true
 );
 
@@ -7396,7 +7396,7 @@ var platformComponents = {
 
 var isReservedTag$1 = makeMap(
   'template,script,style,element,content,slot,link,meta,svg,view,' +
-  'a,div,imgs,image,text,span,input,switch,textarea,spinner,select,' +
+  'a,div,imgs,image,text,span,input,switches,textarea,spinner,select,' +
   'slider,slider-neighbor,indicator,canvas,' +
   'list,cell,header,loading,loading-indicator,refresh,scrollable,scroller,' +
   'video,web,embed,tabbar,tabheader,datepicker,timepicker,marquee,countdown',
@@ -7406,7 +7406,7 @@ var isReservedTag$1 = makeMap(
 // Elements that you can, intentionally, leave open (and which close themselves)
 // more flexible than web
 var canBeLeftOpenTag = makeMap(
-  'web,spinner,switch,video,textarea,canvas,' +
+  'web,spinner,switches,video,textarea,canvas,' +
   'indicator,marquee,countdown',
   true
 );

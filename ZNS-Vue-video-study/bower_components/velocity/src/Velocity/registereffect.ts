@@ -123,7 +123,7 @@ namespace VelocityStatic {
 					//						if (redirectOptions.display !== undefined && redirectOptions.display !== "none") {
 					//							opts.display = redirectOptions.display;
 					//						} else if (/In$/.test(effectName)) {
-					//							/* Inline elements cannot be subjected to transforms, so we switch them to inline-block. */
+					//							/* Inline elements cannot be subjected to transforms, so we switches them to inline-block. */
 					//							let defaultDisplay = CSS.Values.getDisplayType(element);
 					//							opts.display = (defaultDisplay === "inline") ? "inline-block" : defaultDisplay;
 					//						}
