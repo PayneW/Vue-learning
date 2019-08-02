@@ -16,12 +16,13 @@
         <ul>
             <!-- 第一个循环是输出 "热门-A-Z" -->
             <!-- 5-5 添加 ref="listGroup"，作用是点击右侧的 shortcutList 时左侧歌手列表滚动到相应的位置 -->
-            <li v-for="group in data" class="list-group" ref="listGroup">
+            <li v-for="group in data" class="list-group" ref="listGroup" :key="group">
                 <h2 class="list-group-title">{{group.title}}</h2>
                 <ul>
                     <!-- 第二个循环式: 每个字母下符合的歌手，循环输出-->
                     <li
                         v-for="item in group.items"
+                        :key="item"
                         class="list-group-item"
                         @click="selectItem(item)">
                         <!-- 5-4:  4-12 视频中有讲解 -->
@@ -51,6 +52,7 @@
                 <!-- 6-2 add: @click="select(item)" 添加点击事件，供跳转到歌手详情页面使用 -->
                 <li v-for="(item, index) in shortcutList"
                     class="item"
+                    :key="item"
                     :data-index="index"
                     :class="{'current': currentIndex === index}">
                     {{ item }}
