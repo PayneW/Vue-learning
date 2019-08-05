@@ -2,7 +2,7 @@ import originJSONP from "jsonp";
 
 // 对安装的 jsonp 库进行二次封装，以便更方便的使用
 export default function jsonp(url, data, option) {
-    // 这里的写法和 js-sundry-goods\JS-实现效果\2019-01-20-手写JSONP\jsonp.html
+    // 这里的写法和 js-sundry-goods\JS-实现效果\手写JSONP\jsonp.html
     url += (url.indexOf("?") === -1 ? "?" : "&") + param(data);
 
     return new Promise((resolve, reject) => {
