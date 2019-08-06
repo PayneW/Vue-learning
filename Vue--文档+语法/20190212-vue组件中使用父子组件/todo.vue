@@ -40,7 +40,7 @@
     export default {
         components: {
             Item,
-            Tabs
+            Tabs  
         },
         data() {
             return {
