@@ -10,7 +10,7 @@
     + build.js                     // 生产环境构建代码
     + check-version.js             // 检查node、npm等版本
     + dev-client.js                // 热重载相关
-    + dev-server.js                // 构建本地服务器
+    + dev-server01.js                // 构建本地服务器
     + utils.js                     // 构建工具相关
     + webpack.base.conf.js         // webpack基础配置
     + webpack.dev.conf.js          // webpack开发环境配置
