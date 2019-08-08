@@ -8,12 +8,13 @@
             @keyup.enter = "addTodo"
         >
 
-        <!-- 此组件为父组件，item.vue 为子组件，父组件通过 props 向子组件传递数据(注: props 对象在子组件内添加)，
-            子组件通过事件向父组件发送消息(注: 子组件 $emit 发送的事件在父组件内定义)。 -->
+        <!-- 此组件为父组件，item.vue 为子组件，父组件通过 props 向子组件传递数据 (注:
+             props 对象在子组件内添加)，子组件通过事件向父组件发送消息 (注: 子组件通过
+             $emit 发送的事件在父组件内定义)。 -->
         <!-- 发送给子组件的数据可以用 v-bind 绑定到子组件名称上 -->
         <!-- <Item v-bind:todo="todo"/> -->
-        <!-- v-for 循环的是计算属性中的 filteredTodos, 因为这里牵扯到点击 "Clear Completed" 按钮
-            清除已经完成的项， -->
+        <!-- v-for 循环的是计算属性中的 filteredTodos, 因为这里牵扯到点击
+            "Clear Completed" 按钮清除已经完成的项， -->
         <Item
             :todo="todo"
             v-for = "todo in filteredTodos"
@@ -44,12 +45,6 @@
         },
         data() {
             return {
-                // 这个todo数据会把作为父级属性(props)传到 item.vue 组件中，
-                /*todo: {
-                    id: 0,
-                    content: 'this is todo list',
-                    completed: false,
-                },*/
                 todos: [],
                 // filter 过滤器: 默认为页面中 all/active/completed 中的 all, 并不是随便定义的
                 filter: "all"
