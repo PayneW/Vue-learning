@@ -1,15 +1,13 @@
 ## Vue install (Vue 安装)
-  在用 Vue 构建大型应用时推荐使用 NPM 安装。 NPM 能很好地和诸如 webpack 或 Browserify 模块打包器配合使用。
-  同时 Vue 也提供配套工具来开发单文件组件。 
- 
-   ```base
-      # 最新稳定版 
-      npm install vue
-   ```
-      
-  + [vue.js是什么？为什么要在nodejs中安装？](https://segmentfault.com/q/1010000006170385)
-  + npm install vue 他这里说的意思应该是把 vue 安装到 node.js 的 node_modules 这个大的包组件中,
-    以便再 Vue 项目中直接通过 import Vue from 'vue' 方式引用
+> 在用 Vue 构建大型应用时推荐使用 NPM 安装。 NPM 能很好地和诸如 webpack 或 Browserify 
+  模块打包器配合使用。同时 Vue 也提供配套工具来开发单文件组件。 
+```base
+    # 最新稳定版 
+    npm install vue
+```
+- [vue.js是什么？为什么要在nodejs中安装？](https://segmentfault.com/q/1010000006170385)
+- npm install vue 他这里说的意思应该是把 vue 安装到 node.js 的 node_modules 这个
+  大的包组件中, 以便在 Vue 项目中直接通过 import Vue from 'vue' 方式引用
     
 ### **20190210-更新: 安装 vue**
 - 1、下载 Node 的 msi 安装包，正常安装会自动把 node 添加到系统变量中
@@ -64,7 +62,7 @@
       + Vue CLI 需要 Node.js 8.9 或更高版本 (推荐 8.11.0+)。你可以使用 nvm 或者 nvm-windows 在同一台电脑中管理多个 Node 版本。
   ```base
      # 可以使用下列任一命令安装这个新的包:
-     npm install -g @vue/cli  [注: install 可以简写位 i]
+     npm install -g @vue/cli  [注: install 可以简写为 i]
      # OR
      yarn global add @vue/cli
      
