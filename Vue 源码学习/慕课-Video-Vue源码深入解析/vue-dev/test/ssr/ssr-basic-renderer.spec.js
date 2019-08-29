@@ -42,7 +42,7 @@ describe('SSR: basicRenderer', () => {
           '<div id="ho" class="red"></div> ' +
           '<span>hi</span> ' +
           '<input value="hi"> ' +
-          '<imgs src="https://vuejs.org/images/default.png"> ' +
+          '<images src="https://vuejs.org/images/default.png"> ' +
           '<div class="a">test</div> ' +
           '<span class="b">testAsync</span>' +
         '</div>'

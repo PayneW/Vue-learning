@@ -292,7 +292,7 @@ function genStaticKeys (modules) {
 /*  */
 
 var isUnaryTag = makeMap(
-  'area,base,br,col,embed,frame,hr,imgs,input,isindex,keygen,' +
+  'area,base,br,col,embed,frame,hr,images,input,isindex,keygen,' +
   'link,meta,param,source,track,wbr'
 );
 
@@ -1736,7 +1736,7 @@ var isBooleanAttr = makeMap(
 var isHTMLTag = makeMap(
   'html,body,base,head,link,meta,style,title,' +
   'address,article,aside,footer,header,h1,h2,h3,h4,h5,h6,hgroup,nav,section,' +
-  'div,dd,dl,dt,figcaption,figure,picture,hr,imgs,li,main,ol,p,pre,ul,' +
+  'div,dd,dl,dt,figcaption,figure,picture,hr,images,li,main,ol,p,pre,ul,' +
   'a,b,abbr,bdi,bdo,br,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,rtc,ruby,' +
   's,samp,small,span,strong,sub,sup,time,u,var,wbr,area,audio,map,track,video,' +
   'embed,object,param,source,canvas,script,noscript,del,ins,' +
