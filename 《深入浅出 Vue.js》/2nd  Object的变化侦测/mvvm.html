@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mvvm</title>
+    <style type="text/css">
+        * {margin: 0; padding: 0; list-style: none;}
+        .container {
+            width: 60%; margin: 20px auto;
+            height: 600px; border-radius: 4px;
+            background: lightgray;
+            overflow: hidden;
+        }
+        .container > p {
+            line-height: 36px;
+            margin: 10px;
+            padding: 10px;
+            text-align: left;
+            background: lightseagreen;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        input{ margin:0; padding:0; border:0; outline: none;}
+        input[type="text"] {
+            width: 200px;
+            text-indent: 10px;
+            line-height: 32px;
+            background: #fff;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p>{{a.bb}}</p>
+        <p>{{name}}</p>
+        <p><input type="text" v-model="{{val}}"></p>
+    </div>
+    <script type="text/javascript">
+        function MVVM(options = {}) {
+            this.$options = options;
+            let data = this._data = this.$options.data;
+            observe(data);
+            // - this 代理 this_data;
+            for (let key in data) {
+                Object.defineProperty(data, key, {
+                    enumerable: true,
+                    configurable: true,
+                    get() {
+                        // - 这里一旦调用，就会执行 Observer() 中的 访问器属性
+                        return this._data[key];
+                    },
+                    set(newVal) {
+                        this._data[key] = newVal;
+                    }
+                })
+            }
+        }
+        function observe(data) {
+            if (data instanceof Object) {
+                return new Observe(data);
+            }
+        }
+        function Observe(data) {
+            for (let key in data) {
+                let val = data[key];
+                // - 如果 data[key] 还是对象我们接着添加访问器属性
+                observe(data[key]);
+                Object.defineProperty(data, key, {
+                    enumerable: true,
+                    configurable: true,
+                    get() {
+                        return val;
+                    },
+                    set(newVal) {
+                        if (val === newVal) {return;}
+                        val = newVal;
+                        // - 如果上面新设置的值时对象的话也要添加访问器属性
+                        observe(newVal);
+                    }
+                })
+            }
+        }
+
+        function compiler() {
+
+        }
+
+
+        let vm = new MVVM({
+            el: "#container",
+            data: {
+                a: {
+                    bb: "我是 a 内部的 bb "
+                },
+                name: "我是 name",
+                val: ""
+            }
+        })
+    </script>
+</body>
+</html>
