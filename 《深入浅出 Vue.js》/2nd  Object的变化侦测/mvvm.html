@@ -36,7 +36,7 @@
     <div id="app">
         <p>{{a.bb}}</p>
         <p>{{name}}</p>
-        <p><input type="text" v-model="{{name}}"></p>
+        <p><input type="text" v-model="name"></p>
     </div>
 
     <script type="text/javascript">
@@ -113,13 +113,13 @@
                         let val = vm;
                         arr.forEach((k) => {
                             val = val[k];
-                        })
+                        });
 
                         // - Note: 实例化发布订阅模式的中介者 Watcher (观察者构造函数)
                         //   fn 为真正的订阅者，fn 接收一个希望更新的新值，fn 函数的
                         //   执行体内，把新值赋值给节点。
                         new Watcher(vm, RegExp.$1, function(newVal) {
-                            node.textContent = text.replace(reg, newVale);
+                            node.textContent = text.replace(reg, newVal);
                         })
                     }
                 })
@@ -133,10 +133,10 @@
         }
         Dep.prototype.addSub = function(fn) {
             this.sub.push(fn);
-        }
+        };
         Dep.prototype.notify = function() {
             this.subs.forEach(item => item.update());
-        }
+        };
 
         // - Watcher 中介者收集订阅函数
         // - Tip: Watcher 中介者是从哪里收集订阅者呢？ A: 在 Compiler 模板编译函数内，
@@ -154,12 +154,12 @@
             let arr = exp.split(".");
             arr.forEach((k) => {
                 val = val[k];
-            })
+            });
             Dep.target = null;
         }
         Watcher.prototype.update = function() {
             this.fn();
-        }
+        };
 
 
 
