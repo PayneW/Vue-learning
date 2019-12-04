@@ -1,16 +1,73 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0,
-           maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>为什么Vue3.0不再使用defineProperty实现数据监听?</title>
-</head>
-<body>
-    <script>
-        // - 文章来源: https://mp.weixin.qq.com/s/O8iL4o8oPpqTm4URRveOIA
-    </script>
-</body>
-</html>
+<script>
+    // - 为什么Vue3.0不再使用defineProperty实现数据监听?
+    // - 文章来源: https://mp.weixin.qq.com/s/O8iL4o8oPpqTm4URRveOIA
+    function defineReactive(data, key, value) {
+        Object.defineProperty(data, key, {
+            enumerable: true,
+            configurable: true,
+            get: function defineGet() {
+                console.log(`get key: ${key}  value: ${value}`);
+                return value;
+            },
+            set: function defineSet(newVal) {
+                console.log(`set key: ${key}  value: ${value}`);
+                value = newVal;
+            }
+        })
+    }
+    function observe(data) {
+        Object.keys(data).forEach(function (key) {
+            defineReactive(data, key, data[key]);
+        })
+    }
+
+    let arr = [1, 2, 3];
+    observe(arr);
+
+    // - 1. 通过下表获取某个元素和修改某个元素的值.
+    // - 通过下表获取某个元素会触发 getter 方法
+    console.log(arr[1]);    // 2
+    // - 通过下表设置某个元素的值会触发 setter 方法
+    arr[1] = 5;
+    console.log(arr);   // [1, 5, 3]
+
+    // - 2. 数组的 push 方法: push 并未触发 setter 和 getter 方法, 数组的下标
+    //   可以看做是对象中的 key, 这里 push 之后相当于增加了索引为 3 的元素, 但
+    //   并未对新的下标进行 observe, 所以不会触发.
+    arr.push(4);    // [1, 5, 3, 4]
+
+    // - 3. 数组的 unshift()方法. { unshift(): 在数组开头插入元素}
+    // - unshift 操作会导致原来索引为 0, 1, 2, 3 的值发生变化, 这就需要将原来索引
+    //   为 0, 1, 2, 3 的值取出来, 然后重新赋值, 所以取值的过程触发了 getter, 赋值
+    //   时出触发了 setter.
+    // - 只有索引为 0, 1, 2 的属性才会触发 getter/setter.
+    // - 这里我们可以对比对象来看，arr 数组初始值为 [1, 2, 3]，即只对索引为 0，1，2
+    //   执行了 observe 方法，所以无论后来数组的长度发生怎样的变化，依然只有索引为
+    //   0、1、2 的元素发生变化才会触发。其他的新增索引，就相当于对象中新增的属性，
+    //   需要再手动 observe 才可以。
+    // get key: 2  value: 3
+    // get key: 1  value: 5
+    // set key: 2  value: 3
+    // get key: 0  value: 1
+    // set key: 1  value: 5
+    // set key: 0  value: 1
+    arr.unshift(0); // [0, 1, 5, 3, 4]
+
+    // - 4. 数组的 pop() 方法. {pop(): 从数组末尾删除元素.}
+    // - 当移除到元素索引为 2 的时候, 才会触发 getter.
+    // - 删除了索引为 2 的元素后, 再去修改或获取它的值时, 不会再触发 setter 和
+    //   getter. 这和对象的处理是同样的, 数组的索引被删除后, 就相当于对象的属性被
+    //   删除一样, 不会再去触发 observe.
+    arr.pop();
+
+    // - 我们简单总结如下:
+    // - Object.defineProperty() 在数组中的表现和在对象中的表现是一致的，数组的
+    //   索引就可以看做是对象中的 key。
+    //   + 通过索引访问或设置对应元素的值时，可以触发 getter 和 setter 方法。
+    //   + 通过 push 或 unshift 会增加索引，对于新增加的属性，需要再手动初始化
+    //     才能被 observe。
+    //   + 通过 pop 或 shift 删除元素, 会删除并更新索引, 也会触发 setter 和
+    //     getter 方法。
+    // - 所以, Object.defineProperty 是有监控数组下标变化的能力的, 只是 Vue 2.x
+    //   放弃了这个特性.
+</script>
