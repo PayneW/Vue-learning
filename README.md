@@ -7,7 +7,10 @@ Vue study
 - VM: view-model 视图模型
 
 
-[从1万篇文章中挑出的40篇最棒的 Vue 学习指南（2018版）](https://zhuanlan.zhihu.com/p/33642051)
+> I'll keep saying this... if people can't build monoliths properly,
+  microservices won't help.  -- Simon Brown
+  如果你连单体应用都写不好, 微前端也帮不上什么忙.
+
 
 ## 待看文章:
 - https://www.jianshu.com/p/4450b63a27fe
