@@ -6,21 +6,20 @@
 </head>
 <body>
     <script>
-
         function MVVM(options = {}) {
-            this.$options = options
-            let data = this._data = this.$options.options
+            this.$options = options;
+            let data = this._data = this.$options.options;
             for (let key in data) {
                 // this 为当前构造函数的实例
                 Object.defineProperty(this, key, {
                     enumerable: true,
                     configurable: true,
                     get: function() {
-                        return this._data[key]
+                        return this._data[key];
                     },
                     set: function(newVal) {
-                        if (val === newVal) return
-                        this._data[key] = newVal
+                        if (val === newVal) return;
+                        this._data[key] = newVal;
                     }
                 })
             }

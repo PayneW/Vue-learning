@@ -1,0 +1,117 @@
+<script type="text/javascript">
+    // - 收集依赖的 Dependence 类
+    // - 发布订阅模式的订阅者构造函数 (Dependence)
+    class Dep {
+        constructor() {
+            this.subs = [];
+        }
+        addSub(sub) {
+            this.subs.push(sub);
+        }
+        removeSub(sub) {
+            remove(this.subs, sub);
+        }
+        depend() {
+            if (window.target) {
+                this.addSub(window.target);
+            }
+        }
+        notify() {
+            const subs = this.subs.slice();
+            for (let i = 0, l = subs.length; i < l; i++) {
+                subs[i].update();
+            }
+        }
+    }
+    function remove(arr, item) {
+        if (arr.length) {
+            const index = arr.indexOf(item);
+            if (index > -1) {
+                return arr.splice(index, 1);
+            }
+        }
+    }
+
+    // - Watcher 中介者: 负责收集订阅函数
+    class Watcher{
+        constructor(vm, expOrFn, cb) {
+            this.vm = vm;
+            this.getter = parsePath(expOrFn);
+            this.cb = cb;
+            this.value = this.get();
+        }
+        get() {
+            window.target = this;
+            let value = this.getter.call(this.vm, this.vm);
+            window.target = undefined;
+            return value;
+        }
+        update() {
+            const oldValue = this.value;
+            this.value = this.get();
+            this.cb.call(this.vm, this.value, oldValue);
+        }
+    }
+    // - `\w`: 匹配字母，数字，下划线。等于 `[a-zA-Z0-9]`
+    // - `[^xyz]`: 不匹配这个集合中的任何一个字符。
+    const bailRE = /[^\w.$]/;
+    // - parsePath(): 解析简单路径. 比如 2.6 中给出的
+    //   vm.$watch('a.b.c', function(newVal, oldVal) {})
+    function parsePath(path) {
+        if (bailRE.test(path)) {
+            return;
+        }
+        // - split(): 把字符串转换为数组
+        const segments = path.split('.');
+        return function(obj) {
+            for (let i = 0; i < segments.length; i++) {
+                if (!obj) {
+                    return;
+                }
+                obj = obj[segments[i]];
+            }
+            return obj;
+        }
+    }
+
+    // - 2.7 递归侦测所有 key
+    class Observe{
+        constructor(value) {
+            this.value = value;
+            if (!Array.isArray(value)) {
+                this.walk(value);
+            }
+        }
+        // - walk 会将每一个属性都转换成 getter/setter 的形式来侦测变化,
+        //   这个方法只有在数据类型为 Object 时被调用
+        walk(obj) {
+            const keys = Object.keys(obj);
+            for (let i = 0; i < keys.length; i++) {
+                defineReactive(obj, keys[i], obj[keys[i]]);
+            }
+        }
+    }
+
+    function defineReactive(data, key, val) {
+        // - 2.7 新增, 递归子属性
+        if (typeof val === 'object') {
+            new Observe(val);
+        }
+        let dep = new Dep();
+        Object.defineProperty(data, key, {
+            enumerable: true,
+            configurable: true,
+            get: function() {
+                dep.depend();
+                return val;
+            },
+            set: function(newVal) {
+                if (val === newVal) {
+                    return;
+                }
+                val = newVal;
+                dep.notify();
+            }
+        })
+    }
+</script>
