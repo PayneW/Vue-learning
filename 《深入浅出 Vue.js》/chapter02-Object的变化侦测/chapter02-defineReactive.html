@@ -52,8 +52,8 @@
             this.cb.call(this.vm, this.value, oldValue);
         }
     }
-    // - `\w`: 匹配字母，数字，下划线。等于 `[a-zA-Z0-9]`
-    // - `[^xyz]`: 不匹配这个集合中的任何一个字符。
+    // - \w: 匹配字母，数字，下划线。等于 [a-zA-Z0-9]
+    // - [^xyz]: 不匹配这个集合中的任何一个字符。
     const bailRE = /[^\w.$]/;
     // - parsePath(): 解析简单路径. 比如 2.6 中给出的
     //   vm.$watch('a.b.c', function(newVal, oldVal) {})
