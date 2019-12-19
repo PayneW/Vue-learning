@@ -13,6 +13,8 @@
 
     <script type="text/javascript">
 
+        // - 这些代码并没有触发订阅的调用, 所以没法测试发布订阅模式的代码.
+
         class Observe{
             constructor(value) {
                 this.value = value;
@@ -25,6 +27,7 @@
             walk(obj) {
                 // - Object.keys(): 取得对象上所有可枚举的实例属性,
                 const keys = Object.keys(obj);
+                console.log('keys:', keys);
                 for (let i = 0; i < keys.length; i++) {
                     defineReactive(obj, keys[i], obj[keys[i]]);
                 }
@@ -49,6 +52,7 @@
                 }
             }
             notify() {
+                // - 数组的 slice() 方法, 创建当前数组的一个副本
                 const subs = this.subs.slice();
                 for (let i = 0, l = subs.length; i < l; i++) {
                     subs[i].update();
