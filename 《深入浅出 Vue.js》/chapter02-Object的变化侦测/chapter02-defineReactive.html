@@ -1,6 +1,5 @@
 <script type="text/javascript">
-    // - 收集依赖的 Dependence 类
-    // - 发布订阅模式的订阅者构造函数 (Dependence)
+    // - 发布订阅模式中, 收集依赖的 Dependence 类
     class Dep {
         constructor() {
             this.subs = [];
@@ -32,7 +31,7 @@
         }
     }
 
-    // - Watcher 中介者: 负责收集订阅函数
+    // - 发布订阅模式中负责收集订阅函数的:  Watcher 中介者类
     class Watcher{
         constructor(vm, expOrFn, cb) {
             this.vm = vm;
@@ -92,6 +91,7 @@
         }
     }
 
+    // - define reactive 定义响应式
     function defineReactive(data, key, val) {
         // - 2.7 新增, 递归子属性
         if (typeof val === 'object') {
