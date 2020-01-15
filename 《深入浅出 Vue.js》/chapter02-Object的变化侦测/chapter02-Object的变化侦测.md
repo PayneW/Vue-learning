@@ -21,7 +21,7 @@
 ### 2.2 如何追踪变化
 - 如何侦测一个对象的变化? A: 使用 `Object.defineProperty` 或 ES6 的 `Proxy(代理)`
 
-## 本章代码完成解说 + 调用示例
+## 本章代码解说 + 调用示例(书上没有调用示例!!! 呵呵...真是服气 ^_^!)
 - 完整代码见同级目录 `chapter02-complete-code.html`
 - 方便 Markdown 查看粘贴进来:(为了防止改动, 对比时参考 html 代码) 
   ```js
@@ -40,7 +40,7 @@
         }
         // - 因为当前函数内的 Object.defineProperty 方法(即下一行)让我们可以
         //   监听对象属性值发生改变, 如果值发生改变我们需要通知所有的订阅者, 因为
-        //   订阅者全部保存在 Dep 类中, 所以我们需要先实例化 Dep 
+        //   订阅者全部保存在 Dep 类中, 我们需要先实例化 Dep.
         let dep = new Dep();
         Object.defineProperty(data, key, {
             enumerable: true,
