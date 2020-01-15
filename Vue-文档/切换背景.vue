@@ -23,3 +23,12 @@
         }
     }
 </script>
+
+<style type="text/css">
+    .bg1 {
+
+    }
+    .bg2 {
+
+    }
+</style>
