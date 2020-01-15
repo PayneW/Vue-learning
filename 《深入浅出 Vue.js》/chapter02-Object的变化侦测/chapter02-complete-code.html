@@ -6,15 +6,50 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0,
             maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>20191219--MVVM transcript</title>
+    <title>Object 的变化侦测</title>
 </head>
 <body>
     <div id="app">I am the app element</div>
 
     <script type="text/javascript">
 
-        // - 这些代码并没有触发订阅的调用, 所以没法测试发布订阅模式的代码.
+        // - 除了书本上的讲解还参考了: 
+        //     + [vue系列--响应式原理实现及Observer源码解析(七)](
+        //       https://www.cnblogs.com/tugenhua0707/p/11754291.html)
+        //     + Programming-Video-Learning-W/珠峰培训/02_MVVM 原理实现/mvvm/
+        //       mvvm-with-comment.js
 
+        // - define reactive 定义响应式数据: 每当从 data 的 key 中读取数据时,
+        //   get 函数就会触发; 每当往 data 的 key 中设置数据时, set 函数被触发.
+        function defineReactive(data, key, val) {
+            // - 2.7 新增, 递归子属性
+            if (typeof val === 'object') {
+                new Observe(val);
+            }
+            // - 因为当前函数内的 Object.defineProperty 方法(即下一行)让我们可以
+            //   监听对象属性值发生改变, 如果值发生改变我们需要通知所有的订阅者, 因为
+            //   订阅者全部保存在 Dep 类中, 所以我们需要先实例化 Dep 
+            let dep = new Dep();
+            Object.defineProperty(data, key, {
+                enumerable: true,
+                configurable: true,
+                get: function() {
+                    dep.depend();
+                    return val;
+                },
+                set: function(newVal) {
+                    if (val === newVal) {
+                        return;
+                    }
+                    val = newVal;
+                    dep.notify();
+                }
+            })
+        }
+
+        // - observer [əb'zɜːvə] --n.观察者
+        // - 2.7: 我们封装一个 Observer 类, 这个类的作用是将一个数据内的所有属性
+        //   (包括子属性) 都转换成 getter/setter的形式, 然后去追踪它们的变化.
         class Observe{
             constructor(value) {
                 this.value = value;
@@ -27,15 +62,14 @@
             walk(obj) {
                 // - Object.keys(): 取得对象上所有可枚举的实例属性,
                 const keys = Object.keys(obj);
-                console.log('keys:', keys);
                 for (let i = 0; i < keys.length; i++) {
                     defineReactive(obj, keys[i], obj[keys[i]]);
                 }
             }
         }
 
-        // - 发布订阅模式中,收集订阅者(每个 Watcher 构造函数的实例都是一个订阅者) 的
-        //   Dependence 类
+        // - 发布订阅模式--收集订阅者的 Dependence 类 : 用于依赖收集和派发更新.
+        //   (每个 Watcher 构造函数的实例都是一个订阅者)
         class Dep{
             constructor() {
                 this.subs = [];
@@ -68,15 +102,17 @@
             }
         }
 
-        // - 发布订阅模式的 Watcher 中介者
+        // - 发布订阅模式--中用来实例化订阅者的: Watcher 中介者类, 它的原型上有一个
+        //   update 方法, 用于派发更新. 
         class Watcher{
             constructor(vm, expOrFn, cb) {
                 this.vm = vm;
-                this.getter = parsePath(expOrFn);
+                this.getter = parsePath(expOrFn);   // {1}
                 this.cb = cb;
                 this.value = this.get();
             }
             get() {
+                // - this 为当前 Watcher 构造函数的实例
                 window.target = this;
                 let value = this.getter.call(this.vm, this.vm);
                 window.target = undefined;
@@ -88,13 +124,12 @@
                 this.cb.call(this.vm, this.value, oldValue);
             }
         }
-
         // - \w: 匹配字符, 数字, 下划线. 等于 [a-zA-Z0-9];
         // - [^xyz]: 不匹配这个集合中的任何一个字符.
         const bailRE = /[^\w.$]/;
         // - parsePath(): 解析简单路径, 例如 2.6 中给出的:
         //   vm.$watch('a.b.c', function(newVal, oldVal) {}
-        function parsePath() {
+        function parsePath(path) {
             if (bailRE.test(path)) {
                 return;
             }
@@ -111,35 +146,29 @@
             }
         }
 
-        // - define reactive 定义响应式
-        function defineReactive(data, key, val) {
-            // - 2.7 新增, 递归子属性
-            if (typeof val === 'object') {
-                new Observe(val);
-            }
-            let dep = new Dep();
-            Object.defineProperty(data, key, {
-                enumerable: true,
-                configurable: true,
-                get: function() {
-                    dep.depend();
-                    return val;
-                },
-                set: function(newVal) {
-                    if (val === newVal) {
-                        return;
-                    }
-                    val = newVal;
-                    dep.notify();
-                }
-            })
-        }
-
+        
+        // - 调用示例
         function MVVM(options = {}) {
             this.$options = options;
             let data = this._data = this.$options.data;
-            console.log('data: ', data);
+            
+            // - 在 Vue 中 Object/Array 的变化侦测是和模板解析连起来的, 
+            //   订阅者 watcher(即 Watcher 构造函数的实例) 是在模板解析中被实例化的,
+            //   但是当前章节中还没有讲解模板解析,调用方式如下:
+            // - (1) 实例化 Observer 观察者类对 data 数据进行监听(即: 添加访问器属性)
             new Observe(data);
+            
+            // - (2) 上面 defineReactive 函数中有调用发布订阅模式的 Dep 来把改变的
+            //   属性值通知到其他订阅者, 但是订阅者我们还没有实例化, 此处实例化订阅者. 
+            // - 变量 data 对象的所有属性, 分别调用.
+            Object.keys(data).forEach((key) => {
+                if (data.hasOwnProperty(key)) {
+                    new Watcher(data, key, (newVale, oldVale) => {
+                        console.log('新值返回: ', newValue);
+                        console.log('旧值返回: ', oldValue);
+                    })
+                }
+            })
         }
 
         let vm = new MVVM({
@@ -148,15 +177,15 @@
                 a: {aa: 'I am aa'},
                 b: {name: '我是 b 的 name 值'},
                 c: '我是 c 属性!'
-            },
-            // - computed 可以缓存, 只是把数据挂在 vm 上
-            computed: {
-                // - hello 是不会自己触发试图更新的.
-                hello() {
-                    return this.b.name + this.c;
-                }
             }
         });
+
+        // - 在浏览器的控制台中输出下面内容测试:
+        // vm._data;
+        // vm_data.a;
+        // vm_data.a.aa;
+        // vm_data.a.aa = "I changed aa's value";
+        // vm_data.a.aa;
     </script>
 </body>
 </html>
