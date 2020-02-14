@@ -38,47 +38,57 @@ export type Config = {
 export default ({
   /**
    * Option merge strategies (used in core/util/options)
+   * - 选项合并策略 (用于 core/util/options)
    */
   // $flow-disable-line
   optionMergeStrategies: Object.create(null),
 
   /**
    * Whether to suppress warnings.
+   * - 是否支持警告
    */
   silent: false,
 
   /**
    * Show production mode tip message on boot?
+   * - 在启动时显示生产模式提示消息?
+   * -
    */
   productionTip: process.env.NODE_ENV !== 'production',
 
   /**
    * Whether to enable devtools
+   * - 是否启动 devtools
    */
   devtools: process.env.NODE_ENV !== 'production',
 
   /**
    * Whether to record perf
+   * - 是否记录性能
    */
   performance: false,
 
   /**
    * Error handler for watcher errors
+   * - 为观察者错误添加错误句柄
    */
   errorHandler: null,
 
   /**
    * Warn handler for watcher warns
+   * - 为观察者警告添加警告句柄
    */
   warnHandler: null,
 
   /**
    * Ignore certain custom elements
+   * - 忽略某些自定义元素
    */
   ignoredElements: [],
 
   /**
    * Custom user key aliases for v-on
+   * - 为 v-on 自定义别名键
    */
   // $flow-disable-line
   keyCodes: Object.create(null),
@@ -86,45 +96,54 @@ export default ({
   /**
    * Check if a tag is reserved so that it cannot be registered as a
    * component. This is platform-dependent and may be overwritten.
+   * - 检查假如一个标签是已保留的(例: span, p, div), 便不能将其作为组件注册.
+   *   这与平台有关, 可能会被覆盖.
    */
   isReservedTag: no,
 
   /**
    * Check if an attribute is reserved so that it cannot be used as a component
    * prop. This is platform-dependent and may be overwritten.
+   * - 检查假如一个属性是已保留的(例: class, id, style), 便不能将其用作组件属性(prop),
+   *   这与平台有关, 可能会被覆盖.
    */
   isReservedAttr: no,
 
   /**
    * Check if a tag is an unknown element.
    * Platform-dependent.
+   * - 检查标签是否为未知元素. 平台相关.
    */
   isUnknownElement: no,
 
   /**
-   * Get the namespace of an element
+   * Get the namespace of an element. 获取元素的命名空间.
    */
   getTagNamespace: noop,
 
   /**
    * Parse the real tag name for the specific platform.
+   * - 解析特定平台的真实标签名称.
    */
   parsePlatformTagName: identity,
 
   /**
    * Check if an attribute must be bound using property, e.g. value
    * Platform-dependent.
+   * - 检查是否一个特性一定要用属性绑定,(例如: value). 平台相关
    */
   mustUseProp: no,
 
   /**
    * Perform updates asynchronously. Intended to be used by Vue Test Utils
    * This will significantly reduce performance if set to false.
+   * - 执行异步更新. 打算由 Vue Test Utils 使用. 如果设置为 false, 这将显著影响性能.
    */
   async: true,
 
   /**
    * Exposed for legacy reasons
+   * - 由于遗留原因而暴露.
    */
   _lifecycleHooks: LIFECYCLE_HOOKS
 }: Config)

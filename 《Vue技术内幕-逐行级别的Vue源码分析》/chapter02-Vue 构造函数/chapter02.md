@@ -34,6 +34,11 @@
     + He gave such explicit directions that everyone understood them. 
       它给的指示很明确，每人都了解。
     + It's an explicit statement. 这句话说得很确定。
+- **prune [pruːn] --v.修剪，裁剪，修整，精简。 --n.梅干，干梅子**
+    + It's not a prune tree. They pruned the tree. 不是梅树，是它们在修枝剪叶。
+
+
+
 
 
 
@@ -436,7 +441,7 @@
         }
         Object.defineProperty(Vue, 'config', configDef);    // {4-16}
 
-        // - exposed util methods.
+        // - exposed util methods. (导出 util 方法.)
         // - NOTE: these are not considered part of the public API -
         //   avoid relying on them unless you are aware of the risk.
         Vue.util = {                                        // {4-17}
@@ -450,7 +455,7 @@
         Vue.delete = del;                                   // {4-19}
         Vue.nextTick = nextTick;                            // {4-20}
 
-        // - 2.6 explicit observale API. 显示可观察的 API
+        // - 2.6 explicit observale API. (显示可观察的 API.)
         // - TIP: 这里的方法对比源码简化了 flow 检查, 因为写了 flow 检查不符合 js
         //   语法, 没有高亮了.
         Vue.observable = (Obj) => {                         // {4-21}
@@ -476,43 +481,27 @@
     }
 
   ```
-  这段代码的作用是在 `Vue` 构造函数上添加 `config` 属性,
+  `行{4-12}` 到 `行{4-16}` 的作用是在 `Vue` 构造函数上添加 `config` 属性,
   这个属性的添加方式类似我们前面看到的 `$data` 以及 `$props`, 也是一个只读的属性,
   并且当你试图设置其值时, 在非生产环境下会给你一个友好的提示.
 
   那 `Vue.config` 的值是什么呢? 在 `src/core/global-api/index.js`
-  文件的开头有这样一句:
-  ```js
-    import config from '../config';
-  ```
+  文件的开头有这样一句: 即 `行{4-1}`
   所以 `Vue.config` 代理的是从 `core/config.js` 文件导出的对象.
 
-  接着是这样一段代码:
-  ```js
-    
-  ```
-  在 Vue 上添加了 `util` 属性, 这个属性是一个对象, 这个对象拥有 4 个属性分别是: `warn`,
-  `extend`, `mergeOptions` 以及 `defineReactive`. 这 4 个属性来自于
-  `core/util/index.js` 文件.
+  `行{4-17}` 在 Vue 上添加了 `util` 属性, 这个属性是一个对象, 这个对象拥有 4
+  个属性分别是: `warn`,`extend`, `mergeOptions` 以及 `defineReactive`.
+  这 4 个属性来自于 `src/core/util/index.js` 文件.
 
-  接着就是上面的一段注释, 大概意思是 `Vue.util` 以及 `util` 下的 4
+  `行{4-17}` 上面的一段注释, 大概意思是 `Vue.util` 以及 `util` 下的 4
   个方法都不被认为是公共 API 的一部分, 要避免依赖他们, 但是你依然可以使用,
   只不过风险你要自己控制. 并且, 在官方文档上也没有介绍这个全局 API, 所以能不用尽量不要用.
 
-  接着在 `src/core/global-api/index.js` 内是这样一段代码:
-  ```js
-   
-  ```
-  这段代码比较简单, 在 `Vue` 上添加了 4 个属性分别是 `set`, `delete`, `nextTick`
-  以及 `options`, 这里要注意的是 `Vue.options`, 现在它还只是一个空的对象, 通过
-  `Object.create(null)` 创建.
+  接着 `行{4-18}`, `行{4-19}`, `行{4-20}`, `行{4-24}` 在 `Vue`
+  构造函数上添加了 4 个属性分别是 `set`, `delete`, `nextTick` 以及 `options`,
+  注意 `Vue.options` 默认是通过 `Object.create(null)` 创建的一个空对象.
 
-  不过接下来, `Vue.options` 就不是一个空的对象了, 因为下面这段代码:
-  ```js
-  
-  ```
-  `Vue.options` 将变成这样:
-
+  不过接下来通过 `行{4-25}` 和 `行{4-26}` 后 `Vue.options` 将变成这样:
   ```js
     Vue.options = {
         components: Object.create(null),
@@ -521,15 +510,16 @@
         _base: Vue
     }
   ```
-  紧接着, 是这句代码:
-  ```js
-    extend(Vue.options.components, builtInComponents);
-  ```
-  `extend` 来自于 `shared/util.js` 文件, 可以在
-  `../附录/shared/util.js 文件工具方法全解` 中查看其作用, 总之这句代码的意思就是将
+  紧接着是 `行{4-28}`, `extend` 来自于 `../src/shared/util.js` 文件,
+  (Note: 进入 util.js 中查看 extend() 方法的源码可以看到, extend()
+  就是很多库中实现的 Mixin(混合) 方法, 详见:
+  `第2部分--设计模式/chapter08-发布-订阅模式/8.5-6-发布订阅模式通用实现.html`)
+  可以在 `../附录/shared/util.js 文件工具方法全解` 中查看其作用, 总之这句代码的意思就是将
   `builtInComponents` 的属性混合到 `Vue.options.components` 中, 其中
-  `builtInComponents` 来自于 `core/components/index.js` 文件, 该文件如下:
+  `builtInComponents` 来自于 `../src/core/components/index.js` 文件, 该文件如下:
   ```js
+    // - ../src/core/components/index.js (全部代码)
+
     import KeepAlive from './keep-alive';
     export default {
         KeepAlive
@@ -552,47 +542,108 @@
         _base: Vue
     }
   ```
-  我们继续看代码, 在 `initGlobalAPI` 方法的最后部分, 以 `Vue` 为参数调用了 4 个
-  `init*` 方法:
-  ```js
-    initUse(Vue);
-    initMixin(Vue);
-    initExtend(Vue);
-    initAssetRegisters(Vue);
-  ```
+  我们继续看代码, 在 `../src/core/global-api/index.js` 内 
+  `initGlobalAPI` 方法的最后部分, 以 `Vue` 为参数调用了 4 个
+  `init*` 方法, 即 `行{4-29}`, `行{4-30}`, `行{4-31}` 和 `行{4-32}`, 
   这 4 个方法从上到下分别来自于:
-    + `global-api/use.js`,
-    + `global-api/mixin.js`,
-    + `global-api/extend.js`,
-    + `global-api/assets.js` 
+    + `../src/core/global-api/use.js`,
+    + `../src/core/global-api/mixin.js`,
+    + `../src/core/global-api/extend.js`,
+    + `../src/core/global-api/assets.js` 
 
-  这 4 个方法, 我们不着急, 一个一个慢慢看, 先打开 `global-api/use.js` 文件,
+  这 4 个方法, 我们一个一个看, 先打开 `../src/core/global-api/use.js` 文件,
   我们发现这个文件只有一个 `initUse` 方法, 如下:
   ```js
+    // - ../src/core/global-api/use.js (全部代码)
+
     /* @flow */
-    import {toArray} from '../util/index';
-    export function initUse(Vue: GlobalAPI) {
-        Vue.use = function(plugin: Function | Object) {
+    import {toArray} from '../util/index';                      // {5-1} 
+    export function initUse(Vue: GlobalAPI) {                   // {5-2}
+        Vue.use = function(plugin: Function | Object) {         // {5-3}
             // - installed plguins 安装的插件
-            const installedPlugins = (this._installedPlugins || (this._installedPlugins = []));
-            if (installedPlugins.indexOf(plugin) > -1) {
+            const installedPlugins = 
+                (this._installedPlugins || (this._installedPlugins = [])); // {5-4}
+            if (installedPlugins.indexOf(plugin) > -1) {        // {5-5}
               return this;
             }
   
             // - additional parameters; 附加参数
-            const args = toArray(arguments, 1);
+            const args = toArray(arguments, 1);                 // {5-6}
             // - `unshift()`: 在数组开头插入元素
-            args.unshift(this);
-            if (typeof plugin.install === 'function') {
-                plugin.install.apply(plugin, args);
-            } else if (typeof plugin === 'function') {
-                plugin.apply(null, args);
+            args.unshift(this);                                 // {5-7}
+            if (typeof plugin.install === 'function') {         // {5-8}
+                plugin.install.apply(plugin, args);             // {5-9}
+            } else if (typeof plugin === 'function') {          // {5-10}
+                plugin.apply(null, args);                       // {5-11}
             }
-            installedPlguins.push(plugin);
+            installedPlguins.push(plugin);                      // {5-12}
+            return this;                                        // {5-13}
+        }
+    }
+  ```
+  该方法的作用是在 `Vue` 构造函数上添加 `use` 方法, 也就是传说中的 `Vue.use`
+  这个全局 API, 这个方法大家应该不会陌生, 用来安装 `Vue` 插件.
+
+  再打开 `../src/core/global-api/mixini.js` 文件, 这个文件更简单, 代码如下:
+  ```js
+    // - ../src/core/global-api/mixini.js (全部代码)
+
+    /* @flow */
+    import {mergeOptions} from '../util/index';                 // {6-1}
+
+    export function initMixin(Vue: GlobalAPI) {                 // {6-2}
+        Vue.mixin = function(mixin: Object) {                   // {6-3}
+            this.options = mergeOptions(this.options, mixin);   // {6-4}
             return this;
         }
     }
   ```
+  其中, `行{6-2}` 方法的作用是, 其内部 `行{6-2}` 在 `Vue` 构造函数上添加
+  `mixin` 静态方法, 这个全局 API.
+
+  继续打开 `global-api/extend.js` 文件, 找到 `initExtend` 方法, 如下:
+  ```js
+    // - ../src/core/global-api/extend.js (全部代码)
+
+    /* @flow */
+    import {ASSET_TYPES} from 'shared/constants';
+    import {defineComputed, proxy} from '../instance/state';
+    import {extend, mergeOptions, validateComponentName} from '../util/index';
+
+    export function initExtend (Vue: GlobalAPI) {
+        // - Each instance constructor, including Vue, has a unique cid,
+        //   The enables us to create wrapped "child constructors" for 
+        //   prototypal inheritance and cache them.
+        Vue.cid = 0;
+        let cid = 1;
+
+        // - Class inheritance
+        Vue.extend = function(extendOptions: Object): Function {
+            extendOptions = extendOptions || {};
+            const Super = this;
+            const SuperId = Super.cid;
+            const cachedCtors = 
+                extendOptions._Ctor || (extendOptions._Ctor = {});
+            if (cachedCtors[SuperId]) {
+                return cachedCtors[SuperId];
+            }
+
+            const name = extendOptions.name || Super.options.name;
+            if (process.env.NOED_ENV !== 'production' && name) {
+                validateComponentName(name);
+            }
+
+            const Sub = function VueComponent(options) {
+                this._init(options);
+            };
+            Sub.prototype = Object.create(Super.prototype);
+            Sub.prototype.constructor = Sub;
+            
+
+        }
+    }
+  ```
+  
 
 
 #### 2.3 Vue 平台化的包装
