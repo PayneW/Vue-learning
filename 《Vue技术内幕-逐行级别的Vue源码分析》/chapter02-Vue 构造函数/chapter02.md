@@ -194,11 +194,11 @@
             dataDef.set = function(newData: Object) {   // {1-6}
                 // - 避免替换根实例 $data, 改用嵌套数据属性
                 warn(                                   // {1-7}
-                    'Avoid replacing instance root $data. ` + 
+                    'Avoid replacing instance root $data. ' + 
                     'Use nested data properties instead.',
                     this
                 )
-            }
+            };
             propsDef.set = function() {                 // {1-8}
                 warn(`$props is readonly.`, this);      // {1-9}
             }
@@ -209,11 +209,11 @@
         Vue.prototype.$set = set;                       // {1-12}
         Vue.prototype.$delete = del;                    // {1-13}
   
-        Vue.prototype.$watch = function() {             // {1-14}
-            expOrFn: string | Function,
-            cb: any,
-            options?: Object
-        }: Function {
+        Vue.prototype.$watch = function(
+             expOrFn: string | Function,
+             cb: any,
+             options?: Object
+        ): Function {
             const vm: Component = this;
             if (isPlainObject(cb)) {
                 return createWatcher(vm, expOrFn, cb, options);
@@ -232,7 +232,7 @@
                     )
                 }
             }
-            return fucntion unwatchFn() {
+            return function unwatchFn() {
                 watcher.teardown();
             }
         }
@@ -292,7 +292,7 @@
 
         Vue.prototype.$nextTick = function(fn: Function) {  // {2-2}
             return nextTick(fn, this);                      
-        }
+        };
 
         Vue.prototype._render = function(): VNode {}        // {2-3}
     }
@@ -373,9 +373,9 @@
   
     // - 在 Vue.prototype 上添加 $isServer 属性, 该属性代理了来自
     //   `core/util/env.js` 文件的 isServerRendering 方法.
-    Object.defineProperty(Vue.prototype, '$isServer`, { 
+    Object.defineProperty(Vue.prototype, '$isServer', { 
         get: isServerRendering
-    })                                                  // {3-6}
+    });                                                // {3-6}
   
     // - 在 Vue.prototype 上添加 $ssrContext 属性
     Object.defineProperty(Vue.prototype, '$ssrContext', {
@@ -785,9 +785,9 @@
   ```
   所以, 最终经过 `initAssetRegisters` 方法, `Vue` 又多了 3 个静态方法:
   ```js
-    Vue.component
-    Vue.directive
-    Vue.filter
+    Vue.component;
+    Vue.directive;
+    Vue.filter;
   ```
   这 3 个静态方法大家都不陌生, 分别用来全局注册组件, 指令和过滤器.
 
