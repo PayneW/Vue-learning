@@ -11,10 +11,11 @@
 
 
 ## 生词 
-- **entity ['ɛntəti] --n.实体**
+- **entity ['ɛntəti] --n.实体, 存在.**
     + business entity 企业单位
     + economic entity 经济实体
-    + What kind of an entity is a person? 认识一种什么样的实体？
+    + entity and nonentity.存在和不存在.
+    + the entities underlying physical form. 作为物质构造之基础的实体.
 - **rendering ['rɛndərɪŋ] --n.[计]渲染; 表演,演出; 翻译,译文[of].**
     + Rendering Context. 渲染上下文.
     + Rendering engine. 渲染引擎
@@ -34,11 +35,18 @@
     + He gave such explicit directions that everyone understood them. 
       它给的指示很明确，每人都了解。
     + It's an explicit statement. 这句话说得很确定。
+- **observable [əb'zɝvəbl] --adj.可观察的, 看得见的**
+    + explicit observable API. 显示可观察的 API.    
 - **prune [pruːn] --v.修剪，裁剪，修整，精简。 --n.梅干，干梅子**
     + It's not a prune tree. They pruned the tree. 不是梅树，是它们在修枝剪叶。
-
-
-
+- **instantiation [in,stænʃieiʃən] --n.实例化; 实体化; 体现**
+    + 在js 文件中创建 `new Object()` 时, WebStorm 会提示: 
+      Object instantiation can be simplified. 对象实例化可以简化.
+- **definition [defɪ'nɪʃ(ə)n] --n.定义，精确度**
+    + definition of probability. 概率定义
+    + It is by definition a complex object. 它本质上是个复杂的物体。
+- **directive [dɪ'rektɪv] --n.指示，指令  --adj.指导的，管理的**
+    + It's a directive straight from the President. 这是总统直接下达的指令。
 
 
 
@@ -343,9 +351,9 @@
 
 
 #### 2.2 Vue 构造函数的静态属性和方法 (全局 API)
-- 到目前为止, **`core/instance/index.js`** 文件, 也就是 `Vue` 的出生文件的代码我们就看完了,
-  按照之前我们寻找 `Vue` 构造函数时的文件路径回溯, 下一个我们要看的文件应该就是
-  `core/index.js` 文件 (Note: 即上面的 `{flag 1}`), 
+- 到目前为止, **`core/instance/index.js`** 文件, 也就是 `Vue`
+  的出生文件的代码我们就看完了, 按照之前我们寻找 `Vue` 构造函数时的文件路径回溯,
+  下一个我们要看的文件应该就是 `core/index.js` 文件 (Note: 即上面的 `{flag 1}`), 
   这个文件将 `Vue` 从 `core/instance/index.js` 文件中导入进来, 我们打开
   `core/index.js`, 下面是其全部的代码, 同样很简短易看:
   
@@ -360,7 +368,7 @@
     'core/vdom/create-functional-component';            // {3-4}
   
     // - 将 Vue 构造函数作为参数传递给 initGlobalAPI 方法, 该方法来自
-    //   `./global-api/index.js` 文件.
+    //   `../src/core/global-api/index.js` 文件.
     initGlobalAPI(Vue);                                 // {3-5}
   
     // - 在 Vue.prototype 上添加 $isServer 属性, 该属性代理了来自
@@ -455,7 +463,7 @@
         Vue.delete = del;                                   // {4-19}
         Vue.nextTick = nextTick;                            // {4-20}
 
-        // - 2.6 explicit observale API. (显示可观察的 API.)
+        // - 2.6 explicit observable API. (显示可观察的 API.)
         // - TIP: 这里的方法对比源码简化了 flow 检查, 因为写了 flow 检查不符合 js
         //   语法, 没有高亮了.
         Vue.observable = (Obj) => {                         // {4-21}
@@ -584,9 +592,9 @@
   该方法的作用是在 `Vue` 构造函数上添加 `use` 方法, 也就是传说中的 `Vue.use`
   这个全局 API, 这个方法大家应该不会陌生, 用来安装 `Vue` 插件.
 
-  再打开 `../src/core/global-api/mixini.js` 文件, 这个文件更简单, 代码如下:
+  再打开 `../src/core/global-api/mixin.js` 文件, 这个文件更简单, 代码如下:
   ```js
-    // - ../src/core/global-api/mixini.js (全部代码)
+    // - ../src/core/global-api/mixin.js (全部代码)
 
     /* @flow */
     import {mergeOptions} from '../util/index';                 // {6-1}
@@ -606,45 +614,195 @@
     // - ../src/core/global-api/extend.js (全部代码)
 
     /* @flow */
-    import {ASSET_TYPES} from 'shared/constants';
-    import {defineComputed, proxy} from '../instance/state';
-    import {extend, mergeOptions, validateComponentName} from '../util/index';
+    import {ASSET_TYPES} from 'shared/constants';                   // {7-1}
+    import {defineComputed, proxy} from '../instance/state';        // {7-2}
+    import {extend, mergeOptions, validateComponentName} from '../util/index'; // {7-3}
 
-    export function initExtend (Vue: GlobalAPI) {
+    // - inital extend 初始化扩展
+    export function initExtend (Vue: GlobalAPI) {                   // {7-4}
         // - Each instance constructor, including Vue, has a unique cid,
         //   The enables us to create wrapped "child constructors" for 
         //   prototypal inheritance and cache them.
-        Vue.cid = 0;
-        let cid = 1;
+        // - 每个实例构造函数(包括 Vue), 都有一个唯一的 cid, 它可以为原型继承创建包装的
+        //   "子构造函数" 并对其进行缓存.
+        Vue.cid = 0;                                                // {7-5}
+        let cid = 1;                                                // {7-6}
 
-        // - Class inheritance
-        Vue.extend = function(extendOptions: Object): Function {
-            extendOptions = extendOptions || {};
-            const Super = this;
-            const SuperId = Super.cid;
+        // - Class inheritance (类继承)
+        Vue.extend = function(extendOptions: Object): Function {    // {7-7}
+            extendOptions = extendOptions || {};                    // {7-8}
+            const Super = this;                                     // {7-9}
+            const SuperId = Super.cid;                              // {7-10}
             const cachedCtors = 
-                extendOptions._Ctor || (extendOptions._Ctor = {});
-            if (cachedCtors[SuperId]) {
-                return cachedCtors[SuperId];
+                extendOptions._Ctor || (extendOptions._Ctor = {});  // {7-11}
+            if (cachedCtors[SuperId]) {                             // {7-12}
+                return cachedCtors[SuperId];                        // {7-13}
             }
 
-            const name = extendOptions.name || Super.options.name;
-            if (process.env.NOED_ENV !== 'production' && name) {
-                validateComponentName(name);
+            const name = extendOptions.name || Super.options.name;  // {7-14}
+            if (process.env.NOED_ENV !== 'production' && name) {    // {7-15}
+                validateComponentName(name);                        // {7-16}
             }
 
-            const Sub = function VueComponent(options) {
-                this._init(options);
+            const Sub = function VueComponent(options) {            // {7-17}
+                this._init(options);                                // {7-18}
             };
-            Sub.prototype = Object.create(Super.prototype);
-            Sub.prototype.constructor = Sub;
-            
+            // - 利用 Object.create() 方法克隆一个对象, 其原型为 Super.prototype
+            Sub.prototype = Object.create(Super.prototype);         // {7-19}
+            Sub.prototype.constructor = Sub;                        // {7-20}
+            Sub.cid = cid++;                                        // {7-21}
+            Sub.options = mergeOptions(                             // {7-22}
+                Super.options,
+                extendOptions
+            );
+            Sub['super'] = Super;                                   // {7-23}
 
+            // - For props and computed properties, we define the proxy
+            //   getters on the Vue instances at extension time, on the
+            //   extended prototype. This avoids Object.defineProperty calls
+            //   for each instance created. 
+            // - 对于 props 和 可计算属性, 我们在扩展时在 Vue 实例上定义了代理获取器,
+            //   它实际是在扩展的原型上. 这样可以避免为每个创建的实例调用
+            //   Object.defineProperty.
+            if (Sub.prototype.props) {                              // {7-24}
+                initProps(Sub);                                     // {7-25}
+            }
+            if (Sub.options.computed) {                             // {7-26}
+                initComputed(Sub);                                  // {7-27}
+            }
+
+            // - allow further extension/mixin/plugin usage.
+            // - 允许进一步扩展/混合/插件使用.
+            Sub.extend = Super.extend;                              // {7-28}
+            Sub.mixin = Super.mixin;                                // {7-29}
+            Sub.use = Super.use;                                    // {7-30}
+
+            // - create asset registers, so extended classes can have their
+            //   private assets too. (创建资产注册, 因此扩展库也可以有它们的私有资产.)
+            ASSET_TYPES.forEach(function(type) {                    // {7-31}
+                Sub[type] = Super[type]                             // {7-32}
+            });
+            // - enable recursive self-lookup. (启用递归自查)
+            if (name) {                                             // {7-33}
+                Sub.options.components[name] = Sub;                 // {7-34}
+            }
+
+            // - keep a reference to the super options at extension time.
+            //   later at instantiation we can check if Super's options have
+            //   been updated.
+            // - 在扩展时保留对父级选项的引用. 稍后在实例化时, 我们可以检查 Super
+            //   的选项是否已更新.
+            Sub.superOptions = Super.optoins;                       // {7-35}
+            Sub.extendOptions = extendOptions;                      // {7-36}
+            Sub.sealedOptions = extend({}, Sub.options);            // {7-37}
+            
+            // - cache constructor (缓存构造函数)
+            cachedCtors[SuperId] = Sub;                             // {7-38}
+            return Sub;                                             // {7-39}
+        }
+    }
+
+    function initProps(Comp) {                                      // {7-40}
+        const props = Comp.options.props;                           // {7-41}
+        for (const key in props) {                                  // {7-42}
+            proxy(Comp.prototype, `_props`, key);                   // {7-43}
+        }
+    }
+
+    function initComputed(Comp) {                                   // {7-44}
+        const computed = Comp.options.computed;                     // {7-45}
+        for (const key in computed) {                               // {7-46}
+            defineComputed(Comp.prototype, key, computed[key]);     // {7-47}
         }
     }
   ```
-  
+  `initExtend` 即 `行{7-4}` 方法在 `Vue` 上添加了 `Vue.cid` 静态属性, 和
+  `Vue.extend` 静态方法.
 
+  最后一个是 `initAssetRegisters`(即: `行{4-32}`), 我们打开
+  `src/core/global-api/assets.js` 文件, 找到 `initAssetRegisters` 方法如下:
+  ```js
+    // - ../src/core/global-api/assets.js  (全部代码)
+
+    import {ASSET_TYPES} from 'shared/constants';                   // {8-1}
+    import {isPlainObject, validateComponentName} from '../util/index'; // {8-2}
+
+    export function initAssetRegisters(Vue: GlobalAPI) {            // {8-3}
+        // - Create asset registration methods. (创建资产注册方法)
+        ASSET_TYPES.forEach(type => {                               // {8-4}
+            Vue[type] = function(                                   // {8-5}
+                id: string,
+                defination: Function | Object
+            ): Function | Object | void {
+                if (!definition) {                                  // {8-6}
+                    return this.options[type + 's'][id];            // {8-7}
+                } else {
+                    // - istanbul ignore if 
+                    if (process.env.NODE_ENV !== 'production'
+                        && type === 'component') {                  // {8-8}
+                        validateComponentName(id);                  // {8-9}
+                    }
+                    if (type === 'component' 
+                        && isPlainObject(definition)) {             // {8-10}
+                        definition.name = definition.name || id;    // {8-11}
+                        definition = this.options._base.extend(definition); // {8-12}
+                    }
+                    if (type === 'directive'
+                        && typeof definition === 'function') {      // {8-13}
+                        definition = {bind: defintion, update: definition}; // {8-14}
+                    }
+                    this.options[type + 's'][id] = definitoin;      // {8-15}
+                    return definition;
+                }
+            }
+        })
+    }
+  ```
+  其中, `ASSET_TYPES` 我们已经见过了, 它在 `../src/shared/constants.js` 文件中,
+  长成这样, 即下面代码的 `行{9-2}`:
+  ```js
+    // - ../src/shared/constants.js  (全部代码)
+    export const SSR_ATTR = 'data-server-rendered';     // {9-1}
+    export const ASSET_TYPES = [                        // {9-2}
+        'component',
+        'directive',
+        'filter'
+    ];
+    export const LIFECYCLE_HOOKS = [                    // {9-3}
+        'beforeCreate',
+        'created',
+        'beforeMount',
+        'mounted',
+        'beforeUpdate',
+        'updated',
+        'beforeDestroy',
+        'destroyed',
+        'activated',
+        'deactivated',
+        'errorCaptured',
+        'ssrPrefetch'
+    ];
+  ```
+  所以, 最终经过 `initAssetRegisters` 方法, `Vue` 又多了 3 个静态方法:
+  ```js
+    Vue.component
+    Vue.directive
+    Vue.filter
+  ```
+  这 3 个静态方法大家都不陌生, 分别用来全局注册组件, 指令和过滤器.
+
+  这样, `initGlobalAPI` 方法的全部功能我们就介绍完毕了, 它的作用就像它的名字一样,
+  是在 `Vue` 构造函数上添加全局的 API, 类似整理 `Vue.prototype` 上的属性和方法一样,
+  我们同样对 `Vue` 静态属性和方法做了一个整理, 将他放到 `附录/Vue构造函数整理-全局API`
+  中, 便于以后查阅.
+
+  至此, 对于 `core/index.js` 文件的作用我们也大概清楚了, 在这个文件里, 它首先将核心的
+  `Vue`, 即在 `../src/core/instance/index.js` 文件中创建,
+  然后经历 5 个方法给原型添加属性和方法后的 `Vue` 导入, 然后使用 `initGlobalAPI`
+  方法给 `Vue` 添加静态方法和属性, 除此之外, 在这个文件里, 也对原型进行了修改,
+  为其添加了 2 个属性: `$isServer` 和 `$ssrContext`, 最后添加了 `Vue.version`
+  属性并导出了 `Vue`. 
 
 #### 2.3 Vue 平台化的包装
+
 #### 2.4 with compiler
