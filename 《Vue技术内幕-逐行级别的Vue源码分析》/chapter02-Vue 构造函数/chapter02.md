@@ -47,6 +47,15 @@
     + It is by definition a complex object. 它本质上是个复杂的物体。
 - **directive [dɪ'rektɪv] --n.指示，指令  --adj.指导的，管理的**
     + It's a directive straight from the President. 这是总统直接下达的指令。
+- **specific [spə'sɪfɪk] --adj.具体的，特定的**
+    + This is likely a problem with your specific environment.
+      这可能是您特性环境的问题。
+    + There was no specific plan in my mind. 我脑子里没有具体的计划。
+    + Do you have specific request for packing? 你们对包装有特别的要求吗？
+- **hydrate ['haɪdret] --n.水合物(结晶中有一定比例水分子成分的固体化合物).**
+  **--vt&vi.(使)水合. 时态: hydrated, hydrating, hydrates**
+
+
 
 
 
@@ -238,10 +247,11 @@
         }
     }
   ```
-  我们先看最后两句, 使用 `Object.defineProperty` 在 `Vue.prototype` 上定义了两个属性,
-  就是大家熟悉的 `$data` 和 `$props`, 这两个属性的定义分别写在了 `dataDef` 以及
-  `propsDef` 这两个对象里, 我们来仔细看一下这两个对象的定义, 首相是 `get`:
-  即 `行{1-2}` 和 `行{1-4}`,可以看到, `$data` 属性实际上代理的是 `_data` 这个属性,
+  我们先看 `行{1-10}` 和 `行{1-11}`, 使用 `Object.defineProperty` 在
+  `Vue.prototype` 上定义了两个属性, 就是大家熟悉的 `$data` 和 `$props`,
+  这两个属性的定义分别写在了 `dataDef` 以及 `propsDef` 这两个对象里, 
+  我们来仔细看一下这两个对象的定义, 首先是 `get`(即 `行{1-2}` 和 `行{1-4}`),
+  可以看到, `$data` 属性实际上代理的是 `_data` 这个属性,
   而 `$props` 代理的是 `props` 这个实例属性. 然后 `行{1-5}` 为是否为生产环境的判断,
   如果不是生产环境的话, 就为 `$data` 和 `$props` 这两个属性设置一下 `set`,
   实际上就是提示你一下: 别他娘的想修改我, 老子就是无敌.
@@ -380,7 +390,9 @@
     // - 在 Vue.prototype 上添加 $ssrContext 属性
     Object.defineProperty(Vue.prototype, '$ssrContext', {
         get() {
-            // - istanbul ignore next 
+            // - istanbul ignore next.
+            // - TIP: Istanbul 是 JS 程序的代码覆盖率工具.
+            //   `/* istanbul ignore next */` 注释语法, 允许某些代码不计入覆盖率.
             return this.$vnode && this.$vnode.ssrContext;
         }
     })                                                  // {3-7}
@@ -471,7 +483,7 @@
             return obj;                                     // {4-23}
         };
 
-        Vue.optionts = Object.create(null);                 // {4-24}
+        Vue.options = Object.create(null);                 // {4-24}
         ASSET_TYPES.forEach(type => {                       // {4-25}
             Vue.options[type + 's'] = Object.create(null);  // {4-26}
         });
@@ -522,9 +534,11 @@
   (Note: 进入 util.js 中查看 extend() 方法的源码可以看到, extend()
   就是很多库中实现的 Mixin(混合) 方法, 详见:
   `第2部分--设计模式/chapter08-发布-订阅模式/8.5-6-发布订阅模式通用实现.html`)
-  可以在 `../附录/shared/util.js 文件工具方法全解` 中查看其作用, 总之这句代码的意思就是将
-  `builtInComponents` 的属性混合到 `Vue.options.components` 中, 其中
-  `builtInComponents` 来自于 `../src/core/components/index.js` 文件, 该文件如下:
+  可以在
+  [附录/shared/util.js文件工具方法全解.md](../附录/shared/util.js文件工具方法全解.md)
+  中查看其作用, 总之这句代码的意思就是将 `builtInComponents` 的属性混合到
+  `Vue.options.components` 中, 其中 `builtInComponents` 来自于
+  `../src/core/components/index.js` 文件, 该文件如下:
   ```js
     // - ../src/core/components/index.js (全部代码)
 
@@ -541,7 +555,7 @@
   ```
   那么到现在为止, `Vue.options` 已经变成了这样:
   ```js
-    Vue.options = {
+    Vue.options = {                     // {flag: 00-1}
         components: {
             KeepAlive
         },
@@ -804,5 +818,347 @@
   属性并导出了 `Vue`. 
 
 #### 2.3 Vue 平台化的包装
+- 现在，在上面我们理清 Vue 构造函数的过程中已经看了两个主要的文件, 它们分别是:
+  `src/core/instance/index.js` 文件以及 `src/core/index.js` 文件,
+  前者是 Vue 构造函数的定义文件, 主要作用是定义 Vue 构造函数, 并对其原型添加属性和方法,
+  即实例属性和实例方法. `src/core/index.js` 主要作用是为 Vue 添加全局的API,
+  也就是静态的方法和属性. 这两个文件有个共同点，就是它们都在 `core` 目录下,
+  我们在介绍 `Vue` 项目目录结构的时候说过: `core` 目录存放的是与平台无关的代码,
+  所以无论是 `src/core/instance/index.js` 文件还是 `src/core/index.js` 文件,
+  它们都在包装核心的 Vue, 且这些包装是与平台无关的. 但是 Vue 是一个 Multi-platform
+  的项目 (`web`和`weex`), 不同平台可能会内置不同的组件、指令, 或者一些平台特有的功能等等,
+  那么这就需要对 Vue 根据不同的平台进行平台化地包装, 这就是接下来我们要看的文件,
+  这个文件也出现在我们寻找 Vue 构造函数的路线上, 它就是:
+  `src/platforms/web/runtime/index.js` 文件。
+
+  在看这个文件之前，大家可以先打开 `platforms` 目录,可以发现有两个子目录 `web` 和
+  `weex`. 这两个子目录的作用就是分别为相应的平台对核心的 Vue 进行包装的.
+  而我们所要研究的 web 平台，就在 `web` 这个目录里。
+
+  接下来, 我们就打开 `src/platforms/web/runtime/index.js` 文件, 看一看里面的代码,
+  这个文件的一开始是一大堆 `import` 语句，其中就包括从 `src/core/index.js`
+  文件导入 `Vue` 的那句。
+  ```js
+    // - src/platforms/web/runtime/index.js (全部代码)
+
+    /* @flow */
+    import Vue from 'core/index';                               // {10-1}
+    import config from 'core/config';                           // {10-2}
+    import {extend, noop} from 'shared/util';                   // {10-3}
+    import {mountComponent} from 'core/instance/lifecycle';     // {10-4}
+    import {devtools, inBrowser} from 'core/util/index';        // {10-5}
+
+    import {
+        query,
+        mustUseProp,
+        isReservedTag,
+        isReservedAttr,
+        getTagNamespace,
+        isUnknownElement
+    } from 'web/util/index';                                    // {10-6}
+
+    import {path} from './patch';                               // {10-7}
+    import platformDirectives from './directives/index';        // {10-8}
+    import platfromComponents from './components/index';        // {10-9}
+
+    // - install platform specific utils. (安装特定于平台的工具)
+    Vue.config.mustUseProp = mustUseProp;                       // {10-10}
+    Vue.config.isReservedTag = isReservedTag;                   // {10-11}
+    Vue.config.isReservedAttr = isReservedAttr;                 // {10-12}
+    Vue.config.getTagNamespace = getTagNamespace;               // {10-13}
+    Vue.config.isUnknownElement = isUnknownElement;             // {10-14}
+
+    // - install platform runtime directives & components.
+    // - 安装平台运行时指令和组件
+    extend(Vue.options.directives, platformDirectives);         // {10-15}
+    extend(Vue.options.components, platformComponents);         // {10-16}
+
+    // - install platform patch function. 安装平台补丁功能
+    Vue.prototype.__patch__ = inBrowser ? patch : noop;         // {10-17}
+
+    // - public mount method. 公共安装方法
+    Vue.prototype.$mount = function(                            
+        el?: string | Element,  
+        hydrating?: boolean
+    ): Component {                                              // {10-18}
+        el = el && inBrowser ? query(el): undefined;            // {10-19}
+        return mountComponent(this, el, hydrating)              // {10-20}
+    }
+
+    // - devtools global hook. devtools 全局钩子
+    /* istanbul ignore next. */
+    if (inBrowser) {                                            // {10-21}
+        setTimeout(() => {                                      // {10-22}
+            if (config.devtools) {                              // {10-23}
+                if (devtools) {                                 // {10-24}
+                    devtools.emit('init', Vue);                 // {10-25}
+                } else if (                                     
+                    process.env.NODE_ENV !== 'production'      
+                    && process.env.NODE_ENV !== 'test'         
+                ) {                                             // {10-26}
+                    console[console.info ? 'info': 'log'](
+                        'Download the Vue Devtools extension for a better' +
+                        'development experence: \n' +
+                        'https://github.com/vuejs/vue-devtools'
+                    )
+                }
+            }
+            if (                                    
+                process.env.NODE_ENV !== 'production'
+                && process.env.NODE_ENV !== 'test'
+                && config.productionTip !== false
+                && typeof console !== 'undefined'
+            ) {                                                 // {10-27}
+                console[console.info ? 'info': 'log'](
+                    `You are running Vue in development mode.\n` +
+                    `Make sure to turn on production mode when deploying` +
+                    `for production.\n` +
+                    `See more tips at https://vuejs.org/guide/deployment.html`
+                )
+            }
+        }, 0)
+    }
+    exprot default Vue;
+  ```
+  在 `import` 语句下面的 5 行, 即 `行{10-10}`, `行{10-11}`, `行{10-12}`,
+  `行{10-13}`, `行{10-14}`, (TIP: 在上面的 `行{4-16}` 定义的 `Vue.config`),
+  我们滑动到上面的 `../src/core/global-api/index.js` 源码出, 可以看到内部
+  `Vue.cofig`代理的值是从 `src/core/config.js` 文件导出的对象,
+  这个对象最开始长成这样:
+  ```js
+    // - ../src/core/config.js 
+    Vue.config = {
+        // - user
+        optionMergeStrategies: Object.create(null),
+        silent: false,
+        productionTip: process.env.NODE_ENV !== 'production',
+        performance: false,
+        devtools: process.env.NODE_ENV !== 'production',
+        errorHandler: null,
+        warnHandler: null,
+        ignoredElements: [],
+        keyCodes: Object.create(null),
+
+        // - platform
+        isReservedTag: no,
+        isReservedAttr: no,
+        parsePlatformTagName: identity,
+        isUnknownElement: no,
+        getTagNamespace: noop,
+        mustUseProp: no,
+
+        // - legacy
+        _lifecycleHooks: LIFECYCLE_HOOKS
+    }
+  ```
+  我们可以看到, 从 `src/core/config.js` 文件导出的 `config` 对象, 
+  大部分属性都是初始化了一个初始值, 并且我们在 `src/core/config.js`
+  文件中能看到很多这样的注释，如下图: `图丢失......`
+
+  `This is platform-dependent and may be overwritten.`, 这句话的意思是
+  这个配置是与平台有关的，很可能会被覆盖掉。这个时候我们再回来看 `行{10-10}`,
+  `行{10-11}`, `行{10-12}`, `行{10-13}`, `行{10-14}`; 其实就是在覆盖默认导出的
+  `config` 对象的属性, 注释已经写的很清楚了, 安装平台特定的工具方法,
+  至于这些东西的作用这里我们暂且不说, 你只要知道它在干嘛即可.
+
+  接着是 `行{10-15}` 和 `行{10-16}` 安装特定平台运行的 指令(directive) 和
+  组件(component), 大家现在还记得 `Vue.options` 长什么样吗? 在执行这两行代码之前,
+  它长这样: (即: 上面的 `{flag 00-1}`)
+  ```js
+    Vue.options = {
+        components: {
+            KeepAlive
+        },
+        directives: Object.create(null),
+        filters: Object.create(null),
+        _base: Vue
+    }
+  ```
+  `extend` 方法上面已经见过了, 这里就不说明其作用了, 可以查看
+  [附录/shared/util.js文件工具方法全解.md](../附录/shared/util.js文件工具方法全解.md)
+  , 那么经过 `行{10-15}` 和 `行{10-16}` 两行代码之后的 `Vue.options` 长什么样呢?
+  要想知道这个问题, 我们就要知道 `platformDirectives` 和 `platformComponents`
+  长什么样.
+
+  根据上面代码开头的 `import` 导入语句 `行{10-8}` 和 `行{10-9}` 我们知道,
+  这 2 个变量来自于 `../src/platforms/web/runtime/directives/index.js`
+  和 `../src/platforms/web/runtime/components/index.js` 文件, 我们先打开
+  `../src/platforms/web/runtime/directives/index.js` 文件:
+  ```js
+    // - ../src/platforms/web/runtime/directives/index.js (全部代码)
+    import model from './model';
+    import show from './show';
+    export default {
+        model,
+        show
+    }
+  ```
+  也就是说, `platformDirectives` 是:
+  ```js
+    platformDirectives = {
+        model,
+        show
+    }
+  ```
+  所以, 经过 `行{10-15}` 即 `extend(Vue.options.directives, platformDirectives)`
+  之后, `Vue.options` 将变为:
+  ```js
+    Vue.options = {
+        components: {
+            KeepAlive
+        },
+        directives: {
+            model,
+            show
+        },
+        filters: Object.create(null),
+        _base: Vue
+    }
+  ```
+  同样的道理, 下面是 `../src/platforms/web/runtime/components/index.js`
+  的全部代码:
+  ```js
+    // - ../src/platforms/web/runtime/components/index.js (全部代码)
+    import Transition from './transition';
+    import TransitionGroup from './transition-group';
+
+    export default {
+        Transition,
+        TransitionGroup
+    };
+  ```
+  所以 `platformComponents` 的值为:
+  ```js
+    platformComponents = {
+        Transition,
+        TransitionGroup
+    }
+  ```
+  那么经过 `行{10-16}` 即 `extend(Vue.options.components, platformComponents)`
+  之后, `Vue.options` 将变为:
+  ```js
+    Vue.options = {
+        // - TIP: 在上面的 `行{4-28}` 中我们就已经初始化了 Vue.options.components,
+        //   并给其添加了一个来自 `src/core/components/index.js` 中导入的
+        //   KeepAlive 属性.
+        components: {
+            KeepAlive,
+            Transition,
+            TransitionGroup
+        },
+        directives: {
+            model,
+            show
+        },
+        filters: Object.create(null);
+        _base: Vue
+    }
+  ```
+  我们继续往下看, `行{10-17}`是在 `Vue.prototype` 上添加 `__patch__` 方法, 
+  如果在浏览器环境运行的话, 这个方法的值为 `patch` 函数, 否则是一个空函数 `noop`. 
+  然后又在 `Vue.prototype` 上添加了 `$mount`方法 (即: `行{10-18}`, `行{10-19}`,
+  `行{10-20}`), 我们暂且不关心 `$mount` 方法的内容和作用.
+
+  再往下的一段代码是 `Vue-devtools` 的全局钩子, 它被包裹在 `setTimeout` 中,
+  最后导出了 `Vue`. (即: `行{10-21} ~ 行{10-27}`).
+
+  现在我们就看完了 `platforms/web/runtime/index.js` 文件, 该文件的作用是对 `Vue`
+  进行平台化包装:
+    + 设置平台化的 `Vue.config`.
+    + 在 `Vue.options` 上混合了 2 个指令 (`directives`), 分别是 `model` 和 `show`.
+    + 在 `Vue.options` 上混合了 2 个组件 (`components`), 分别是 `Transition`
+      和 ` TransitionGroup`.
+    + 在 `Vue.prototype` 上添加了 2 个方法: `__patch__` 和 `$mount`.
+
+  经过这个文件之后, `Vue.options`, `Vue.config` 和 `Vue.prototype` 都有所变化,
+  我们把这些变化更新到对应的 [附录]("../附录") 文件里, 都可以查看的到.
 
 #### 2.4 with compiler
+- 在看完上面的 `src/platforms/web/runtime/index.js` 文件之后, 其实 `运行时` 版本的
+  `Vue` 构造函数就已经 "成型了". 我们可以打开 `src/platforms/entry-runtime.js`
+  这个入口文件, 这个文件只有 2 行代码:
+  ```js
+    // - src/platforms/entry-runtime.js (全部代码)
+    import Vue from './runtime/index';
+    export default Vue;
+  ```
+  可以发现, `运行时` 版的入口文件, 导出的 `Vue` 就到
+  `/src/platforms/web/runtime/index.js` 文件为止. 然而我们所选择的并不仅仅是运行时版,
+  而是完整版的 `Vue`, 入口文件是 `entry-runtime-with-compiler.js`,
+  我们知道完整版和运行时版的区别就在于 `compiler`, 
+  所以其实在我们看这个文件的代码之前也能够知道这个文件的作用:
+  *就是在运行时版的基础上添加 `compiler`*, 对没错, 这个文件就是干这个的,
+  接下来我们就看看它是怎么做的, 打开 `entry-runtime-with-compiler.js` 文件:
+  ```js
+    // - ../src/platform/web/entry-runtime-with-compiler.js  (简化)
+
+    import config from 'core/config';
+    import {warn, cached} from 'core/util/index';
+    import {mark, measure} from 'core/util/perf';
+
+    // - 导入 运行时 的 Vue 
+    import Vue from './runtime/index';
+
+    import {query} from './util/index';
+
+    // - 从 `src/platforms/web/compiler/index.js` 文件导入 compileToFunctions
+    import {compileToFunctions} from './compiler/index';
+
+    import {shouldDecodeNewlines, shouldDecodeNewlinesForHref} from './util/compat';
+
+    // - 根据 id 获取元素的 innerHTML
+    const idToTemplate = cached(id => {
+        const el = query(id);
+        return el && el.innerHTML;
+    });
+
+    // - 使用 mount 变量缓存 Vue.prototype.$mount 方法
+    const mount = Vue.prototype.$mount;
+    // + 重写 Vue.prototype.$mount 方法
+    Vue.prototype.$mount = function(
+        el?: string | Element,
+        hydrating?: boolean
+    ): Component {
+        // ... 函数体省略
+    }
+
+    // - 获取元素的 outerHTML: 
+    // - (NOTE: 在读模式下, outerHTML 返回调用它的元素及所有子节点的 HTML 标签.
+    //   在写模式下, outerHTML 会根据指定的 HTML 字符串创建新的 DOM 子树，
+    //   然后用这个 DOM 子树完全替换调用元素.)
+    function getOuterHTML (el: Element): stirng {
+        if (el.outerHTML) {
+            return el.outerHTML;
+        } else {
+            const container = document.createElement('div');
+            container.appendChild(el.cloneNode(true));
+            return container.innerHTML;
+        }
+    }
+
+    // - 在 Vue 上添加一个全局 API `Vue.compile` 其值为上面导入进来的
+    //   compileToFunctions
+    Vue.compile = compileToFunctions;
+
+    // - 导出 Vue
+    export default Vue;
+  ```
+  上面代码是简化过的, 但是保留了所有重要的部分, 该文件的开始是一堆 `import` 语句,
+  其中重要的 2 句 `import` 语句就是添加注释的那两句, 一句是导入运行时的 `Vue`,
+  一句是从 `src/platforms/web/compiler/index.js` 文件导入
+  `compileToFunctions`, 并且在倒数第二句代码将其添加到 `Vue.compile` 上.
+  
+  然后定义了一个函数 `idToTemplate`, 这个函数的作用是: 获取拥有指定 `id` 
+  属性的元素的 `innerHTML`.
+
+  之后缓存了运行时版 `Vue` 的 `Vue.prototype.$mount` 方法，并且进行了重写。
+
+  接下来又定义了 `getOuterHTML` 函数, 用来获取一个元素的 `outerHTML`。
+
+  这个文件运行下来, 对 `Vue` 的影响有两个, 第一个影响是它重写了
+  `Vue.prototype.$mount` 方法；第二个影响是添加了 `Vue.compile` 全局API,
+  目前我们只需要获取这些信息就足够了, 我们把这些影响同样更新到 附录 对应的文件中,
+  也都可以查看的到.
+
+  到这里，`Vue` 神秘面具下真实的样子基本已经展现出来了. 
+  现在深呼吸, 继续我们的探索吧!
