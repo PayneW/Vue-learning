@@ -172,9 +172,22 @@
   ```js
     // - ../src/core/instance/init.js
 
+    let uid = 0;
     export function initMixin(Vue: Class<Component>) {
         Vue.prototype._init = function (options?: Object) {
-            // ... _init 方法的函数体, 此处省略
+            const vm: Component = this;
+            // - a uid
+            vm._uid = uid++;
+
+            let startTag, endTag;
+            /* istanbul ignore if */
+            if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
+                startTag = `vue-perf-start:${vm._uid}`;
+                endTag = `vue-perf-end:${vm._uid}`;
+                mark(startTag);
+            }
+
+            // ... 剩余代码省略
         }
     }
   ```
@@ -535,7 +548,7 @@
   就是很多库中实现的 Mixin(混合) 方法, 详见:
   `第2部分--设计模式/chapter08-发布-订阅模式/8.5-6-发布订阅模式通用实现.html`)
   可以在
-  [附录/shared/util.js文件工具方法全解.md](../附录/shared/util.js文件工具方法全解.md)
+  [附录/shared/util.js-文件工具方法全解.md](../附录/shared/util.js-文件工具方法全解.md)
   中查看其作用, 总之这句代码的意思就是将 `builtInComponents` 的属性混合到
   `Vue.options.components` 中, 其中 `builtInComponents` 来自于
   `../src/core/components/index.js` 文件, 该文件如下:

@@ -1,9 +1,9 @@
 ```js
     **************************************************
-    // - initMixin(Vue)      /src/core/instance/init.js
+    // - initMixin(Vue)  *********    /src/core/instance/init.js
     Vue.prototype._init = function (options?: Object) {}
 
-    // - stateMixin(Vue)     /src/core/instance/state.js
+    // - stateMixin(Vue)  *********   /src/core/instance/state.js
     Vue.prototype.$data
     Vue.prototype.$props
     Vue.prototype.$set = set
@@ -14,18 +14,18 @@
         options?: Object
     ): Function {}
 
-    // - eventsMixin(Vue)    /src/core/instance/events.js
+    // - eventsMixin(Vue)  *********  /src/core/instance/events.js
     Vue.prototype.$on = function (event: string | Array<string>, fn: Function): Component {}
     Vue.prototype.$once = function (event: string, fn: Function): Component {}
     Vue.prototype.$off = function (event?: string | Array<string>, fn?: Function): Component {}
     Vue.prototype.$emit = function (event: string): Component {}
 
-    // - lifecycleMixin(Vue)    /src/core/instance/lifecycle.js
+    // - lifecycleMixin(Vue)  *********  /src/core/instance/lifecycle.js
     Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {}
     Vue.prototype.$forceUpdate = function () {}
     Vue.prototype.$destroy = function () {}
 
-    // - renderMixin(Vue)    src/core/instance/render.js
+    // - renderMixin(Vue)  *********  src/core/instance/render.js
     // installRenderHelpers 函数中
     Vue.prototype._o = markOnce
     Vue.prototype._n = toNumber
