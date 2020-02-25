@@ -1,9 +1,21 @@
 # 1. debug.js 
+
+
+## 生词
+- **classify ['klæsɪfaɪ] --vt.分类; 归类**
+    + We will classify these subjects under three topics.
+      我们把这些问题分成 3 个主题.
+    + We usually classify types of character as good or bad.
+      我们通常把性格的类型分为善与恶.
+
+
+
+## 内容
 - ```js
     // - src/core/util/debug.js (全部代码)
     // @flow
 
-    import config from '../config';                                    // {1-1} 
+    import config from '../config';                                     // {1-1}
     import {noop} from 'shared/util';                                   // {1-2}
     
     export let warn = noop;                                             // {1-3}
@@ -22,7 +34,6 @@
         // - warn (警告)
         warn = (msg, vm) => {                                          // {1-11}
             const trace = vm ? generateComponentTrace(vm) : '';        // {1-12}
-
             if (config.warnHandler) {                                  // {1-13}
                 config.warnHandler.call(null, msg, vm, trace);         // {1-14}
             } else if (hasConsole && (!config.silent)) {               // {1-15}
@@ -151,7 +162,21 @@
   `行{1-8}, 行{1-9}, 行{1-10}`:
   ```js
     const hasConsole = typeof console !== 'undefined';
-    const classifyRE = /(?:^|[-_](\w))/g;
+    // - classify regular expression. 对正则表达式进行分类
+    // - `(?:^|[-_])`: 非捕获型分组(不需要获取供以后使用), 内部的 `^|[-_]`
+    //   表示匹配以字符串开头或者 `- / _` 字符, 如果其后还有正则, 那么必须出现在
+    //   字符串开始或 `- / _` 字符之后.(Tip: 这里到底对不对? 不知道...). {tip:
+    //   正则表达式的更多笔记见仓库: /DataStructure-Algorithm-Learning/正则表达式/}
+    // - `^|`: 匹配以 `|`开头
+    // - `[-_]`: 匹配 `-` 或 `_`
+    // - `(\w)`: 捕获型分组, 分组内匹配 "字母, 数字, 下划线"
+    const classifyRE = /(?:^|[-_])(\w)/g;
     const classify = str => str.replace(classifyRE, c => c.toUpperCase())
         .replace(/[-_]/g, '');
+  ```
+  其中 `hasConsole` 用来检查宿主环境的 `console` 是否可用, `classifyRE`
+  是一个正则表达式, 用于 `classify` 函数, `classify`
+  函数的作用是将一个字符串的首字母以及中横线转为驼峰, `classify` 的使用如下:
+  ```js
+    console.log(classify('aaa-bbb-ccc')):   // AaaBbbCcc
   ```
