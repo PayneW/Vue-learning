@@ -80,52 +80,34 @@
       restriction.  例如，某一国家通过数量上的限定来限制进口。
 - **strategy ['strætɪdʒɪ] --n.战略，策略**
      + option merge strategies  选项合并策略
-
-
-
+- **duplicate ['djuːplɪkət]  --v.重复，复制。 --adj.复制，复写。--n.副本，复制品**
+    + duplicate copy 副本，复制本
+    + duplicate file 备份文件
+    + de-duplicate hooks 重复数据删除钩子
+- **de-: (前缀)离开; 除去; 否定; 倒转**
+- **assert [ə'sɜːt] --vt.断言，声称，宣称**
 
 
 
 
 ## 内容 (Content)
-### (1.) [debug.js](./)
+### (1.) `debug.js`
+- `debug.js` 文档见: `../2.6-vue-source-document/src/core/util/debug.js`
+- `debug.md` 文档见: `../2.6-vue-source-document/src/core/util/debug.md`
 ### (2.) `env.js`
-- ```js
-    // - src/core/util/env.js (全部代码)
-    
-  ```
+- `env.js` 文档见: `../2.6-vue-source-document/src/core/util/env.js`
+- `env.md` 文档见: `../2.6-vue-source-document/src/core/util/env.md`
 ### (3.) `error.js`
-- ```js
-    // - src/core/util/error.js (全部代码)
-    
-  ```
+- 同上
 ### (4.) `index.js`
-- ```js
-    // - src/core/util/index.js (全部代码)
-    
-  ```
+- 同上
 ### (5.) `lang.js`
-- ```js
-    // - src/core/util/lang.js (全部代码)
-    
-  ```
+- 同上
 ### (6.) `next-tick.js`
-- ```js
-    // - src/core/util/next-tick.js (全部代码)
-    
-  ```
+- 同上
 ### (7.) `options.js`
-- ```js
-    // - src/core/util/options.js (全部代码)
-    
-  ```
+- 同上
 ### (8.) `perf.js`
-- ```js
-    // - src/core/util/perf.js (全部代码)
-    
-  ```
+- 同上
 ### (9.) `props.js`
-- ```js
-    // - src/core/util/props.js (全部代码)
-    
-  ```
+- 同上

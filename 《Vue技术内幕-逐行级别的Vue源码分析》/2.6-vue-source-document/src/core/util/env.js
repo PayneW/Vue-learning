@@ -3,7 +3,7 @@
 // - can we use _proto__?
 export const hasProto = '__proto__' in {};
 
-// - Broser environment sniffing. 浏览器环境嗅探
+// - Broser environment sniffing. (浏览器环境嗅探)
 export const inBrowser = typeof window !== 'undefined';
 export const inWeex = typeof WXEnvironment !== 'undefined' && !! WXEnvironment.platform;
 export const weexPlatform = inWeex && WXEnvironment.platform.toLowerCase();

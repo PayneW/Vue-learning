@@ -15,7 +15,11 @@
   ```base 
     mkdir -p get_started
     cd get_started
-    echo '{"name": "get_started", "scripts": {"flow": "flow; test $? -eq 0 -o $? -eq 2"}}' > package.json
+
+    // - 上面两行也可以不用, 可在 vscode 中直接建好文件夹, 粘贴路径在 mac
+    //   的 iTerm 中直接`cd 路径`即可.
+
+    echo '{"name": "2.6-vue-source-document", "scripts": {"flow": "flow; test $? -eq 0 -o $? -eq 2"}}' > package.json
   ```
   接着，加入 Flow
   ```base

@@ -32,7 +32,7 @@ function flushCallbacks() {
 //   #7834, #8109)
 //   (而且, 在事件处理程序中使用 (宏) 任务会引起一些怪异的无法避免的行为. 例如...)
 // - So we now use microtasks everywhere, again.
-//   (因为,我们现在再次在各处使用微任务.)
+//   (因此,我们现在再次在各处使用微任务.)
 // - A major drawback of this trade-off is that there are some scenarios
 //   where microtasks have too high a priority and fire in between
 //   supposedly sequential events (e.g. #4521, #6690, which have
