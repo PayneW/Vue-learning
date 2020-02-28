@@ -30,6 +30,8 @@ import {
 //   a parent option value and a child option value into the final value.
 //   (选项覆盖策略是处理如何将父选项值和子选项值合并为最终值的函数.)
 // - strategy (策略)
+// - Note: 在 `src/core/config.js` 中 `optionMergeStrategies` 默认是一个
+//   空对象 (Object.create(null))
 const strats = config.optionMergeStrategies;
 
 // - Options with restrictions (有限制的选项)
@@ -76,8 +78,8 @@ function mergeData(to: Object, from: ?Object): Object {
     return to;
 }
 
-
 // - Data
+// -  导出 merge data or function (合并数据或函数) 
 export function mergeDataOrFn(
     parentVal: any,
     childVal: any,
@@ -144,6 +146,7 @@ strats.data = function (
 };
 
 // - Hooks and props are merged as arrays. (Hooks 和 props 被作为数组合并.)
+// - merge hook (合并钩子)
 function mergeHook (
     parentVal: ?Array<Function>,
     childVal: ?Function | ?Array<Function>
@@ -189,6 +192,7 @@ LIFECYCLE_HOOKS.forEach(hook => {
 // - When a vm is present (instance creation), we need to do a three-way
 //   merge between constructor options, instance options and parent options.
 //   (当 vm 存在时(实例创建), 我们需要在构造函数选项, 实例选项和父选项之间进行三方合并.)
+// - merge assets(合并资源)
 function mergeAssets(
     parentVal: ?Object,
     childVal: ?Object,
@@ -210,8 +214,8 @@ ASSET_TYPES.forEach(function(type) {
 });
 
 // - Watchers.
-// - Watchers hashes should not overwrite one another,
-//   so we merge them as arrays. (观察器哈希不应相互覆盖, 因此我们将他们合并为数组.)
+// - Watchers hashes should not overwrite one another, so we merge them
+//   as arrays. (观察器哈希不应相互覆盖, 因此我们将他们合并为数组.)
 strats.watch = function(
     parentVal: ?Object,
     childVal: ?Object,
@@ -242,7 +246,6 @@ strats.watch = function(
     return ret;
 };
 
-
 // - Other object hashes. (其他对象哈希)
 strats.props = 
 strats.methods = 
@@ -270,7 +273,7 @@ const defaultStrat = function(parentVal: any, childVal: any): any {
     return childVal === undefined ? parentVal : childVal;
 };
 
-// - Validate component names ()
+// - check components (检查组件)
 function checkComponents(options: Object) {
     for (const key in options.components) {
         validateComponentName(key)
@@ -295,6 +298,7 @@ export function validateComponentName(name: string) {
 
 // - Ensure all props option syntax are normalized into the 
 //   Object-based format. (确保所有 props 选项的语法均已标准化为基于对象的格式.)
+// - normalize props (标注化 props)
 function normalizeProps(options: Object, vm: ?Component) {
     const props = options.props;
     if (!props) return;
@@ -355,32 +359,117 @@ function normalizeInject(options: Object, vm: ?Component) {
     }
 }
 
+// - Normalize raw function directives into object format. 
+//   (将原始函数指令规范化为对象格式.)
+// - normalize directive (标准化指令)
 function normalizeDirectives(options: Object) {
-
+    const dirs = options.directives;
+    if (dirs) {
+        for (const key in dirs) {
+            const def = dirs[key];
+            if (typeof def === 'function') {
+                dirs[key] = {bind: def, update: def}
+            }
+        }
+    }
 }
 
-// - 
+// - assert object type (断言对象类型)
 function assertObjectType(name: string, value: any, vm: ?Component) {
-
+    if (!isPlainObject(value)) {
+        warn(
+            `Invalid value for option "${name}": expected an Object, ` + 
+            `but got ${toRawType(value)}.`,
+            vm
+        )
+    }
 }
 
-// - 
+// - Merge two option objects into a new one. (合并两个 option 对象到一个新对象中.)
+// - Core utility used in both instantitation and inheritance. 
+//   (用于实例和继承的核心工具)
 export function mergeOptions(
     parent: Object,
     child: Object,
     vm?: Component
 ): Object {
+    if (process.env.NODE_ENV !== 'production') {
+        checkComponents(child);
+    }
 
+    if (typeof child === 'function') {
+        child = child.options;
+    }
+
+    normalizeProps(child, vm);
+    normalizeInject(child, vm);
+    normalizeDirectives(child, vm);
+
+    // - Apply extends and mixins on the child options, but only
+    //   if it is a raw options object that isn't the result of 
+    //   another mergeOptions call. 
+    //   (在子选项上应用扩展和混合, 但前提是它是一个原始选项的对象, 而不是另一个
+    //   mergeOptions 调用的结果.)
+    // - Only merged options has the _base property. 
+    //   (仅合并选项具有 _base 属性的.) 
+    if (!child_base) {
+        if (child.extends) {
+            parent = mergeOptions(parent, child.extends, vm);
+        }
+        if (child.mixins) {
+            for (let i = 0, l = child.mixins.length; i < l; i++) {
+                parent = mergeOptions(parent, child.mixins[i], vm);
+            }
+        }
+    }
+
+    const options = {};
+    let key;
+    for (key in parent) {
+        mergeField(key);
+    }
+    for (key in child) {
+        if (!hasOwn(parent, key)) {
+            mergeField(key);
+        }
+    }
+    function mergeField(key) {
+        const strat = strats[key] || defaultStrat;
+        options[key] = strat(parent[key], child[key], vm, key);
+    }
+    return options;
 };
 
 
-// - 
+// - Resolve an asset.
+// - This function is used because child instances need access to assets
+//   defined in its ancestor chain. (使用此函数是因为子实例需要访问其祖先链
+//   中定义的资源.)
 export function resolveAsset(
     options: Object,
     type: string,
     id: string,
     warnMissing?: boolean
 ): any {
-
+    /* istanbul ignore if */
+    if (typeof id !== 'string') {
+        return;
+    }
+    const assets = options[type];
+    // - check local registration variations first
+    if (hasOwn(assets, id)) return assets[id];
+    const camelizedId = camelize(id);
+    if (hasOwn(assets, camelizedId)) return assets[camelizedId];
+    const PascalCaseId = capitalize(camelizedId);
+    if (hasOwn(assets, PascalCaseId)) return assets[PascalCaseId];
+    // - fallback to prototype chain
+    const res = assets[id] || assets[camelizedId] || assets[PascalCaseId];
+    if (process.env.NODE_ENV !== 'production' && warnMissing && !res) {
+        warn(
+            'Failed to resole ' + type.slice(0, -1) + ': ' + id,
+            options
+        )
+    }
+    return res;
 }
 
