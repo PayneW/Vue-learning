@@ -1,5 +1,14 @@
 ```js
     **************************************************
+    // - Vue():          *********   /src/core/instance/index.js
+    function Vue(options) {
+        if (process.env.NODE_ENV !== 'production' && !(this instanceof Vue)) {
+            warn('Vue is a constructor and should be called with the `new` keyword');
+        }
+        this._init(options); // {1}
+    }
+
+
     // - initMixin(Vue)  *********    /src/core/instance/init.js
     Vue.prototype._init = function (options?: Object) {}
 

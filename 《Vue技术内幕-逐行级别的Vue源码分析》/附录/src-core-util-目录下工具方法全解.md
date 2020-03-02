@@ -86,8 +86,24 @@
     + de-duplicate hooks 重复数据删除钩子
 - **de-: (前缀)离开; 除去; 否定; 倒转**
 - **assert [ə'sɜːt] --vt.断言，声称，宣称**
+- **certain ['sɝtn] --adj.某些(some); 一定; 确定; 肯定. --n.某几个**
+    + with certain qualifications. 附带某些条件
+    + Is it certain that they will win? 他们一定会赢吗?
+    + We are certain of success. 我们确信会成功.
+    + He is certain to come. 他一定会来的.
+- **qualification [ˌkwɒlɪfɪ'keɪʃ(ə)n]/[ˌkwɑlɪfɪ'keʃən] (发音相同)**
+  **--n.资质; 合格; 条件; 限定**
+    + He has no qualifications for the post. 他没有资格担任该职位.
+    + with certain qualifications. 附加某些限制.
+- **ancestor ['ænsɛstɚ] --n.祖先; 祖辈; 原型; 先驱**
+    + My ancestors lived here, same as yours. 我的祖先生活在这里, 和你们一样.
+    + ancestors who were farmers. 祖辈是农民.
+- **variation [ˌvɛrɪ'eʃən] --n.变异; 变动**
+    + considerable variation(s) in temperature. 相当大的气温变化
+    + a temperature variation of 10. ℃ 温差十度
+    + a variation in color [size]. 颜色[大小]的不同.  
 
-
+    
 
 
 ## 内容 (Content)

@@ -8,8 +8,6 @@
     + 2.4 with compiler
 
 
-
-
 ## 生词 
 - **entity ['ɛntəti] --n.实体, 存在.**
     + business entity 企业单位
