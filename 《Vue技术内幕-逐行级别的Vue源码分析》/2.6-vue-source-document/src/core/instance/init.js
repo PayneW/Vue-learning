@@ -55,6 +55,7 @@ export function initMixin(Vue: Class<Comment>) {                    // {1-11}
             //   选项需要特殊处理.)
             initInternalComponent(vm, options);                     // {1-22}
         } else {
+            // - mergeOptions() 来自: `src/core/util/options.js`
             vm.$options = mergeOptions(                             // {1-23}
                 resolveConstructorOptions(vm.constructor),          // {1-24}
                 optons || {},                                       // {1-25}

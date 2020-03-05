@@ -335,6 +335,7 @@ function normalizeProps(options: Object, vm: ?Component) {
 
 // - Normalize all injections into Object-based format. 
 //   (将所有注入标准化为基于对象的格式.)
+// - normalize inject (标准化注入)
 function normalizeInject(options: Object, vm: ?Component) {
     const inject = options.inject;
     if (!inject) return;
@@ -386,7 +387,7 @@ function assertObjectType(name: string, value: any, vm: ?Component) {
 }
 
 // - Merge two option objects into a new one. (合并两个 option 对象到一个新对象中.)
-// - Core utility used in both instantitation and inheritance. 
+// - Core utility used in both instantiation and inheritance.
 //   (用于实例和继承的核心工具)
 export function mergeOptions(
     parent: Object,

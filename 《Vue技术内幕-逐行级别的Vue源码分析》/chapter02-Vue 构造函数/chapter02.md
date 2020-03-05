@@ -195,19 +195,25 @@
   当我们执行 `new Vue()` 的时候, `this._init(options)` 将被执行.
 - **(2)** 再打开 **`./state.js`** 文件, 找到 `stateMixin` 方法, 这个方法的一开始,
   是这样一段代码:
+  
   ```js
-    // - ../src/core/instance/state.js
-
+  // - ../src/core/instance/state.js
+  
     export function stateMixin(Vue: Class<Component>) {
         // - Flow somehow has problems with directly declared definition
         //   object when using Object.defineProperty, so we have to
         //   procedurally build up the object here. (Flow 有时候有问题,
         //   当使用 Object.defineProperty 直接声明定义对象时.)
         
-        // - data define (数据定义)
+        // - data define (定义 data)
         const dataDef = {};                             // {1-1}
+        // - `this._data` 在当前文件内的 `initData()` 方法内有定义, 即:
+        //   let data = vm.$options.data
+    	  //   data = vm._data = typeof data === 'function'
+        //        ? getData(data, vm)
+        //        : data || {}`
         dataDef.get = function() {return this._data};   // {1-2}
-        // - props define (属性定义)
+        // - props define (定义 props)
         const propsDef = {};                            // {1-3}
         propsDef.get = function() {return this._props}; // {1-4}
         if (process.env.NODE_ENV !== 'production') {    // {1-5}
@@ -219,13 +225,13 @@
                     this
                 )
             };
-            propsDef.set = function() {                 // {1-8}
+          propsDef.set = function() {                 // {1-8}
                 warn(`$props is readonly.`, this);      // {1-9}
             }
         }
         Object.defineProperty(Vue.prototype, '$data', dataDef);     // {1-10}
         Object.defineProperty(Vue.prototype, '$props', propsDef);   // {1-11}
-
+  
         // - `set` 和 `del` 是在 `../src/core/observer/index.js` 中定定义的
         //   方法(倒数第 2 和倒数第 3 个)
         Vue.prototype.$set = set;                       // {1-12}
@@ -497,6 +503,12 @@
         };
 
         Vue.options = Object.create(null);                  // {4-24}
+        // - `ASSET_TYPES` 来自 `src/shared/constants.js`, 源码为:
+        //   export const ASSET_TYPES = [
+        //       'component',
+        //       'directive',
+        //       'filter'
+        //   ]
         ASSET_TYPES.forEach(type => {                       // {4-25}
             Vue.options[type + 's'] = Object.create(null);  // {4-26}
         });
@@ -977,6 +989,7 @@
   接着是 `行{10-15}` 和 `行{10-16}` 安装特定平台运行的 指令(directive) 和
   组件(component), 大家现在还记得 `Vue.options` 长什么样吗? 在执行这两行代码之前,
   它长这样: (即: 上面的 `{flag 00-1}`)
+  
   ```js
     Vue.options = {
         components: {
@@ -991,12 +1004,13 @@
   [附录/shared/util.js文件工具方法全解.md](../附录/shared/util.js文件工具方法全解.md)
   , 那么经过 `行{10-15}` 和 `行{10-16}` 两行代码之后的 `Vue.options` 长什么样呢?
   要想知道这个问题, 我们就要知道 `platformDirectives` 和 `platformComponents`
-  长什么样.
-
+长什么样.
+  
   根据上面代码开头的 `import` 导入语句 `行{10-8}` 和 `行{10-9}` 我们知道,
   这 2 个变量来自于 `../src/platforms/web/runtime/directives/index.js`
   和 `../src/platforms/web/runtime/components/index.js` 文件, 我们先打开
-  `../src/platforms/web/runtime/directives/index.js` 文件:
+  `directives/index.js` 文件:
+  
   ```js
     // - ../src/platforms/web/runtime/directives/index.js (全部代码)
     import model from './model';
@@ -1032,9 +1046,9 @@
   的全部代码:
   ```js
     // - ../src/platforms/web/runtime/components/index.js (全部代码)
-    import Transition from './transition';
+  import Transition from './transition';
     import TransitionGroup from './transition-group';
-
+  
     export default {
         Transition,
         TransitionGroup
@@ -1069,20 +1083,20 @@
   ```
   我们继续往下看, `行{10-17}`是在 `Vue.prototype` 上添加 `__patch__` 方法, 
   如果在浏览器环境运行的话, 这个方法的值为 `patch` 函数, 否则是一个空函数 `noop`. 
-  然后又在 `Vue.prototype` 上添加了 `$mount`方法 (即: `行{10-18}`, `行{10-19}`,
+然后又在 `Vue.prototype` 上添加了 `$mount`方法 (即: `行{10-18}`, `行{10-19}`,
   `行{10-20}`), 我们暂且不关心 `$mount` 方法的内容和作用.
-
-  再往下的一段代码是 `Vue-devtools` 的全局钩子, 它被包裹在 `setTimeout` 中,
+  
+再往下的一段代码是 `Vue-devtools` 的全局钩子, 它被包裹在 `setTimeout` 中,
   最后导出了 `Vue`. (即: `行{10-21} ~ 行{10-27}`).
-
+  
   现在我们就看完了 `platforms/web/runtime/index.js` 文件, 该文件的作用是对 `Vue`
   进行平台化包装:
     + 设置平台化的 `Vue.config`.
     + 在 `Vue.options` 上混合了 2 个指令 (`directives`), 分别是 `model` 和 `show`.
     + 在 `Vue.options` 上混合了 2 个组件 (`components`), 分别是 `Transition`
-      和 ` TransitionGroup`.
+    和 ` TransitionGroup`.
     + 在 `Vue.prototype` 上添加了 2 个方法: `__patch__` 和 `$mount`.
-
+  
   经过这个文件之后, `Vue.options`, `Vue.config` 和 `Vue.prototype` 都有所变化,
   我们把这些变化更新到对应的 [附录]("../附录") 文件里, 都可以查看的到.
 
@@ -1170,7 +1184,7 @@
 
   这个文件运行下来, 对 `Vue` 的影响有两个, 第一个影响是它重写了
   `Vue.prototype.$mount` 方法；第二个影响是添加了 `Vue.compile` 全局API,
-  目前我们只需要获取这些信息就足够了, 我们把这些影响同样更新到 附录 对应的文件中,
+  目前我们只需要获取这些信息就足够了, 我们把这些影响同样更新到 `附录` 对应的文件中,
   也都可以查看的到.
 
   到这里，`Vue` 神秘面具下真实的样子基本已经展现出来了. 
