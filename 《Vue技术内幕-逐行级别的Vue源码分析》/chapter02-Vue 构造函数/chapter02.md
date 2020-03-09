@@ -515,7 +515,7 @@
 
         // - this is used to identify the "base" constructor to extend all
         //   plain-object components with in Weex's multi-instance scenarios.
-        Vue.prototype._base = Vue;                          // {4-27}
+        Vue.options._base = Vue;                          // {4-27}
 
         extend(Vue.options.components, builtInComponents);  // {4-28}
 
@@ -600,9 +600,10 @@
 
   这 4 个方法, 我们一个一个看, 先打开 `../src/core/global-api/use.js` 文件,
   我们发现这个文件只有一个 `initUse` 方法, 如下:
+  
   ```js
-    // - ../src/core/global-api/use.js (全部代码)
-
+  // - ../src/core/global-api/use.js (全部代码)
+  
     /* @flow */
     import {toArray} from '../util/index';                      // {5-1} 
     export function initUse(Vue: GlobalAPI) {                   // {5-2}
@@ -629,15 +630,15 @@
     }
   ```
   该方法的作用是在 `Vue` 构造函数上添加 `use` 方法, 也就是传说中的 `Vue.use`
-  这个全局 API, 这个方法大家应该不会陌生, 用来安装 `Vue` 插件.
-
+这个全局 API, 这个方法大家应该不会陌生, 用来安装 `Vue` 插件.
+  
   再打开 `../src/core/global-api/mixin.js` 文件, 这个文件更简单, 代码如下:
   ```js
-    // - ../src/core/global-api/mixin.js (全部代码)
-
+  // - ../src/core/global-api/mixin.js (全部代码)
+  
     /* @flow */
-    import {mergeOptions} from '../util/index';                 // {6-1}
-
+  import {mergeOptions} from '../util/index';                 // {6-1}
+  
     export function initMixin(Vue: GlobalAPI) {                 // {6-2}
         Vue.mixin = function(mixin: Object) {                   // {6-3}
             this.options = mergeOptions(this.options, mixin);   // {6-4}
@@ -646,17 +647,17 @@
     }
   ```
   其中, `行{6-2}` 方法的作用是, 其内部 `行{6-2}` 在 `Vue` 构造函数上添加
-  `mixin` 静态方法, 这个全局 API.
-
+`mixin` 静态方法, 这个全局 API.
+  
   继续打开 `global-api/extend.js` 文件, 找到 `initExtend` 方法, 如下:
   ```js
-    // - ../src/core/global-api/extend.js (全部代码)
-
+  // - ../src/core/global-api/extend.js (全部代码)
+  
     /* @flow */
     import {ASSET_TYPES} from 'shared/constants';                   // {7-1}
     import {defineComputed, proxy} from '../instance/state';        // {7-2}
-    import {extend, mergeOptions, validateComponentName} from '../util/index'; // {7-3}
-
+  import {extend, mergeOptions, validateComponentName} from '../util/index'; // {7-3}
+  
     // - inital extend 初始化扩展
     export function initExtend (Vue: GlobalAPI) {                   // {7-4}
         // - Each instance constructor, including Vue, has a unique cid,
@@ -665,8 +666,8 @@
         // - 每个实例构造函数(包括 Vue), 都有一个唯一的 cid, 它可以为原型继承创建包装的
         //   "子构造函数" 并对其进行缓存.
         Vue.cid = 0;                                                // {7-5}
-        let cid = 1;                                                // {7-6}
-
+      let cid = 1;                                                // {7-6}
+  
         // - Class inheritance (类继承)
         Vue.extend = function(extendOptions: Object): Function {    // {7-7}
             extendOptions = extendOptions || {};                    // {7-8}
@@ -676,13 +677,13 @@
                 extendOptions._Ctor || (extendOptions._Ctor = {});  // {7-11}
             if (cachedCtors[SuperId]) {                             // {7-12}
                 return cachedCtors[SuperId];                        // {7-13}
-            }
-
+          }
+  
             const name = extendOptions.name || Super.options.name;  // {7-14}
             if (process.env.NOED_ENV !== 'production' && name) {    // {7-15}
                 validateComponentName(name);                        // {7-16}
-            }
-
+          }
+  
             const Sub = function VueComponent(options) {            // {7-17}
                 this._init(options);                                // {7-18}
             };
@@ -694,8 +695,8 @@
                 Super.options,
                 extendOptions
             );
-            Sub['super'] = Super;                                   // {7-23}
-
+          Sub['super'] = Super;                                   // {7-23}
+  
             // - For props and computed properties, we define the proxy
             //   getters on the Vue instances at extension time, on the
             //   extended prototype. This avoids Object.defineProperty calls
@@ -708,14 +709,14 @@
             }
             if (Sub.options.computed) {                             // {7-26}
                 initComputed(Sub);                                  // {7-27}
-            }
-
+          }
+  
             // - allow further extension/mixin/plugin usage.
             // - 允许进一步扩展/混合/插件使用.
             Sub.extend = Super.extend;                              // {7-28}
             Sub.mixin = Super.mixin;                                // {7-29}
-            Sub.use = Super.use;                                    // {7-30}
-
+          Sub.use = Super.use;                                    // {7-30}
+  
             // - create asset registers, so extended classes can have their
             //   private assets too. (创建资产注册, 因此扩展库也可以有它们的私有资产.)
             ASSET_TYPES.forEach(function(type) {                    // {7-31}
@@ -724,8 +725,8 @@
             // - enable recursive self-lookup. (启用递归自查)
             if (name) {                                             // {7-33}
                 Sub.options.components[name] = Sub;                 // {7-34}
-            }
-
+          }
+  
             // - keep a reference to the super options at extension time.
             //   later at instantiation we can check if Super's options have
             //   been updated.
@@ -739,15 +740,15 @@
             cachedCtors[SuperId] = Sub;                             // {7-38}
             return Sub;                                             // {7-39}
         }
-    }
-
+  }
+  
     function initProps(Comp) {                                      // {7-40}
         const props = Comp.options.props;                           // {7-41}
         for (const key in props) {                                  // {7-42}
             proxy(Comp.prototype, `_props`, key);                   // {7-43}
         }
-    }
-
+  }
+  
     function initComputed(Comp) {                                   // {7-44}
         const computed = Comp.options.computed;                     // {7-45}
         for (const key in computed) {                               // {7-46}
@@ -756,16 +757,16 @@
     }
   ```
   `initExtend` 即 `行{7-4}` 方法在 `Vue` 上添加了 `Vue.cid` 静态属性, 和
-  `Vue.extend` 静态方法.
-
+`Vue.extend` 静态方法.
+  
   最后一个是 `initAssetRegisters`(即: `行{4-32}`), 我们打开
   `src/core/global-api/assets.js` 文件, 找到 `initAssetRegisters` 方法如下:
   ```js
-    // - ../src/core/global-api/assets.js  (全部代码)
-
+  // - ../src/core/global-api/assets.js  (全部代码)
+  
     import {ASSET_TYPES} from 'shared/constants';                   // {8-1}
-    import {isPlainObject, validateComponentName} from '../util/index'; // {8-2}
-
+  import {isPlainObject, validateComponentName} from '../util/index'; // {8-2}
+  
     export function initAssetRegisters(Vue: GlobalAPI) {            // {8-3}
         // - Create asset registration methods. (创建资产注册方法)
         ASSET_TYPES.forEach(type => {                               // {8-4}
@@ -828,13 +829,13 @@
     Vue.directive;
     Vue.filter;
   ```
-  这 3 个静态方法大家都不陌生, 分别用来全局注册组件, 指令和过滤器.
-
+这 3 个静态方法大家都不陌生, 分别用来全局注册组件, 指令和过滤器.
+  
   这样, `initGlobalAPI` 方法的全部功能我们就介绍完毕了, 它的作用就像它的名字一样,
   是在 `Vue` 构造函数上添加全局的 API, 类似整理 `Vue.prototype` 上的属性和方法一样,
   我们同样对 `Vue` 静态属性和方法做了一个整理, 将他放到 `附录/Vue构造函数整理-全局API`
-  中, 便于以后查阅.
-
+中, 便于以后查阅.
+  
   至此, 对于 `core/index.js` 文件的作用我们也大概清楚了, 在这个文件里, 它首先将核心的
   `Vue`, 即在 `../src/core/instance/index.js` 文件中创建,
   然后经历 5 个方法给原型添加属性和方法后的 `Vue` 导入, 然后使用 `initGlobalAPI`
@@ -1086,9 +1087,10 @@
 然后又在 `Vue.prototype` 上添加了 `$mount`方法 (即: `行{10-18}`, `行{10-19}`,
   `行{10-20}`), 我们暂且不关心 `$mount` 方法的内容和作用.
   
+
 再往下的一段代码是 `Vue-devtools` 的全局钩子, 它被包裹在 `setTimeout` 中,
   最后导出了 `Vue`. (即: `行{10-21} ~ 行{10-27}`).
-  
+
   现在我们就看完了 `platforms/web/runtime/index.js` 文件, 该文件的作用是对 `Vue`
   进行平台化包装:
     + 设置平台化的 `Vue.config`.
@@ -1096,7 +1098,7 @@
     + 在 `Vue.options` 上混合了 2 个组件 (`components`), 分别是 `Transition`
     和 ` TransitionGroup`.
     + 在 `Vue.prototype` 上添加了 2 个方法: `__patch__` 和 `$mount`.
-  
+
   经过这个文件之后, `Vue.options`, `Vue.config` 和 `Vue.prototype` 都有所变化,
   我们把这些变化更新到对应的 [附录]("../附录") 文件里, 都可以查看的到.
 

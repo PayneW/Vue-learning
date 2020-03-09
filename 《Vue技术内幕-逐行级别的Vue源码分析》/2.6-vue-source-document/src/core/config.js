@@ -1,6 +1,8 @@
 // @flow
 
+// - `src/shared/util.js`
 import {no, noop, identity} from 'shared/util';
+// - `src/shared/constants.js`
 import {LIFECYCLE_HOOKS} from 'shared/constants';
 
 export type Config = {

@@ -126,7 +126,7 @@ export function resolveConstructorOptions(Ctor: Class<Component>) { // {1-59}
         const cachedSuperOptions =  Ctor.superOptions;              // {1-63}
         if (superOptions !== cachedSuperOptions) {                  // {1-64}
             // - super option changed, need to resolve new options. 
-            //   (父选项已变更, 需要细节新 options)
+            //   (父选项已变更, 需要解析新 options)
             Ctor.superOptions = superOptions;                       // {1-65}
             // - check if there are any late-modified/attached options (#4976)
             const modifiedOptions = resolveModifiedOptions(Ctor);   // {1-66}

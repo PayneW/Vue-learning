@@ -11,8 +11,13 @@ import {ASSET_TYPES} from 'shared/constants';           // {4-7}
 import builtInComponents from '../components/index';    // {4-8}
 import {observe} from 'core/observer/index';            // {4-9}
 
-import {warn, extend, nextTick, mergeOptions, defineReactive} from
-'../util/index';                                        // {4-10}
+import {
+    warn,
+    extend,
+    nextTick, 
+    mergeOptions,
+    defineReactive
+} from '../util/index';                                        // {4-10}
 
 export function initGlobalAPI(Vue: GlobalAPI) {         // {4-11}
     // - config
@@ -38,9 +43,8 @@ export function initGlobalAPI(Vue: GlobalAPI) {         // {4-11}
     Vue.set = set;                                      // {4-18}
     Vue.delete = del;                                   // {4-19}
     Vue.nextTick = nextTick;                            // {4-20}
-
     // - 2.6 explicit observable API. (显示可观察的 API.)
-    Vue.observable = <T>(Obj: T): T => {                // {4-21}
+    Vue.observable = <T>(obj: T): T => {                // {4-21}
         observe(obj);                                   // {4-22}
         return obj;                                     // {4-23}
     };
@@ -52,7 +56,7 @@ export function initGlobalAPI(Vue: GlobalAPI) {         // {4-11}
 
     // - this is used to identify the "base" constructor to extend all
     //   plain-object components with in Weex's multi-instance scenarios.
-    Vue.prototype._base = Vue;                          // {4-27}
+    Vue.options._base = Vue;                          // {4-27}
 
     extend(Vue.options.components, builtInComponents);  // {4-28}
 

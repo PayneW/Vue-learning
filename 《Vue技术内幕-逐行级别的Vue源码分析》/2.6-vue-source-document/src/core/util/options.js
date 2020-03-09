@@ -1,20 +1,22 @@
+// # `2.6-vue-source-document/src/core/util/options.js`
+
 // @flow
 
 // - `src/core/config.js`
-import config from '../config';                                     // - {}
-// - `src/core/util/debug.js`                           
-import {warn} from './debug';                                       // - {}
-// - `src/observer/index.js`
-import {set} from '../observer/index';                              // - {}
+import config from '../config';  
+// - `src/core/util/debug.js`            
+import {warn} from './debug';   
+// - `src/core/observer/index.js`
+import {set} from '../observer/index'; 
 // - `src/core/util/lang.js`
-import {unicodeLetters} from './lang';                              // - {}
+import {unicodeLetters} from './lang';
 // - `src/core/util/env.js`
-import {nativeWatch, hasSymbol} from './evn';                       // - {}
+import {nativeWatch, hasSymbol} from './evn';
 // - `src/shared/constants.js`
 import {
     ASSET_TYPES,
     LIFECYCLE_HOOKS
-} from 'shared/constants';                                          // - {}
+} from 'shared/constants';
 // - `src/shared/util.js`
 import {
     extend,
@@ -24,7 +26,7 @@ import {
     capitalize,
     isBuiltInTag,
     isPlainObject
-} from 'shared/util';                                               // - {}
+} from 'shared/util'; 
 
 // - Option overwriting strategies are functions that handle how to merge
 //   a parent option value and a child option value into the final value.
@@ -362,7 +364,7 @@ function normalizeInject(options: Object, vm: ?Component) {
 
 // - Normalize raw function directives into object format. 
 //   (将原始函数指令规范化为对象格式.)
-// - normalize directive (标准化指令)
+// - normalize directives (标准化指令)
 function normalizeDirectives(options: Object) {
     const dirs = options.directives;
     if (dirs) {
@@ -388,7 +390,7 @@ function assertObjectType(name: string, value: any, vm: ?Component) {
 
 // - Merge two option objects into a new one. (合并两个 option 对象到一个新对象中.)
 // - Core utility used in both instantiation and inheritance.
-//   (用于实例和继承的核心工具)
+//   (用于实例化和继承的核心工具)
 export function mergeOptions(
     parent: Object,
     child: Object,
@@ -423,7 +425,6 @@ export function mergeOptions(
             }
         }
     }
-
     const options = {};
     let key;
     for (key in parent) {
