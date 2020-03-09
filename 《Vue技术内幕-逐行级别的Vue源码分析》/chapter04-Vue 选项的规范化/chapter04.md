@@ -151,6 +151,16 @@
     ASSET_TYPES.forEach(type => {                       // {4-25}
         Vue.options[type + 's'] = Object.create(null);  // {4-26}
     });
+    // - this is used to identify the "base" constructor to extend all
+    //   plain-object components with in Weex's multi-instance scenarios.
+    Vue.options._base = Vue;                          // {4-27}
+
+    extend(Vue.options.components, builtInComponents);  // {4-28}
+
+    initUse(Vue);                                       // {4-29}
+    initMixin(Vue);                                     // {4-30}
+    initExtend(Vue);                                    // {4-31}
+    initAssetRegisters(Vue);                            // {4-32}
   ```
   经过 `行{4-25}` 和 `行{4-26}` 后 `Vue.options` 将变成这样:
   ```js
@@ -265,7 +275,123 @@
   那么接下来我们就打开 `../2.6-vue-source-document/src/core/util/options.js`
   文件并找到 `mergeOptions` 方法，看一看都发生了什么。
 
-### 4.2 检查组件名称是否符合要求
+### 4.2 检查组件名称是否符合要求 (`validateComponentName`)
+- 我们接着看 `../2.6-vue-source-document/src/core/util/options.js` 文件, 找到
+  `mergeOptions` 方法, 这个方法上面有一段注释: 
+  ```js
+    /**
+     * Merge two option objects into a new one.
+     * (合并两个 option 对象到一个新对象中.)
+     * Core utility used in both instantiation and inheritance.
+     * (用于实例化和继承的核心工具)
+     */
+  ```
+  合并两个选项对象为一个新的对象, 这个函数在实例化和继承的时候都有用到, 这里要注意两点,
+  第一: 这个函数将会产生一个新的对象; 第二: 这个函数不仅仅在实例化对象 (即 `_init` 方法中)
+  的时候用到, 在 继承(`Vue.extend`) 中也有用到,
+  所以这个函数应该是一个用来合并两个选项对象为一个新对象的通用程序。
+
+  所以我们现在就看看它是怎么去合并两个选项对象的, 找到 `mergeOptions` 函数, 
+  我么先来预览一下这个函数的全貌, 然后再切段分析:
+  ```js
+    export function mergeOptions(
+        parent: Object,
+        child: Object,
+        vm?: Component
+    ): Object {
+        if (process.env.NODE_ENV !== 'production') {
+            checkComponents(child);
+        }
+        
+        if (typeof child === 'function') {
+            child = child.options;
+        }
+        
+        // - 下面 3 个方法, 定义在同文件中. 请对照
+        //   `../2.6-vue-source-document/src/core/util/options.js` 查看.
+        normalizeProps(child, vm);
+        normalizeInject(child, vm);
+        normalizeDirectives(child, vm);
+
+        // - Apply extends and mixins on the child options, but only
+        //   if it is a raw options object that isn't the result of 
+        //   another mergeOptions call. 
+        //   (在子选项上应用扩展和混合, 但前提是它是一个原始选项的对象, 而不是另一个
+        //   mergeOptions 调用的结果.)
+        // - Only merged options has the _base property. 
+        //   (仅合并选项具有 _base 属性的.) 
+        if (!child_base) {
+            if (child.extends) {
+                parent = mergeOptions(parent, child.extends, vm);
+            }
+            if (child.mixins) {
+                for (let i = 0, l = child.mixins.length; i < l; i++) {
+                    parent = mergeOptions(parent, child.mixins[i], vm);
+                }
+            }
+        }
+        const options = {};
+        let key;
+        for (key in parent) {
+            mergeField(key);
+        }
+        for (key in child) {
+            if (!hasOwn(parent, key)) {
+                mergeField(key);
+            }
+        }
+        function mergeField(key) {
+            const strat = strats[key] || defaultStrat;
+            options[key] = strat(parent[key], child[key], vm, key);
+        }
+        return options;
+    };
+  ```
+  现在我们来仔细分析一下上面的 `mergeOptions`, 开始的一段代码:
+  ```js
+    if (process.env.NODE_ENV !== 'production') {
+        checkComponents(child)
+    }
+  ```
+  在非生产环境下, 会以 `child` 为参数调用 `checkComponents` 方法, 我们看看
+  `checkComponents` 是做什么的, 这个方法同样定义在当前 `options.js` 文件中,
+  内容如下:
+  ```js
+    /**
+     * Validate component names (验证组件名)
+     */
+    function checkComponents (options: Object) {
+        for (const key in options.components) {
+            validateComponentName(key)
+        }
+    }
+  ```
+  由注释可知, 这个方法是用来校验组件的名字是否符合要求的, 首先 `checkComponents`
+  方法使用一个 `for...in` 循环遍历 `options.components` 选项, 
+  将每个子组件的名字作为参数依次传递给 `validateComponentName` 函数, 所以
+  `validateComponentName `函数才是真正用来校验名字的函数, 该函数就定义在
+  `checkComponents` 函数下方, 源码如下:
+  ```js
+    // - validate component name (验证组件名)
+    export function validateComponentName(name: string) {
+        if (!new RegExp(`^[a-zA-Z][\\-\\.0-9_${unicodeLetters}]*$`).test(name)) {
+            warn(
+                'Invalid component name: "' + name + '", Component names ' +
+                'should conform to valid custom element name in html5 specificaton.'
+            )
+        }
+        if (isBuiltInTag(name) || config.isReservedTag(name)) {
+            warn(
+                'Do not use built-in or reserved HTML elements as component ' + 
+                'id: ' + name;
+            )
+        }
+    };
+  ```
+
+
+
+
 ### 4.3 允许合并另一个实例构造函数的选项(`options`)
 ### 4.4 规范化 `props` (normalizeProps 标准化props)
 ### 4.5 规范化 `inject`(normalizeInject 标准化注入)

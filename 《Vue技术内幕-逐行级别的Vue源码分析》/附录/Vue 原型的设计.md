@@ -1,6 +1,8 @@
+# Vue 构造函数的原型上添加的属性和方法
+
 ```js
     **************************************************
-    // - Vue():          *********   /src/core/instance/index.js
+    // - Vue():  *********   /src/core/instance/index.js
     function Vue(options) {
         if (process.env.NODE_ENV !== 'production' && !(this instanceof Vue)) {
             warn('Vue is a constructor and should be called with the `new` keyword');
@@ -54,11 +56,10 @@
     Vue.prototype.$nextTick = function (fn: Function) {}
     Vue.prototype._render = function (): VNode {}
 
-    // - core/index.js 文件中
+    // - src/core/index.js 文件中
     Object.defineProperty(Vue.prototype, '$isServer', {
         get: isServerRendering
     })
-
     Object.defineProperty(Vue.prototype, '$ssrContext', {
         get () {
             /* istanbul ignore next */
@@ -66,7 +67,7 @@
         }
     })
 
-    // - 在 runtime/index.js 文件中
+    // - 在 src/platforms/web/runtime/index.js 文件中
     Vue.prototype.__patch__ = inBrowser ? patch : noop
     Vue.prototype.$mount = function (
         el?: string | Element,
