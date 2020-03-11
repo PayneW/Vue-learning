@@ -2,8 +2,8 @@
 
 ## 目录 (Catalog)
 1. `emptyObject` (空对象)
-2. `isUndef` (is undefined 是未定义的)
-3. `isDef` (is defined 是定义的)
+2. `isUndef` (is undefined 判断元素是否不存在)
+3. `isDef` (is defined 判断元素是否存在)
 4. `isTrue` (判断给定变量是否为 `true`)
 5. `isFalse` (判断给定变量是否为 `false`)
 6. `isPrimitive` (是原始值)

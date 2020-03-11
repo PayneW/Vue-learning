@@ -12,6 +12,7 @@ import {mountComponent} from 'core/instance/lifecycle';     // {10-4}
 // - `src/core/util/index.js`
 import {devtools, inBrowser} from 'core/util/index';        // {10-5}
 
+// - `src/platforms/web/util/index.js`
 import {
     query,
     mustUseProp,
@@ -20,6 +21,8 @@ import {
     getTagNamespace,
     isUnknownElement
 } from 'web/util/index';                                    // {10-6}
+
+
 
 import {path} from './patch';                               // {10-7}
 import platformDirectives from './directives/index';        // {10-8}
