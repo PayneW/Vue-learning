@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="link-box">
+        <!-- 注意 href 属性值, 链接后面加了一个换行 -->
+        <a href="http://hcysun.me
+        ">aaaa</a>
+        <!-- 注意 href 属性值, 链接后面加了一个 Tab -->
+        <a href="http://hcysun.me   ">bbbb</a>
+    </div>
+
+    <script type="text/javascript">
+        // console.log(document.getElementById('link-box').innerHTML);
+
+        // ---------
+        
+        // check whether current browser encodes a char inside attribute value.
+        // (检查当前浏览器是否在属性值内部编码了字符(character))
+        let div; 
+        function getShouldDecode(href) {                                // {3-2}
+            div = div || document.createElement('div');                 // {3-3}
+            div.innerHTML = href ? `<a href="\n">` : `<div a="\n"/>`;   // {3-4}
+            return div.innerHTML.indexOf('&#10;') > 0;                  // {3-5}
+        }
+        // - 测试 getShouldDecode 函数
+        // - `getShouldDecode` 接收一个布尔值参数 `href`, 如果该参数为 `true` 
+        //   意味着要检测的是 `a` 标签的 `href` 属性; `false` 为检测任意属性.
+        console.log(getShouldDecode(true));
+    </script>
+</body>
+</html>

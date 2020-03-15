@@ -4,8 +4,8 @@
 
 
 ##  目录 (Catalog)
-1. 安装 `Vue`
-2. `npm install vue` 安装到哪里?
+1. 安装 `Vue` 前的的依赖软件.
+2. 安装 `Vue`.
 3. `Vue`命令行工具(`vue-cli`) 是什么 和 安装 `vue-cli`
     + (3.1) `vue-cli 2.x` 命令行工具
     + (3.2) `Vue-cli 3` 更新官方命令行工具(CLI) 
@@ -16,12 +16,16 @@
 
 
 ## 内容 (Content)
-### 1. 安装 `Vue`
+### 1.  安装 `Vue` 前的的依赖软件.
 - `Vue`的安装依赖 `NodeJS` 和 `Git`, 在安装 `Vue` 之前, 请先安装它们.
     + `NodeJS` 和 `Git` 的安装见仓库: `Node.js/README.md`
-### 2. `npm install vue` 安装到哪里?
-- `npm install vue` 的意思是把 `vue` 安装到 `Node.js` 的` node_modules` 这个
-  大的包组件中, 以便在 `Vue` 项目中直接通过 `import Vue from 'vue'` 方式引用
+### 2. 安装 `Vue`.
+- 安装完 `Git` 和 `Node` 后, 运行一下命令安装 `Vue`:
+  ```shell
+    npm install vue
+  ``` 
+  `npm install` 的意思是把 `vue` 安装到 `NodeJS` 的 `node_modules` 的包组件中,
+  以便在 `Vue` 项目中直接通过 `import Vue from 'vue'` 方式引用
     + 当使用 `npm install vue` 安装 `Vue` 时, 如果此时有错误提示:
       `npm WARN saveError ENOENT: no such file or directory` 
       就使用 `npm init -f` 会在 `C:\Users\Administrator\` 下创建 `package.json`
@@ -70,7 +74,7 @@
             + default (babel, eslint)
             + Manually select features 
     1. 预设配置完成后等待 `Vue-CLI` 完成初始化后, 进入 `my-project` 并启动项目:
-      ```base
+      ```shell
         # 进入项目: 
         cd my-project
         

@@ -416,7 +416,9 @@
   这样你将得到一个警告, 该警告的内容就是 `validateComponentName` 方法中的 `warn` 文案:
   `Do not use built-in or reserved HTML elements as component id: slot`.
 
-  除了检测注册的组件名字是否为内置的标签之外, 还会检测是否是保留标签, 即通过 config.isReservedTag 方法进行检测, 大家是否还记得 config.isReservedTag 在哪里被赋值的？前面我们讲到过, 打开
+  除了检测注册的组件名字是否为内置的标签之外, 还会检测是否是保留标签, 即通过
+  `config.isReservedTag` 方法进行检测, 大家是否还记得 `config.isReservedTag`
+  在哪里被赋值的？前面我们讲到过, 打开
   `../2.6-vue-source-document/src/platforms/web/runtime/index.js`
   文件中有这样一段代码: 
   ```js
