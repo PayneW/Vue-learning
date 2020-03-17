@@ -44,6 +44,11 @@
      + Driving a car at a speed compatible with safety. 以兼顾安全的速度驾驶车。
 
 ### 4. `element.js`
+- **decode [diː'kəʊd] --vt.解码; 译码.**
+    + The control unit decoded the 18 bits. 控制器对 18 位字进行了译码.
+    + Obviously, if you wanted to encode an decode in some other format,
+      I would suggest extending the input and output stream.
+      如果您希望对其他格式进行编码和解码, 我建议您继承输入和输出流, 这是很自然的事情.
 
 ### 5. `index.js`
 
@@ -131,7 +136,8 @@
   ```
   该文件主要导出 2 个变量, 分别是 `shouldDecodeNewlines` 和
   `shouldDecodeNewlinesForHref`, 这 2 个变量都是布尔值, 那么这 2 个变量是干嘛的?
-  我们看一个例子就知道了, 假设我们由如下 `DOM`:
+  我们看一个例子就知道了, 假设我们有如下 `DOM`:
+  
   ```html
     <div id="link-box">
         <!-- 注意 href 属性值, 链接后面加了一个换行 -->
@@ -147,8 +153,8 @@
   ```js
     console.log(document.getElementById('link-box').innerHTML);
   ```
-  完整示例见当前文件夹 `./测试代码页面.html`.
-
+完整示例见当前文件夹 `./测试代码页面.html`.
+  
   我在当前 `Chrome` 的版本(`80.0.3987.132`) 测试的输出结果是下面这样;
   ```html
         <!-- 注意 href 属性值, 链接后面加了一个换行 -->
@@ -157,9 +163,9 @@
         <!-- 注意 href 属性值, 链接后面加了一个 Tab -->
         <a href="http://hcysun.me   ">bbbb</a>
   ```
-  可以看出 `80+` 版本的 `Chrome` 已经不再把 `换行符` 和 `制表符` 转义成 `&#10` 和 `&#9`了, 但是可能之前的版本是会的. 下面我们按照作者的文章来被解决转义的情况.
-
-  实际上, 转义这算是浏览器的怪癖行为. 在 `IE` 中, 不仅仅是 `a` 标签的 `href` 属性值,
+可以看出 `80+` 版本的 `Chrome` 已经不再把 `换行符` 和 `制表符` 转义成 `&#10` 和 `&#9`了, 但是可能之前的版本是会的. 下面我们按照文章中所说的被解决转义的情况来讨论.
+  
+  实际上, 转义运算是浏览器的怪癖行为. 在 `IE` 中, 不仅仅是 `a` 标签的 `href` 属性值,
   任何属性值都存在这个问题. 这就会影响 `Vue` 的编译器在对模板进行编译后的结果,
   导致莫名奇妙的问题, 为了避免这些问题 `Vue` 需要知道什么时候要做兼容工作, 
   这就是 `shouldDecodeNewlines` 和 `shouldDecodeNewlinesForHref` 这两个变量的作用. 
@@ -170,6 +176,7 @@
     // check whether current browser encodes a char inside attribute value.
     // (检查当前浏览器是否在属性值内部编码了字符(character))
     let div;                                                        // {3-1}
+    // - get should decode 应该解码
     function getShouldDecode(href: boolean): boolean {              // {3-2}
         div = div || document.createElement('div');                 // {3-3}
         div.innerHTML = href ? `<a href="\n">` : `<div a="\n"/>`;   // {3-4}
@@ -181,11 +188,11 @@
     + (1) 创建一个 `div`;
     + (2) 设置这个 `div` 的 `innerHTML` 为 `<a href="\n"/>` 或者 `<div a="\n"/>` 
     + (3) 获取 `div` 的 `innerHTML` 值, 并检测换行符是否被编码, 如果被编码返回 `true`
-      否则返回 `false`. 测试代码见当前目录: `./测试代码页面.html`.
-
+    否则返回 `false`. 测试代码见当前目录: `./测试代码页面.html`.
+  
   `getShouldDecode` 接收一个布尔值参数 `href`, 如果该参数为 `true` 意味着要检测的是
-  `a` 标签的 `href` 属性; `false` 为检测任意属性.
-
+`a` 标签的 `href` 属性; `false` 为检测任意属性.
+  
   有了上面的函数再实现 `shouldDecodeNewlines` 和 `shouldDecodeNewlinesForHref`
   这两个变量就容易多了:
   ```js
@@ -196,8 +203,8 @@
   要对属性值中的换行符或制表符做兼容处理. 而 `shouldDecodeNewlinesForHref` 为
   `true` 意味着 `Vue` 在编译模板的时候, 要对 `a` 标签的 `href`
   属性值中的换行符或制表符做兼容处理. 当然, 这一切都是以在浏览器中为前提的,
-  因为上面的代码中存在一个 `isBrowser` 的判断.
-
+因为上面的代码中存在一个 `isBrowser` 的判断.
+  
   最后再啰嗦一句, 为什么只在浏览器中才判断是否需要做此兼容处理:
   因为只有完整版(包含`编译器`)的 `Vue` 才会遇到这个问题, 完整版的 `Vue`
   会在浏览器中对模板进行编译, 这样才有可能在解析模板的时候使用 `innerHTML` 获取模板内容.
