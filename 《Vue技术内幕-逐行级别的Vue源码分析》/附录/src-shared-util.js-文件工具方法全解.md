@@ -81,7 +81,7 @@
 #### 4. `isTrue` (is true)
 - 描述: 判断给定变量值是否为 `true`.
   ```js
-    export function isTrue(v: any): boolean %check {
+    export function isTrue(v: any): boolean %checks {
         return v === true;
     }
   ```
@@ -94,7 +94,7 @@
     }
   ```
 
-#### 6. `isPrimitive` (is primitive 是原始值)
+#### 6. `isPrimitive` (is primitive 是否是原始值)
 - 描述: 判断给定变量是否是原始类型, 即 `string`, `number`, `boolean`, `symbol`.
   ```js
     /**
@@ -137,7 +137,7 @@
     }
   ```
 
-#### 9. `isPlainObject` (is plain object 是字面量对象)
+#### 9. `isPlainObject` (is plain object 是否是字面量对象)
 - 描述: 判断给定变量是否是纯对象.
 - 源码分析: 原理很简单, 使用 `Object.prototype.toString` 与 '[object Object]'
   做全等对比.
@@ -151,7 +151,7 @@
     }
   ```
 
-#### 10. `isRegExp` (is regular expression 是正则表达式)
+#### 10. `isRegExp` (is regular expression 是否是正则表达式)
 - 描述: 判断给定变量是否是正则对象.
   ```js
     export function isRegExp(v: any): boolean {
@@ -159,7 +159,7 @@
     }
   ```
 
-#### 11. `isValidArrayIndex` (is valid array index 是有效的数组索引)
+#### 11. `isValidArrayIndex` (is valid array index 是不是有效的数组索引)
 - 描述: 判断给定变量的值是否是有效的数组索引. 如果是有效的则返回 true, 否则返回 false.
 - 源码分析: 一个有效的数组索引要满足 2 个条件: (1) 大于等于 0 的整数. (2) 在条件(1)
   的基础上, 这个整数不能是无限的. 在源码中条件 `n >= 0 && Math.floow(n) === n`
@@ -168,7 +168,7 @@
     export function isValidArrayIndex(val: any): boolean {
         // - `parseFloat()`: 把字符串转换成浮点数值.
         const n = parseFloat(String(val));
-        return n >= 0 && Math.floor(n) == n && isFinite(val);
+        return n >= 0 && Math.floor(n) === n && isFinite(val);
     }
   ```
 
@@ -219,34 +219,36 @@
         str: string,
         expectsLowerCase?: boolean
     ): (key: string) => true | void {
-        // - 定义一个对象 `map`
+        // - 定义一个名为 `map` 的空对象
         const map = Object.create(null);
         // - `string.split()`: 将字符串转换成数组.
         const list: Array<string> = str.split(',');
         // - 遍历 `list` 并以 `list` 中的元素作为 `map` 的 `key`, 将其设置为 `true`.
         for (let i = 0; i < list.length; i++) {
-            map[list] = true;
+            map[list[i]] = true;
         }
-        // - 返回一个函数, 并且如果 `expectsLowerCase` 为 `true` 的话, 将 `map` 的
-        //   `key` 小写.
+        // - 返回一个函数, 并且如果 `expectsLowerCase` 为 `true` 的话,
+        //   将 `map` 的 `key` 小写.
+        // - Tip: 注意这里使用了 `箭头函数` 所以看起来不是很明朗. 即为:
+        //   function(val) { return map[val] }
         return expectsLowerCase 
             ? val => map[val.toLowerCase()] 
             : val => map[val]
     }
     // - 使用示例:
     const isVowel = makeMap('a,e,i,o,u', true);
-    isVowel('e');   // true
-    isVowel('b');   // false
+    console.log(isVowel('e'));   // true
+    console.log(isVowel('b'));   // undefined
   ```
 
-#### 15. `isBuiltInTag` (is built in tag 是内置标签)
+#### 15. `isBuiltInTag` (is built in tag 是不是内置标签)
 - 描述: 检查是否是内置的标签.
 - 源码分析: `isBuiltInTag` 是一个使用 `makeMap` 生成的函数.
   ```js
     /**
      * Check if a tag is a built-in tag.
      */
-    export function isBuiltInTag = makeMap('slot, component', true);
+    export function isBuiltInTag = makeMap('slot,component', true);
   ```
 
 #### 16. `isReservedAttribute`
@@ -333,7 +335,7 @@
      */
     const camelizeRE = /-(\w)/g;
     export const camelize = cached((str: string): string => {
-        return str.replace(camelizeRE, (_, c_ => c ? c.toUpperCase() : '')
+        return str.replace(camelizeRE, (_, c) => c ? c.toUpperCase() : '')
     });
     // - 使用示例:
     camelize('aaa-bbb');    // aaaBbb

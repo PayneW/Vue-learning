@@ -16,7 +16,7 @@ export function isDef(v: any): boolean %checks {
 }
 
 // 4. `isTrue` (is true)
-export function isTrue(v: any): boolean %check {
+export function isTrue(v: any): boolean %checks {
     return v === true;
 }
 
@@ -25,10 +25,11 @@ export function isFalse(v: any): boolean %checks {
     return v === false;
 }
 
-// 6. `isPrimitive` (is primitive 是原始值)
+
 /**
  * Check if value is primitive. 
  */
+// 6. `isPrimitive` (is primitive 是原始值)
 export function isPrimitive(value: any): boolean %checks {
     return (
         typeof value === 'string' ||
@@ -72,7 +73,7 @@ export function isRegExp(v: any): boolean {
 export function isValidArrayIndex(val: any): boolean {
     // - `parseFloat()`: 把字符串转换成浮点数值.
     const n = parseFloat(String(val));
-    return n >= 0 && Math.floor(n) == n && isFinite(val);
+    return n >= 0 && Math.floor(n) === n && isFinite(val);
 }
  
 // 12. `toString` (to String  把变量转换为 string 类型)
@@ -108,7 +109,7 @@ export function makeMap(
     const list: Array<string> = str.split(',');
     // - 遍历 `list` 并以 `list` 中的元素作为 `map` 的 `key`, 将其设置为 `true`.
     for (let i = 0; i < list.length; i++) {
-        map[list] = true;
+        map[list[i]] = true;
     }
     // - 返回一个函数, 并且如果 `expectsLowerCase` 为 `true` 的话, 将 `map` 的
     //   `key` 小写.
@@ -118,12 +119,12 @@ export function makeMap(
 }
 // - 使用示例:
 const isVowel = makeMap('a,e,i,o,u', true);
-isVowel('e');   // true
-isVowel('b');   // false
+console.log(isVowel('e'));   // true
+console.log(isVowel('b'));   // undefined
 
 
 // 15. `isBuiltInTag` (is built in tag 是内置标签)
-export function isBuiltInTag = makeMap('slot, component', true);
+export const isBuiltInTag = makeMap('slot,component', true);
 
 // 16. `isReservedAttribute`
 export const isReservedAttribute = makeMap('key, ref, slot, slot-scope, is')
@@ -164,7 +165,7 @@ export function cached<F: Function> (fn: F): F {
  */
 const camelizeRE = /-(\w)/g;
 export const camelize = cached((str: string): string => {
-    return str.replace(camelizeRE, (_, c_ => c ? c.toUpperCase() : '')
+    return str.replace(camelizeRE, (_, c) => c ? c.toUpperCase() : '')
 });
 // - 使用示例:
 camelize('aaa-bbb');    // aaaBbb
@@ -258,7 +259,7 @@ export const no = (a?: any, b?: any, c?: any) => false;
 /**
  * Return same value
  */
-export function identity = (_: any) => _;
+export const identity = (_: any) => _;
 
 // 29. `genStaticKeys` (generate static keys 生成静态键)
 /**

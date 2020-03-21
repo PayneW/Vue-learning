@@ -3,6 +3,7 @@
 import {inBrowser} from 'core/util/index';
 
 // check whether current browser encodes a char inside attribute value.
+// (检查当前浏览器是否在属性值内部编码了字符(character))
 let div;
 function getShouldDecode(href: boolean): boolean {
     div = div || document.createElement('div');

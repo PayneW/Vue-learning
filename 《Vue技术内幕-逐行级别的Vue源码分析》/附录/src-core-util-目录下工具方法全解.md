@@ -1,4 +1,4 @@
-# core 目录下的工具方法全解
+# `src/core/util/` 目录下的工具方法全解
 
 ## 目录 (Catalog)
 1. `debug.js` 
@@ -85,6 +85,8 @@
     + duplicate file 备份文件
     + de-duplicate hooks 重复数据删除钩子
 - **de-: (前缀)离开; 除去; 否定; 倒转**
+- **directive [dɪ'rektɪv] --n.指示，指令  --adj.指导的，管理的**
+    + It's a directive straight from the President. 这是总统直接下达的指令。
 - **assert [ə'sɜːt] --vt.断言，声称，宣称**
 - **certain ['sɝtn] --adj.某些(some); 一定; 确定; 肯定. --n.某几个**
     + with certain qualifications. 附带某些条件

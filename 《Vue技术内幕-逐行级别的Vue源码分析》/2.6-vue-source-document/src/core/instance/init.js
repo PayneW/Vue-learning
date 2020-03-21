@@ -6,7 +6,7 @@ import config from '../config';                                     // {1-1}
 // - `../src/core/intance/(proxy|state|render|events).js` 
 import {initProxy} from './proxy';                                  // {1-2}
 import {initState} from './state';                                  // {1-3}
-import {initrRender} from './render';                               // {1-4}
+import {initRender} from './render';                               // {1-4}
 import {initEvents} from './events';                                // {1-5}
 
 // - `../src/core/util/perf.js`
@@ -58,7 +58,7 @@ export function initMixin(Vue: Class<Comment>) {                    // {1-11}
             // - mergeOptions() 来自: `src/core/util/options.js`
             vm.$options = mergeOptions(                             // {1-23}
                 resolveConstructorOptions(vm.constructor),          // {1-24}
-                optons || {},                                       // {1-25}
+                options || {},                                       // {1-25}
                 vm                                                  // {1-26}
             )
         }
@@ -73,7 +73,7 @@ export function initMixin(Vue: Class<Comment>) {                    // {1-11}
         initLifecycle(vm);                                          // {1-32}
         initEvents(vm);                                             // {1-33}
         initRender(vm);                                             // {1-34}
-        callback(vm 'beforeCreate');                                // {1-35}
+        callHook(vm, 'beforeCreate');                                // {1-35}
         // - resolve injections before data/props
         initInjections(vm);                                         // {1-36}
         initState(vm);                                              // {1-37}
@@ -144,7 +144,7 @@ export function resolveConstructorOptions(Ctor: Class<Component>) { // {1-59}
 };
 
 // - resolve modified options (解析修改的选项)
-funciton resolveModifiedOptions(Ctor: Class<Component>): ?Object {  // {1-73}
+function resolveModifiedOptions(Ctor: Class<Component>): ?Object {  // {1-73}
     let modified;                                                   // {1-74}
     const latest = Ctor.options;                                    // {1-75}
     const sealed = Ctor.sealedOptions;                              // {1-76}

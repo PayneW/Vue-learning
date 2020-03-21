@@ -68,7 +68,7 @@ function mergeData(to: Object, from: ?Object): Object {
         key = keys[i];
         // - in case the object is already observed... (如果 object 已经被观察.)
         // - continue: 立即退出循环, 但退出循环后会从循环的顶部继续执行
-        if (kye === '__ob__') continue;
+        if (key === '__ob__') continue;
         toVal = to[key];
         fromVal = from[key];
         if (!hasOwn(to, key)) {
@@ -287,13 +287,13 @@ export function validateComponentName(name: string) {
     if (!new RegExp(`^[a-zA-Z][\\-\\.0-9_${unicodeLetters}]*$`).test(name)) {
         warn(
             'Invalid component name: "' + name + '", Component names ' +
-            'should conform to valid custom element name in html5 specificaton.'
+            'should conform to valid custom element name in html5 specification.'
         )
     }
     if (isBuiltInTag(name) || config.isReservedTag(name)) {
         warn(
             'Do not use built-in or reserved HTML elements as component ' + 
-            'id: ' + name;
+            'id: ' + name
         )
     }
 };
@@ -344,9 +344,9 @@ function normalizeInject(options: Object, vm: ?Component) {
     const normalized = options.inject = {};
     if (Array.isArray(inject)) {
         for (let i = 0; i < inject.length; i++) {
-            normalized[inject[i]] = {from: inject[i])}
+            normalized[inject[i]] = {from: inject[i]}
         }
-    } else if (isPlainOjbect(inject)) {
+    } else if (isPlainObject(inject)) {
         for (const key in inject) {
             const val = inject[key];
             normalized[key] = isPlainObject(val) 

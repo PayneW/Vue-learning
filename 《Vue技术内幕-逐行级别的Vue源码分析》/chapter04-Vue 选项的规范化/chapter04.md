@@ -153,7 +153,7 @@
     });
     // - this is used to identify the "base" constructor to extend all
     //   plain-object components with in Weex's multi-instance scenarios.
-    Vue.options._base = Vue;                          // {4-27}
+    Vue.options._base = Vue;                            // {4-27}
 
     extend(Vue.options.components, builtInComponents);  // {4-28}
 
@@ -404,8 +404,9 @@
   然后以组件的名字为参数分别调用两个方法: `isBuiltInTag` 和 `config.isReservedTag`, 
   其中 `isBuiltInTag` 方法的作用是用来检测你所注册的组件是否是内置的标签, 
   这个方法可以在 `../2.6-vue-source-document/src/shared/util.js`
-  文件工具方法全解中查看, 其实现于是我们可知: `slot` 和 `component`
+  文件工具方法全解中查看, 于是我们可知: `slot` 和 `component`
   这两个名字被 `Vue` 作为内置标签而存在的, 你是不能够使用的, 比如:
+  
   ```js
     new Vue({
         components: {
@@ -414,8 +415,8 @@
     })
   ```
   这样你将得到一个警告, 该警告的内容就是 `validateComponentName` 方法中的 `warn` 文案:
-  `Do not use built-in or reserved HTML elements as component id: slot`.
-
+`Do not use built-in or reserved HTML elements as component id: slot`.
+  
   除了检测注册的组件名字是否为内置的标签之外, 还会检测是否是保留标签, 即通过
   `config.isReservedTag` 方法进行检测, 大家是否还记得 `config.isReservedTag`
   在哪里被赋值的？前面我们讲到过, 打开
@@ -430,14 +431,40 @@
     Vue.config.isUnknownElement = isUnknownElement;             // {10-14}
   ```
   其中:
-  ````js
+  ```js
     Vue.config.isReservedTag = isReservedTag;
   ```
-
-
-
+  就是在给 `config.isReservedTag` 赋值, 其值为来自于
+  `/src/platforms/web/util/element.js` 文件的 `isReservedTag` 函数, 
+  大家可以在附录 `../附录/src-platforms-web-util-目录下工具方法全解.md`
+  中查看该方法的作用及实现, 可知在 `Vue` 中 `html` 标签和部分 `SVG` 标签被认为是保留的.
+  所以这段代码是在保证选项被合并前是合法的. 最后大家注意一点, 这些工作是在非生产环境下做的, 
+  所以在非生产环境下开发者就能够发现并修正这些问题, 
+  所以在生产环境下就不需要再重复做一次校验检测了.
+  
+  另外要说一点, 我们的例子中并没有使用 `components` 选项, 
+  但是这里还是给大家顺便介绍了一下. 如果按照我们的例子的话, 
+  mergeOptions 函数中的很多代码都不会执行, 
+  但是为了保证让大家理解整个选项合并所做的事情, 这里都会有所介绍.
 
 ### 4.3 允许合并另一个实例构造函数的选项(`options`)
+- 我们继续看 `mergeOptions` 方法, 接下来的一段代码同样是一个 `if` 语句块:
+  ```js
+    if (typeof child === 'function') {
+        child = child.options
+    }
+  ```
+  这说明 `child` 参数除了是普通的选项对象外，还可以是一个函数，
+  如果是函数的话就取该函数的 `options` 静态属性作为新的 `child`，
+  我们想一想什么样的函数具有 `options` 静态属性呢？现在我们知道 `Vue`
+  构造函数本身就拥有这个属性，其实通过 `Vue.extend`
+  创造出来的子类也是拥有这个属性的。所以这就允许我们在进行选项合并的时候，
+  去合并一个 `Vue` 实例构造者的选项了. 
+
 ### 4.4 规范化 `props` (normalizeProps 标准化props)
+
+
 ### 4.5 规范化 `inject`(normalizeInject 标准化注入)
+
+
 ### 4.6 规范化 `directives` (normalizeDirectives 标准化指令)
