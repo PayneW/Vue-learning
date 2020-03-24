@@ -89,7 +89,7 @@ module.exports = function (config) {
       ? ['dots', 'saucelabs'] // avoid spamming CI output
       : ['progress', 'saucelabs'],
     sauceLabs: {
-      testName: 'Vue.js unit tests',
+      testName: '01-Vue.js unit tests',
       recordScreenshots: false,
       connectOptions: {
         'no-ssl-bump-domains': 'all' // Ignore SSL error on Android emulator

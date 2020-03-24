@@ -94,8 +94,8 @@ if (typeof Promise !== 'undefined' && isNative(Promise)) {
 
 // - `Vue.nextTick` 用于延迟执行一段代码, 它接受 2 个参数 (回调函数 和
 //   执行回调函数的上下文环境), 如果没有提供回调函数, 那么将返回 `promise` 对象.
-// - [Vue API 文档](https://cn.vuejs.org/v2/api/#Vue-nextTick)
-// - Vue API 对 `Vue.nextTick([callback, context])` 叙述:
+// - [## Vue API 文档](https://cn.vuejs.org/v2/api/#Vue-nextTick)
+// - ## Vue API 对 `Vue.nextTick([callback, context])` 叙述:
 //     + 参数: (1) `{Function} [callback]`. (2) `{Object} [context]`
 //     + 用法: 在下次 DOM 更新循环结束之后执行延迟回调. 在修改数据之后立即使用这个方法,
 //       获取更新后的 DOM.

@@ -1589,7 +1589,7 @@ function mergeOptions (
   normalizeProps(child, vm);
   normalizeInject(child, vm);
   normalizeDirectives(child);
-  
+
   // Apply extends and mixins on the child options,
   // but only if it is a raw options object that isn't
   // the result of another mergeOptions call.
@@ -5526,7 +5526,7 @@ function createCompileToFunctionFn (compile) {
       } catch (e) {
         if (e.toString().match(/unsafe-eval|CSP/)) {
           warn$$1(
-            'It seems you are using the standalone build of Vue.js in an ' +
+            'It seems you are using the standalone build of 01-Vue.js in an ' +
             'environment with Content Security Policy that prohibits unsafe-eval. ' +
             'The template compiler cannot work in this environment. Consider ' +
             'relaxing the policy to allow unsafe-eval or pre-compiling your ' +
