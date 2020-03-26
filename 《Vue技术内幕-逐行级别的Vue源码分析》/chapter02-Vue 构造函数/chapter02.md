@@ -227,7 +227,7 @@
                     this
                 )
             };
-          propsDef.set = function() {                 // {1-8}
+          propsDef.set = function() {                   // {1-8}
                 warn(`$props is readonly.`, this);      // {1-9}
             }
         }
@@ -239,7 +239,7 @@
         Vue.prototype.$set = set;                       // {1-12}
         Vue.prototype.$delete = del;                    // {1-13}
   
-        Vue.prototype.$watch = function(
+        Vue.prototype.$watch = function(                // {1-14}
              expOrFn: string | Function,
              cb: any,
              options?: Object
@@ -275,10 +275,9 @@
   可以看到, `$data` 属性实际上代理的是 `_data` 这个属性,
   而 `$props` 代理的是 `props` 这个实例属性. 然后 `行{1-5}` 为是否为生产环境的判断,
   如果不是生产环境的话, 就为 `$data` 和 `$props` 这两个属性设置一下 `set`,
-  实际上就是提示你一下: 别他娘的想修改我, 老子就是无敌.
-  
-  也就是说, `$data` 和 `$props` 是两个只读的属性, 所以, 现在让你使用 `js`
-  实现一个只读的属性, 你应该知道要怎么做了.
+  实际上就是提示你一下: 请勿修改, `$data` 和 `$props` 是两个只读的属性.
+
+  所以, 现在让你使用 `js`实现一个只读的属性, 你应该知道要怎么做了.
   
   接下来 `stateMixin` 又在 `Vue.prototype` 上定义了 3 个方法:
   `行{1-12}`, `行{1-13}`, `行{1-14}`, 这 3 个方法分别是: `$set`, `$delete`

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        Vue.prototype.$data 简化代码
+    </div>
+
+    <!-- <script type="text/javascript" src="./vue.js"></script> -->
+    <script>
+        console.log('111');
+
+        (function() {
+            function Vue(options) {
+                this._init(options);
+            }
+
+            initMixin(Vue);
+            let uid = 0;
+            function initMixin(Vue) {
+                Vue.prototype._init = function(options) {
+                    // - this 为当前 Vue 构造函数的的实例
+                    const vm = this;
+                    // - 在当前实例上添加一个唯一标识符 `_uid` 属性, 每次实例化一个 Vue
+                    //   实例后, uid 的值都会 `+ 1`.
+                    vm._uid = uid++;
+
+                    // - 添加一个标志避免 this 被观察到.
+                    vm._isVue = true;
+
+                    // - merge options (合并 options)
+                    // - Tip: 此处省略 options_isComponent 属性, 此属性是判断当前
+                    //   options 是不是 Vue 的组件传入的.
+                    if (options) {
+                        vm.$options = options;
+                    }
+                    stateMixin(vm);
+                };
+            }
+
+            function stateMixin(vm) {
+                Object.defineProperty(Vue.prototype, '$data', vm.$options.data);
+            }
+        })();
+
+
+        function Vue(options) {
+            this.$options = options || {};
+            let data = options.data;
+            this._data = data;
+            this._init();
+        }
+        Vue.prototype._init = function() {
+            // - 映射 key
+            mapKeys(this);
+            // - 在 Vue 实例上重新定义方法的引用
+            initMethods(this, this.$optins.methods)
+        }
+
+        // - 定义 data 的 get 和 set
+        function mapKeys(vm) {
+            let data = vm._data;
+            if (null !== data && typeof data === 'object') {
+                const keys = Object.keys(data);
+                let i = keys.length;
+                while (i-- >= 0) {
+                    // - 所有属性的操作就重新定向到了 _data 上, 遍历完后,
+                    //   实例上传入的对象字面量 options 中就会多一个 _data 属性,
+                    //   值为一个对象字面量, 对象字面量中是 options.data 属性
+                    //   的一份拷贝.
+                    proxy(vm, `_data`, keys[i])
+                }
+            }
+        }
+        // - 使用 defineProperty 把 data 对象中的属性定义为访问器属性
+        function proxy(vm, targetObject, key) {
+            Object.defineProperty(targetObject, key, {
+                enumerable: true,
+                configurable: true,
+                get() {
+                    // - 即: this._data[key]
+                    return vm[target][key]
+                },
+                set(newVal) {
+                    vm[target][key] = newVal
+                }
+            })
+        }
+
+        // - 重新定义方法的引用, 注意修改调用函数的执行上下文
+        function initMethods(vm, methods) {
+            // - key 为 this.$options.methods 属性内的方法名
+            for (const key in methods) {
+                vm[key] = typeof methods[key] !== 'function' ? noop
+                    : methods[key].apply(vm)
+            }
+        }
+
+        // - 空函数, 占位用
+        function noop() {}
+
+
+        // - Object.defineProperty() 正常使用方式
+        // Object.defineProperty(this, key, {
+        //     enumerable: true,
+        //     configurable: true,
+        //     get() {
+        //         return this._data[key];
+        //     },
+        //     set(newVal) {
+        //         this._data[key] = newVal;
+        //     }
+        // })
+
+
+
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: "Come from Vue instance's data property msg."
+            }
+        });
+
+    </script>
+</body>
+</html>

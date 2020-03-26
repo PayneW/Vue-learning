@@ -25,6 +25,11 @@
         <Demo191/>
         <Demo192/>
         <Demo193/>
+        <Demo11012/>
+        <Demo11013/>
+        <Demo11014/>
+        <Demo11015/>
+        <Demo1111/>
     </div>
 </template>
 
@@ -52,6 +57,11 @@
     import Demo191 from './components/1.9.1';
     import Demo192 from './components/1.9.2';
     import Demo193 from './components/1.9.3';
+    import Demo11012 from './components/1.10.1.2';
+    import Demo11013 from './components/1.10.1.3';
+    import Demo11014 from './components/1.10.1.4';
+    import Demo11015 from './components/1.10.1.5';
+    import Demo1111 from './components/1.11.1';
 
     export default {
         name: 'App',
@@ -84,6 +94,11 @@
             Demo191,
             Demo192,
             Demo193,
+            Demo11012,
+            Demo11013,
+            Demo11014,
+            Demo11015,
+            Demo1111,
         }
     }
 </script>
@@ -131,7 +146,7 @@
         border-radius: 4px;
     }
     .default-div {
-        margin: 10px 0 10px 12px;
+        margin: 6px 0 6px 12px;
         height: 200px;
         width: 320px;
         padding: 0 10px;
