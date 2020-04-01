@@ -22,3 +22,10 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+## 添加安装插件说明:
+### 1. 安装 Stylus 
+- ```shell
+    npm install stylus stylus-loader --save-dev
+  ```

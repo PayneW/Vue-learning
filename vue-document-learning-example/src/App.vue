@@ -30,6 +30,18 @@
         <Demo11014/>
         <Demo11015/>
         <Demo1111/>
+        <Demo1116/>
+        <Demo11162/>
+        <Demo1118/>
+        <Demo2262/>
+        <Demo232/>
+        <Demo233/>
+        <Demo234/>
+        <Demo244/>
+        <Demo245/>
+        <Demo248/>
+        <Demo251/>
+        <Demo2613/>
     </div>
 </template>
 
@@ -62,6 +74,18 @@
     import Demo11014 from './components/1.10.1.4';
     import Demo11015 from './components/1.10.1.5';
     import Demo1111 from './components/1.11.1';
+    import Demo1116 from './components/1.11.6/Prop-father-component';
+    import Demo11162 from './components/1.11.6.2/1.11.6.2';
+    import Demo1118 from './components/1.11.8/1.11.8';
+    import Demo2262 from './components/2.2.6.2';
+    import Demo232 from './components/2.3.2';
+    import Demo233 from './components/2.3.3';
+    import Demo234 from './components/2.3.4/2.3.4';
+    import Demo244 from './components/2.4.4/2.4.4';
+    import Demo245 from './components/2.4.5/2.4.5';
+    import Demo248 from './components/2.4.8/2.4.8';
+    import Demo251 from './components/2.5.1/2.5.1';
+    import Demo2613 from './components/2.6.1.3';
 
     export default {
         name: 'App',
@@ -99,6 +123,18 @@
             Demo11014,
             Demo11015,
             Demo1111,
+            Demo1116,
+            Demo11162,
+            Demo1118,
+            Demo2262,
+            Demo232,
+            Demo233,
+            Demo234,
+            Demo244,
+            Demo245,
+            Demo248,
+            Demo251,
+            Demo2613,
         }
     }
 </script>
@@ -107,9 +143,11 @@
     * {
         margin: 0;
         padding: 0;
-        font-size:14px;
         letter-spacing: 0;
         list-style: none;
+    }
+    p, span, i {
+        font-size:14px;
     }
     h1, h2, h3 {
         margin: 5px 0;
@@ -122,6 +160,10 @@
     }
     div, p {
         border-radius: 4px;
+    }
+    button, input, textarea {
+        outline: none;
+        box-shadow: none;
     }
     button {
         min-width: 66px;

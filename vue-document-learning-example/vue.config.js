@@ -9,6 +9,7 @@ module.exports = {
     },
 
     css: {
-        extract: IS_PROD
+        extract: IS_PROD,
+        // sourceMap: true,
     }
 };

@@ -35,7 +35,6 @@
         created() {
             this.$nextTick(function() {
                 this.selected.push(this.options[0].value);
-                console.log(this.select);
             })
         },
     }
