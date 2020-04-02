@@ -4,8 +4,8 @@
         <label>
             <span> {{ label }}: </span>
             <input
-                type="text"
                 ref="input"
+                type="text"
                 v-bind="$attrs"
                 :value="value"
                 v-on="inputListeners"
