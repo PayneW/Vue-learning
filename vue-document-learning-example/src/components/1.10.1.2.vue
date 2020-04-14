@@ -4,7 +4,7 @@
         <span>Multiline message is:</span>
         <p style="white-space: pre-line;">{{ message }}</p>
         <br>
-        <textarea v-model="message" cols="26" rows="4"></textarea>
+        <textarea v-model="message" cols="26" rows="2"></textarea>
     </div>
 </template>
 <script>

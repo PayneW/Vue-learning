@@ -42,6 +42,8 @@
         <Demo248/>
         <Demo251/>
         <Demo2613/>
+        <Demo312/>
+        <Demo3122/>
     </div>
 </template>
 
@@ -86,6 +88,8 @@
     import Demo248 from './components/2.4.8/2.4.8';
     import Demo251 from './components/2.5.1/2.5.1';
     import Demo2613 from './components/2.6.1.3';
+    import Demo312 from './components/3.1.2';
+    import Demo3122 from './components/3.1.2.2';
 
     export default {
         name: 'App',
@@ -135,10 +139,13 @@
             Demo248,
             Demo251,
             Demo2613,
+            Demo312,
+            Demo3122,
         }
     }
 </script>
 
+<style src="./assets/typo.css"></style>
 <style type="text/css">
     * {
         margin: 0;

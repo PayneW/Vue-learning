@@ -31,6 +31,6 @@
         color: #f0ad4e;
     }
     .another-bg-color {
-        background: #6DFCAD;
+        background: #bcffe1;
     }
 </style>
