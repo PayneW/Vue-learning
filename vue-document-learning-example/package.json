@@ -12,6 +12,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "lodash": "^4.17.15",
+    "velocity-animate": "^2.0.6",
     "vue": "^2.6.11"
   },
   "devDependencies": {
@@ -39,7 +40,9 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "no-unused-vars": "off"
+    }
   },
   "browserslist": [
     "> 1%",

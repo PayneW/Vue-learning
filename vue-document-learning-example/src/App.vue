@@ -46,6 +46,8 @@
         <Demo3122/>
         <Demo3123/>
         <Demo3124/>
+        <Demo3127/>
+        <Demo314/>
     </div>
 </template>
 
@@ -94,6 +96,8 @@
     import Demo3122 from './components/3.1.2.2';
     import Demo3123 from './components/3.1.2.3';
     import Demo3124 from './components/3.1.2.4';
+    import Demo3127 from './components/3.1.2.7';
+    import Demo314 from './components/3.1.4';
 
     export default {
         name: 'App',
@@ -147,6 +151,8 @@
             Demo3122,
             Demo3123,
             Demo3124,
+            Demo3127,
+            Demo314,
         }
     }
 </script>
