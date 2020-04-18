@@ -4,7 +4,7 @@
         <div id="demo">
             <button @click="changeFun">Change button</button>
             <br>
-            <transition name="change-button" mode="out-in">
+            <transition name="change-button">
                 <button :key="change">
                     {{ change ? 'Edit' : 'Save' }}
                 </button>
@@ -39,7 +39,7 @@
     /* - 可以设置不同的进入和离开动画 */
     /* - 设置持续时间和动画函数 */
     .change-button-enter-active, .change-button-leave-active {
-        transition: all .3s linear;
+        transition: all .6s linear;
     }
     .change-button-enter, .change-button-leave-to {
         transform: translateX(10px);
