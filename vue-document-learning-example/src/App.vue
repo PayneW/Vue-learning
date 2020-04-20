@@ -48,6 +48,7 @@
         <Demo3124/>
         <Demo3127/>
         <Demo314/>
+        <Demo316/>
     </div>
 </template>
 
@@ -98,6 +99,7 @@
     import Demo3124 from './components/3.1.2.4';
     import Demo3127 from './components/3.1.2.7';
     import Demo314 from './components/3.1.4';
+    import Demo316 from './components/3.1.6/3.1.6';
 
     export default {
         name: 'App',
@@ -153,6 +155,7 @@
             Demo3124,
             Demo3127,
             Demo314,
+            Demo316,
         }
     }
 </script>
@@ -185,8 +188,7 @@
         box-shadow: none;
     }
     button {
-        min-width: 66px;
-        line-height: 26px;
+        line-height: 16px;
         padding: 3px 6px;
         margin: 6px 6px 6px 0;
         cursor: pointer;
