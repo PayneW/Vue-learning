@@ -168,18 +168,8 @@
 
 <style src="./assets/typo.css"></style>
 <style type="text/css">
-    * {
-        margin: 0;
-        padding: 0;
-        letter-spacing: 0;
-        list-style: none;
-    }
-    p, span, i {
-        font-size:14px;
-    }
     h1, h2, h3 {
         margin: 5px 0;
-        font-size: 20px;
         font-weight: bold;
     }
     p {

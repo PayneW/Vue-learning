@@ -43,7 +43,8 @@ body, button, input, select, textarea {
         segoe ui symbol;
     /* font: 300 1em/1.8 source-code-pro, Menlo,Monaco,Consolas, 
         PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif; */
-    /* font: 300 1em/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif; */
+    /* font: 300 1em/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB,
+       Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif; */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -265,7 +266,8 @@ strong, b {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  /* font-family: PingFang SC, Verdana, Helvetica Neue, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif; */
+  /* font-family: PingFang SC, Verdana, Helvetica Neue, Microsoft Yahei, Hiragino Sans GB,
+    Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif; */
   /* font-family: source-code-pro, Menlo,Monaco,Consolas, 
     PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif; */
     font-family: system-ui, -apple-system, BlinkMacSystemFont, segoe ui,
@@ -366,7 +368,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
-  content: "・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・";
+  content: "・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・";
 }
 
 /* Responsive images */
