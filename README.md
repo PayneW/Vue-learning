@@ -92,6 +92,12 @@
         + (4) 1.3 ~ 2x better update performance^*  
           (update 性能提升 1.3 ~ 2 倍)
         + (5) 2 ~ 3x faster SSR^* (SSR 提高了 2 ~ 3 倍)
+          
+          下图为各项性能对比
+
+          <img src="./Vue-learning-images/compression.png"
+                style="margin-left: 0; border-radius: 4px;
+                    box-shadow: 1px 1px 3px 2px #e5e5e5">
         + `*`based on benchmarks that simulates typical scenarios,
           may vary based on actual application.
     + (2.2) Tree-Shaking support  
