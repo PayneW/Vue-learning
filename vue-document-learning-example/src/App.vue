@@ -51,6 +51,8 @@
         <Demo316/>
         <Demo3171/>
         <Demo3172/>
+        <Demo3173/>
+        <Demo319/>
     </div>
 </template>
 
@@ -104,6 +106,8 @@
     import Demo316 from './components/3.1.6/3.1.6';
     import Demo3171 from './components/3.1.7.1';
     import Demo3172 from './components/3.1.7.2';
+    import Demo3173 from './components/3.1.7.3';
+    import Demo319 from './components/3.1.9';
 
     export default {
         name: 'App',
@@ -162,6 +166,8 @@
             Demo316,
             Demo3171,
             Demo3172,
+            Demo3173,
+            Demo319,
         }
     }
 </script>
