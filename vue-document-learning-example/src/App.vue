@@ -1,58 +1,65 @@
 <template>
     <div id="app">
-        <img alt="Vue logo" class="logo" src="./assets/logo.png">
-        <p v-if="seen">现在你看到我了!</p>
-        <HelloWorld msg="Welcome to Your Vue.js App"/>
-        <Demo123/>
-        <Demo124/>
-        <Demo125/>
-        <Demo133/>
-        <Demo1412/>
-        <Demo1511/>
-        <Demo1513/>
-        <Demo1514/>
-        <Demo152/>
-        <Demo1613 class="another-bg-color"/>
-        <Demo1614/>
-        <Demo1711/>
-        <Demo1714/>
-        <Demo172/>
-        <Demo181/>
-        <Demo182/>
-        <Demo1842/>
-        <Demo186/>
-        <Demo1810/>
-        <Demo191/>
-        <Demo192/>
-        <Demo193/>
-        <Demo11012/>
-        <Demo11013/>
-        <Demo11014/>
-        <Demo11015/>
-        <Demo1111/>
-        <Demo1116/>
-        <Demo11162/>
-        <Demo1118/>
-        <Demo2262/>
-        <Demo232/>
-        <Demo233/>
-        <Demo234/>
-        <Demo244/>
-        <Demo245/>
-        <Demo248/>
-        <Demo251/>
-        <Demo2613/>
-        <Demo312/>
-        <Demo3122/>
-        <Demo3123/>
-        <Demo3124/>
-        <Demo3127/>
-        <Demo314/>
-        <Demo316/>
-        <Demo3171/>
-        <Demo3172/>
-        <Demo3173/>
-        <Demo319/>
+        <div class="normal-component">
+            <img alt="Vue logo" class="logo" src="./assets/logo.png">
+            <p v-if="seen">现在你看到我了!</p>
+            <HelloWorld msg="Welcome to Your Vue.js App"/>
+            <Demo123/>
+            <Demo124/>
+            <Demo125/>
+            <Demo133/>
+            <Demo1412/>
+            <Demo1511/>
+            <Demo1513/>
+            <Demo1514/>
+            <Demo152/>
+            <Demo1613 class="another-bg-color"/>
+            <Demo1614/>
+            <Demo1711/>
+            <Demo1714/>
+            <Demo172/>
+            <Demo181/>
+            <Demo182/>
+            <Demo1842/>
+            <Demo186/>
+            <Demo1810/>
+            <Demo191/>
+            <Demo192/>
+            <Demo193/>
+            <Demo11012/>
+            <Demo11013/>
+            <Demo11014/>
+            <Demo11015/>
+            <Demo1111/>
+            <Demo1116/>
+            <Demo11162/>
+            <Demo1118/>
+            <Demo2262/>
+            <Demo232/>
+            <Demo233/>
+            <Demo234/>
+            <Demo244/>
+            <Demo245/>
+            <Demo248/>
+            <Demo251/>
+            <Demo2613/>
+            <Demo312/>
+            <Demo3122/>
+            <Demo3123/>
+            <Demo3124/>
+            <Demo3127/>
+            <Demo314/>
+            <Demo316/>
+            <Demo3171/>
+            <Demo3172/>
+            <Demo3173/>
+            <Demo319/>
+            <Demo323/>
+            <Demo324/>
+        </div>
+        <div class="carousel">
+            <router-view></router-view>
+        </div>
     </div>
 </template>
 
@@ -108,6 +115,8 @@
     import Demo3172 from './components/3.1.7.2';
     import Demo3173 from './components/3.1.7.3';
     import Demo319 from './components/3.1.9';
+    import Demo323 from './components/3.2.3';
+    import Demo324 from './components/3.2.4';
 
     export default {
         name: 'App',
@@ -168,6 +177,8 @@
             Demo3172,
             Demo3173,
             Demo319,
+            Demo323,
+            Demo324,
         }
     }
 </script>

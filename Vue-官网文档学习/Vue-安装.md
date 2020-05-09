@@ -114,8 +114,9 @@
           问题是这样的, 我在上面 **Hint** 中配置 `npm` 为 `taobao` 镜像之前,
           先在 `CSS-grocery` 中创建了 `vue create css-secrets-examples` 项目,
           在创建项目时, vue 提示要不要把创建的配置选项保存为默认选项, 我就选择了是,
-          这个默认配置的选项保存在 `/Users/WANG/` 的 `.vuerc` 中,
+          这个默认配置的选项保存在 `/Users/WANG/` 的 **`.vuerc`** 中,
           先来看一下此时 `.vuerc` 中的内容:
+          
           ```json
             {
                 "useTaobaoRegistry": false,
@@ -164,7 +165,7 @@
             # 如果其中一个的返回值不为 null, 继续执行:
             npm config set proxy null
             npm config set https-proxy null
-
+          
             # 接着执行:
             npm config set registry http://registry.cnpmjs.org/
           ```
@@ -175,12 +176,16 @@
           镜像为 `taobao` 的镜像, 所以此时只需要把 `false` 改为 `true` 即可.
     4. 预设配置完成后等待 `Vue-CLI` 完成初始化后, 进入 `my-project` 并启动项目:
        ```shell
-        # 进入项目: 
+        # (3) 进入项目: 
         cd my-project
         
         # - Project setup (注: 因为我们创建项目是使用 vue create xx,
-        #   此处便不需要再次使用 npm install 安装依赖了.)
-        ~~npm install~~
+        #   此处便不需要再次使用 npm install 安装依赖了. 
+        # - npm install 的使用场景是: 比如当我把项目发布到 github, 
+        #   在另外一台电脑 download 后, 直接执行 npm install,
+        #   此时项目便会根据 package.json 中的 dependency 和 devdependency
+        #   来安装依赖.)
+        npm install
         
         # Compiles and hot-reloads for development (编译和热重启为开发环境):
         npm run serve

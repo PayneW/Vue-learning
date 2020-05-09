@@ -10,3 +10,7 @@
 
 
 ## Content
+- 安装 vue-router
+  ```shell
+    npm install vue-router
+  ```

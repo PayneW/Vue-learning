@@ -30,11 +30,11 @@
         transition: all .5s linear;
     }
     .fade-leave-to {
-        transform: translateX(-20px);
+        transform: translateX(-40px);
         opacity: 0;
     }
     .fade-enter {
-        transform: translateX(20px);
+        transform: translateX(40px);
         opacity: 0;
     }
     /* - 这个 fade-enter-to 样式可以不写, 因为设置了 fade-enter 样式后,

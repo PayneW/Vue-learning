@@ -42,5 +42,8 @@
     }
 </script>
 <style lang="stylus" scoped>
-   @import "./base-components-style.styl"
+    @import "./base-components-style.styl"
+    div {
+        padding: 6px;
+    }
 </style>
