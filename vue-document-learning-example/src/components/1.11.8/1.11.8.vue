@@ -37,7 +37,6 @@
                 return 'tab-' + this.currentTab.toLowerCase();
             }
         },
-
         components: {
             TabHome,
             TabPosts,

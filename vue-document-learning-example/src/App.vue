@@ -56,9 +56,14 @@
             <Demo319/>
             <Demo323/>
             <Demo324/>
-        </div>
-        <div class="carousel">
-            <router-view></router-view>
+            <Demo411/>
+            <Demo421/>
+            <Demo423/>
+            <Demo4231/>
+            <Demo431/>
+            <Demo4344/>
+            <Demo45/>
+            <Demo512/>
         </div>
     </div>
 </template>
@@ -117,6 +122,14 @@
     import Demo319 from './components/3.1.9';
     import Demo323 from './components/3.2.3';
     import Demo324 from './components/3.2.4';
+    import Demo411 from './components/4.1.1';
+    import Demo421 from './components/4.2.1';
+    import Demo423 from './components/4.2.3';
+    import Demo4231 from './components/4.2.3.1';
+    import Demo431 from './components/4.3.1/4.3.1';
+    import Demo4344 from './components/4.3.4.4/4.3.3.4';
+    import Demo45 from './components/4.5.vue';
+    import Demo512 from './components/5.1.2-todos/5.1.2-todos'
 
     export default {
         name: 'App',
@@ -179,6 +192,14 @@
             Demo319,
             Demo323,
             Demo324,
+            Demo411,
+            Demo421,
+            Demo423,
+            Demo4231,
+            Demo431,
+            Demo4344,
+            Demo45,
+            Demo512
         }
     }
 </script>
@@ -197,6 +218,7 @@
         border-radius: 4px;
     }
     button, input, textarea {
+        font-size: 15px;
         outline: none;
         box-shadow: none;
     }
@@ -215,7 +237,6 @@
         color: #222629;
     }
     input {
-        min-width:120px;
         line-height: 26px;
         text-indent: 10px;
         border: none;

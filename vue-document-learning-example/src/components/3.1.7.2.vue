@@ -40,7 +40,7 @@
 <style scoped>
     .default-div {
         height: auto;
-        min-height: 460px;
+        min-height: 560px;
         overflow: auto;
     }
     .container {

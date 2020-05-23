@@ -6,7 +6,6 @@
                 <label for="new-todo">Add a todo:</label>
                 <input
                     v-model="newTodoText"
-                    id="new-todo"
                     placeholder='E.g. Feed the cat'
                 >
                 <span>
