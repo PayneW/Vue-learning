@@ -1,10 +1,18 @@
 # Vue.js 官网文档学习
 
 - [Vue.js 官网文档](https://cn.vuejs.org/v2/guide/installation.html)
-- 以一种你看的懂的方式来重新整理官网文档.
-- Additional Description: 下面文档中的示例代码是使用 `template`
-  模板的形式 (即: `.vue`组件的形式) 来书写的, Vue 官网文档是使用 `<script>`
-  来加载 `vue` 的方式讲解的.
+
+- 以一种更详细的方式来重新整理官网文档. 我们都知道 Vue 官网文档是使用 `<script>`
+  来加载 `Vue` 的方式讲解的, 对于初学者使用 `Vue CLI` 创建项目后, 
+  却不会在单文件(`*.vue`) 中运行示例,
+  所以下面文档中的示例代码都是使用单文件组件的形式来书写的, 完整的代码在当前仓库:
+  `../../vue-document-learning-example` 文件夹中. 这里是部分示例的截图
+
+  <img src="./vue-document-images/vue-demo-screen.png"
+        style="margin-left: 0; border-radius: 4px; width: 100%;
+                box-shadow: 1px 1px 3px 2px #e5e5e5">
+
+
 
 ## 目录(Catalog)
 1. 基础
@@ -14,13 +22,9 @@
 5. 工具
 6. 规模化
 7. 内在(深入响应式原理)
-8. 迁移
-9. 更多
 
 
-## 生词(New Words)
-- **approachable [] --**
-- **versatile [] --**
+## New Words
 
 
 
@@ -46,6 +50,3 @@
 ### 7. 内在(深入响应式原理)
 - 讲解见: `./07-内在(深入响应式原理).md`
 
-### 8. 迁移
-
-### 9. 更多
