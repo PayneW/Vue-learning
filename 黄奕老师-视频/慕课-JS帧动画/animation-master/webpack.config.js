@@ -1,5 +1,5 @@
 var path = require('path');
-var version = require('./package.json').version;
+var version = require('./package.json.js').version;
 var webpack = require('webpack');
 
 module.exports = {

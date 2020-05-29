@@ -28,8 +28,7 @@
     // - 除了书本上的讲解还参考了: 
     //     + [vue系列--响应式原理实现及Observer源码解析(七)](
     //       https://www.cnblogs.com/tugenhua0707/p/11754291.html)
-    //     + Programming-Video-Learning-W/珠峰培训/02_MVVM 原理实现/mvvm/
-    //       mvvm-with-comment.js
+    //     + 仓库: js-sundry-goods/珠峰/02_MVVM 原理实现/mvvm/mvvm-pure.js
 
     // - define reactive 定义响应式数据: 每当从 data 的 key 中读取数据时,
     //   get 函数就会触发; 每当往 data 的 key 中设置数据时, set 函数被触发.
@@ -59,7 +58,6 @@
         })
     }
 
-    // - observer [əb'zɜːvə] --n.观察者
     // - 2.7: 我们封装一个 Observer 类, 这个类的作用是将一个数据内的所有属性
     //   (包括子属性) 都转换成 getter/setter的形式, 然后去追踪它们的变化.
     class Observe{

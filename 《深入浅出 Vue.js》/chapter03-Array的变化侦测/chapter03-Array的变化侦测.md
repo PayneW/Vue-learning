@@ -18,10 +18,14 @@
 - 3.13 总结
 
 
+
+
 ## 生词 (New Words)
 - **segment ['sɛɡmənt] --n.段,部分. --vt&vi.分割**
     + To divide a computer program into segment. 把一个计算机程序分成若干段.
     + the segments(n) of an orange. 柑橘的一瓣瓣
+
+
 
 ## 内容 (Content)
 -  
