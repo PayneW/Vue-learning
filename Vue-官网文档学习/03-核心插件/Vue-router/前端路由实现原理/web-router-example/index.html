@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./src/style/typo.css">
+    <title>web-router</title>
+    <style>
+        body {
+            margin-top: 15px;
+            margin-left: 50px;
+        }
+        #page {
+            width: 200px;
+            height: 60px;
+            background: lightblue;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        ul.link-list {
+            width: 20em;
+            margin-bottom: 20px;
+        }
+        li {
+            text-decoration: underline;
+            padding: 5px 20px;
+            background: #ececec;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #5790d5;
+            margin-bottom: 5px;
+        }
+        li:hover {
+            color: blue;
+        }
+        .replace-btn {
+            cursor:pointer;
+            padding: 6px 12px;
+            background: #5790d5;
+            border-radius: 5px;
+            text-align: center;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="" id="app">
+        <p id="page"></p>
+        <ul class="link-list">
+            <li data-url="/">/..</li>
+            <li data-url="/page1">page1</li>
+            <li data-url="/page2">page2</li>
+            <li data-url="1">前进</li>
+            <li data-url="-1">后退</li>
+        </ul>
+        <span class="replace-btn">路由替换</span>
+    </div>
+</body>
+</html>
