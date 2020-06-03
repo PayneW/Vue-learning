@@ -25,7 +25,9 @@
     + Vue-安装.md
 - Vue-实战-video
 - Vue-知识集合
-- vue-document-learning-example(tip: Vue.js 官网文档所有单文件组件示例)
+- Vue-Examples(Vue官网文档示例)
+    + vue-document-example(tip: Vue.js 官网文档所有单文件组件示例)
+    + vue-router-document-example
 - Vue-next
 - Vuepress
 
