@@ -6,7 +6,7 @@
   来加载 `Vue` 的方式讲解的, 对于初学者使用 `Vue CLI` 创建项目后, 
   却不会在单文件(`*.vue`) 中运行示例,
   所以下面文档中的示例代码都是使用单文件组件的形式来书写的, 完整的代码在当前仓库:
-  `../../vue-document-learning-example` 文件夹中. 这里是部分示例的截图
+  `../../Vue-Examples/vue-document-example` 文件夹中. 这里是部分示例的截图
 
   <img src="./vue-document-images/vue-demo-screen.png"
         style="margin-left: 0; border-radius: 4px; width: 100%;
