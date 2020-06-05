@@ -23,3 +23,6 @@
 
 ### 2. Vue CLI 4 全面配置
 - 见同级目录: `./Vue-CLI4-全面配置.md`
+
+
+`node_modules/@vue/cli-service/lib/config/base.js`

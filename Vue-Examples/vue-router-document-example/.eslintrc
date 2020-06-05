@@ -1,0 +1,12 @@
+{
+    "rules": {
+        "indent": ["error", 4],
+        "quotes": [0, "double"],
+        "semi": [0, "always"],
+    },
+    "parserOptions": {
+        "ecmaVersion": 7,
+        "sourceType": "module"
+    },
+    "parser": "babel-eslint"
+}

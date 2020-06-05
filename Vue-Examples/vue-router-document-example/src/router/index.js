@@ -1,23 +1,32 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+
+import App from '../App';
+
+// - 导入需要在 <router-view></router-view> 显示的组件
+import Foo from '../components/3.1/foo.vue';
+import Bar from '../components/3.1/bar.vue';
+
+
 
 Vue.use(VueRouter)
 
+
+
 const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+    // - (3) 定义路由
+    {
+        path: '/',
+        redirect: '/app'
+    },
+    {
+        path: '/foo',
+        component: Foo,
+    },
+    {
+        path: '/bar',
+        component: Bar,
+    }
 ]
 
 const router = new VueRouter({

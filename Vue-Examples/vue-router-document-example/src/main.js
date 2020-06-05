@@ -3,6 +3,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import "./assets/typo.css";
+import "./assets/base.css";
+
 Vue.config.productionTip = false
 
 new Vue({

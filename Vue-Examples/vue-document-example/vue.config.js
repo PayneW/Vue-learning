@@ -8,6 +8,14 @@ module.exports = {
         config.resolve.symlinks(true);
     },
 
+    devServer: {
+        open: true,
+        host: 'localhost',
+        port: '1399',
+        https: false,
+        hotOnly: true   // - 热更新
+    },
+
     css: {
         extract: IS_PROD,
         // sourceMap: true,
