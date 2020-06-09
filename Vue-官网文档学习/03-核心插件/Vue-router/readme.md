@@ -132,26 +132,115 @@
 
 
 ### 3. 基础
-> 注意: 教程中的案例代码使用 [ES2015](https://github.com/lukehoban/es6features) 来编写.
+> 注意: 教程中的案例代码使用
+ [ES2015](https://github.com/lukehoban/es6features) 来编写.
 
 > 同时, 所有的例子都将使用完整版的 Vue 以解析模板. 更多细节请 `移步这里`(即:
   Vue 官网教程 `../../01-Vue.js/01-基础.md` -- `1.1 安装`)
 
+#### 3.1 起步
 - 用 Vue.js + Vue Router 创建单页应用，是非常简单的。使用 Vue.js,
   我们已经可以通过组合组件来组成应用程序，当你要把 Vue Router 添加进来，
   我们需要做的是，将组件 (components) 映射到路由 (routes)，然后告诉
   Vue Router 在哪里渲染它们。下面是个基本例子:
-#### 3.1 HTML
 - 因为当前示例是使用完整版(即: 通过 `script` 标签来引入 vue 和 vue-router)的,
   所以此处就不再粘贴代码了, 想看 html 页面写法的直接看官网教程即可,
-  下面把官网的示例改为单文件组件的写法.
+  下面把官网的示例改为单文件组件的写法. 详细代码见: `../../../Vue-Examples/vue-router-document-example`
+    + (1) 先在 components 文件夹下创建 3.1 文件夹, 在其内部创建 `3.1.vue`
+    和 2 个子组件(路由组件) `foo.vue` 和 `bar.vue`;
+    + (2) 在 `App.vue` 中导入 `3.1.vue` 组件,
+    + (3) 我们在当前项目的主入口文件 `main.js` 中引入全局需要的 CSS 文件, 和
+      `vue-router` 插件, 然后在 new Vue() 实例中, 通过 `router`
+      配置参数注入路由, 从而让整个应用都有路由功能.
 
+      通过注入路由, 我们可以在任何组件内通过 `this.$router` 访问路由器, 
+      也可以通过 `this.$route` 访问当前路由:
+      ```html
+        <!-- - 例如我们在 3.1.vue 中添加如下代码 -->
+        <template>
+            // ... 其他代码
+             <p>{{username}}</p>
+        </template>
 
+        <script>
+            export default {
+                name: 'Demo31',
+                computed: {
+                    username() {
+                        // - 因为我们在项目主入口文件 main.js 中引入了 router 路由实例,
+                        //   所以可以在任何组件内通过 `this.$router`(使用见下面的 methods
+                        //   内 goBack 方法内) 访问到路由器; 
+                        //   也可以通过 `this.$route` 访问到当前路由.(tip: Vue
+                        //   内部还是做了封装的, 具体实现以后看了源码便知.)
+                        console.log(this.$route);
+                        return null;
+                    }
+                },
+                methods: {
+                    goBack() {
+                        window.history.length > 1
+                            ? this.$router.go(-1)
+                            : this.$router.push('/')
+                    }
+                }
+            }
+        </script>
+      ```
+    + (4) 最后我们在 src/router 下的 index.js 文件夹中, 导入 `App.vue` /
+      `foo.vue` / `bar.vue`, 在 `routes` 数组中定义路由,
+      每个路由应该映射一个组件. `component` 属性的值便是导入的组件,
+      最后使用 new VueRouter() 创建 router 路由示例, 把 `routers` 传入.
 
-#### 3.2 JavaScript
-
-#### 3.1 起步
 #### 3.2 动态路由匹配
+- 我们经常需要把某种模式匹配到的所有路由, 全都映射到同一个组件. 例如, 我们有一个
+  `User` 组件, 对于所有 ID 各不相同的用户, 都要使用这个组件来渲染. 那么,
+  我们可以在 `vue-router` 的路由路径中使用 "动态路径参数"(dynamic segment)
+  来达到这个效果:
+  ```js
+    const User = {
+        template: '<div>User</div>'
+    };
+    const router = new VueRouter({
+        routes: [
+            // - 动态路径参数以冒号开头
+            {path: '/user/:id', component: User}
+        ]
+    });
+  ```
+  现在呢, 项 `/user/foo` 和 `user/bar` 都将映射到相同的路由.
+
+  一个 "路径参数" 使用冒号 `:` 标记. 当匹配到一个路由时, 参数值会被设置到
+  `this.$route.params`, 可以在每个组件内使用. 于是, 我们可以更新 `User` 模板,
+  输出当前用的 ID:
+  ```js
+    const User = {
+        template: '<div>User {{$route.params.id}}</div>'
+    }
+  ```
+  你可以看看这个[在线例子](https://jsfiddle.net/yyx990803/4xfa2f19/).
+
+  你可以在一个路由中设置多端 "路径参数", 对应的值都会设置到 `$route.params` 中.
+  例如:
+  
+  |      模式       |     匹配路径     |     `$route.params`    |
+  |    :---   |   :---    |    :---    |
+  | /user/:username | /user/evan     | `{username: 'evan'}` |
+  | /user/:username/post/:post_id | /user/evan/post123 | `{username: 'evan', post_id: '123'}` |
+
+  除了 `$route.params` 外, `$route` 对象还提供了其他有用的信息, 例如,
+  `$route.query`(如果 URL 中有查询参数), `$route.pash` 等等. 你可以查看
+  [API 文档](https://router.vuejs.org/zh/api/#%E8%B7%AF%E7%94%B1%E5%AF%B9%E8%B1%A1)
+  
+  **Hint:** 上面的示例的单文件写法见: `../../../Vue-Examples/vue-router-document-example/src/components/3.2`
+##### 3.2.1 响应路由参数的变化
+- 提醒一下, 当使用路由参数时, 例如从 `/user/foo` 导航到 `/user/bar`,
+  **原来的组件会被复用.** 因为两个路由都渲染同个组件, 比起销毁再创建看,
+  复用则显得更高效. **不过, 这也意味着组件的生命周期钩子不会再被调用.**
+
+  复用组件时, 想对路由参数的变化作出响应的话, 你可以简单地 watch(检测变化)
+  `$route` 路由信息对象:
+  
+
 #### 3.3 嵌套路由
 #### 3.4 编程式的导航
 #### 3.5 命令路由

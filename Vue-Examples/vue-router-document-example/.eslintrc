@@ -1,12 +1,42 @@
 {
     "rules": {
-        "indent": ["error", 4],
+        "indent": ["off", 4],
         "quotes": [0, "double"],
         "semi": [0, "always"],
+        "space-before-function-paren": ["off", "always"],
+        "comma-dangle": ["off", "never"],
+        "no-unused-vars": ["off", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+        "no-trailing-space": [0],
+        "camelCase": [0],
+        "no-param-reassign": [0],
+        "one-var": 0,
+        "one-var-declaration-per-line": 0,
+        "func-names": 0,
+        "no-console": 0,
+        "newline-per-chained-call": 0,
+        "prefer-const": 0,
+        "no-restricted-syntax": [
+            2,
+            "DebuggerStatement",
+            "LabeledStatement",
+            "WithStatement"
+        ]
     },
+    "root": true,
+    "env": {
+        "node": true
+    },
+    "extends": [
+        "plugin:vue/essential",
+        "@vue/standard"
+    ],
     "parserOptions": {
-        "ecmaVersion": 7,
-        "sourceType": "module"
-    },
-    "parser": "babel-eslint"
+        "parser": "babel-eslint",  
+        "ecmaVersion": 2018,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true
+        }
+    }
+   
 }

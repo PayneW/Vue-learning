@@ -1,7 +1,8 @@
 @charset "utf-8"
 
 p {
-    margin: 5px 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
     line-height: 20px;
 }
 div, p {
@@ -33,11 +34,10 @@ input {
     border-radius: 4px;
 }
 .default {
-    margin: 6px 0 6px 12px;
-    height: 300px;
-    width: 360px;
-    padding: 0 10px;
-    float: left;
+   margin: 10px auto;
+    width: 90%;
+    min-height: 300px;
+
     background: #33cc99;
     overflow: hidden;
 }
