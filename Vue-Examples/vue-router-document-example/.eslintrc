@@ -20,7 +20,8 @@
             "DebuggerStatement",
             "LabeledStatement",
             "WithStatement"
-        ]
+        ],
+        "no-multi-spaces": 0
     },
     "root": true,
     "env": {

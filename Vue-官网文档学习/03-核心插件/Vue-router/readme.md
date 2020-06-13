@@ -55,8 +55,8 @@
 #### 1.1 直接下载 / CDN
 - [https://unpkg.com/vue-router/dist/vue-router.js](https://unpkg.com/vue-router/dist/vue-router.js)
 
-  [npkg.com](https://unpkg.com/) 提供了基于 NPM 的 CDN 链接。
-  上面的链接会一直指向在 NPM 发布的最新版本。你也可以像
+  [npkg.com](https://unpkg.com/) 提供了基于 NPM 的 CDN 链接. 
+  上面的链接会一直指向在 NPM 发布的最新版本. 你也可以像
   `https://unpkg.com/vue-router@2.0.0/dist/vue-router.js` 这样指定
   版本号 或者 Tag.
 
@@ -139,10 +139,10 @@
   Vue 官网教程 `../../01-Vue.js/01-基础.md` -- `1.1 安装`)
 
 #### 3.1 起步
-- 用 Vue.js + Vue Router 创建单页应用，是非常简单的。使用 Vue.js,
-  我们已经可以通过组合组件来组成应用程序，当你要把 Vue Router 添加进来，
-  我们需要做的是，将组件 (components) 映射到路由 (routes)，然后告诉
-  Vue Router 在哪里渲染它们。下面是个基本例子:
+- 用 Vue.js + Vue Router 创建单页应用, 是非常简单的. 使用 Vue.js,
+  我们已经可以通过组合组件来组成应用程序, 当你要把 Vue Router 添加进来, 
+  我们需要做的是, 将组件 (components) 映射到路由 (routes), 然后告诉
+  Vue Router 在哪里渲染它们. 下面是个基本例子:
 - 因为当前示例是使用完整版(即: 通过 `script` 标签来引入 vue 和 vue-router)的,
   所以此处就不再粘贴代码了, 想看 html 页面写法的直接看官网教程即可,
   下面把官网的示例改为单文件组件的写法. 详细代码见: `../../../Vue-Examples/vue-router-document-example`
@@ -231,14 +231,69 @@
   `$route.query`(如果 URL 中有查询参数), `$route.pash` 等等. 你可以查看
   [API 文档](https://router.vuejs.org/zh/api/#%E8%B7%AF%E7%94%B1%E5%AF%B9%E8%B1%A1)
   
-  **Hint:** 上面的示例的单文件写法见: `../../../Vue-Examples/vue-router-document-example/src/components/3.2`
+  **Hint:** 上面示例的单文件写法见: `../../../Vue-Examples/vue-router-document-example/src/components/3.2`
 ##### 3.2.1 响应路由参数的变化
 - 提醒一下, 当使用路由参数时, 例如从 `/user/foo` 导航到 `/user/bar`,
-  **原来的组件会被复用.** 因为两个路由都渲染同个组件, 比起销毁再创建看,
+  **原来的组件会被复用.** 因为两个路由都渲染同个组件, 比起销毁再创建,
   复用则显得更高效. **不过, 这也意味着组件的生命周期钩子不会再被调用.**
 
   复用组件时, 想对路由参数的变化作出响应的话, 你可以简单地 watch(检测变化)
   `$route` 路由信息对象:
+  ```js
+    const User = {
+        template; '..',
+        watch: {
+            $route(to, from) {
+                // - 对路由变化作出响应...
+            }
+        }
+    }
+  ```
+  或者使用 2.2 中引入的 `beforeRouteUpdate`
+  [导航守卫](https://router.vuejs.org/zh/guide/advanced/navigation-guards.html#%E5%85%A8%E5%B1%80%E5%89%8D%E7%BD%AE%E5%AE%88%E5%8D%AB):
+  ```js
+    const User = {
+        template: '..',
+        beforeRouteUpdate(to, from , next) {
+            // react to route changes...
+            // don't forget to call next()
+        }
+    }
+  ```
+##### 3.2.2 捕获所有路由或 404 Not found 路由
+- 常规阐述只会匹配被 `/` 分隔的 URL 片段中的字符. 如果想匹配 **任意路径**,
+  我们可以使用通配符 (`*`):
+  ```js
+    {
+        // - 会匹配所有路径
+        path: '*'
+    }
+    {
+        // - 会匹配以 `/user-` 开头的任意路径
+        path: '/user-*'
+    }
+  ```
+  当使用通配符路由时, 请确保路由的顺序是正确的, 也就是说含有通配符的路由应该放在最后.
+  路由 `{ path: '*' }` 通常用于客户端 404 错误. 如果你使用了 History 模式,
+  请确保[正确配置你的服务器](https://router.vuejs.org/zh/guide/essentials/history-mode.html#%E5%90%8E%E7%AB%AF%E9%85%8D%E7%BD%AE%E4%BE%8B%E5%AD%90). 
+
+  当使用一个通配符时, `$route.params`(tip: 为一个对象, 在 `/3.2/user.vue` 中查看)
+  内会自动添加一个名为 `pathMatch` 参数. 它包含了 `URL` 通过通配符被匹配的部分:
+  ```js
+    // - 给出一个路由 { path: '/user-*' }
+    this.$router.push('/user-admin');
+    console.log(this.$route.params.pathMatch)   // 'admin'
+    
+    // - 给出一个路由 { path: '*' }
+    this.$router.push('/non-existing');     // - 设置一个不存在的 route
+    console.log(this.$route.params.pathMath);   // '/non-existing'
+  ```
+##### 3.2.3 高级匹配模式
+- `vue-router` 使用 [path-to-regexp]() 作为路径匹配引擎,
+  所以支持很多高级的匹配模式, 例如: 可选的动态路径参数、匹配零个或多个、一个或多个,
+  甚至是自定义正则匹配。查看它的[文档]()学习高阶的路径匹配, 还有这个例子 展示 vue-router 怎么使用这类匹配。
+##### 3.2.4 匹配优先级
+
   
 
 #### 3.3 嵌套路由
