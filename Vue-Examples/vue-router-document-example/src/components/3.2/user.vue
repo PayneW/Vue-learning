@@ -19,7 +19,7 @@ export default {
             // {
             //     fullpath: "/user/bar",
             //     hash: "",
-            //     matched: [{}, {}],
+            //     matched: [{...}, {...}],
             //     meta: {},
             //     name: undefined,
             //     params: {id: "bar"},

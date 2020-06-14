@@ -7,18 +7,43 @@
 3. 基础
     + 3.1 起步
     + 3.2 动态路由匹配
+        - 3.2.1 响应路由参数的变化
+        - 3.2.2 捕获所有路由或 404 Not found 路由
+        - 3.2.3 高级匹配模式
+        - 3.2.4 匹配优先级
     + 3.3 嵌套路由
     + 3.4 编程式的导航
+        - 3.4.1 `router.push(location, onComplete?, onAbort?)`
+        - 3.4.2 `router.replace(location, onComplete?, onAbort?)`
+        - 3.4.3 `router.go(n)`
+        - 3.4.4 操作 History
     + 3.5 命令路由
     + 3.6 命名视图
+        - 3.6.1 嵌套命名视图
     + 3.7 重定向和别名
+        - 3.7.1 重定向
+        - 3.7.2 别名
     + 3.8 路由组件传参
+        - 3.8.1 布尔模式
+        - 3.8.2 对象模式
+        - 3.8.3 函数模式
     + 3.9 HTML5 History 模式
+        - 3.9.1 后端配置例子
 4. 进阶 
     + 4.1 导航守卫
+        - 4.1.1 全局前置守卫 
+        - 4.1.2 全局解析守卫
+        - 4.1.3 全局后置钩子
+        - 4.1.4 路由独享守卫
+        - 4.1.5 组件内的守卫
+        - 4.1.6 完整的导航解析流程
     + 4.2 路由元信息
     + 4.3 过渡动效
+        - 4.3.1 单个路由的过渡
+        - 4.3.2 基于路由的动态过渡
     + 4.4 数据获取
+        - 4.4.1 导航完成后获取数据 
+        - 4.4.2 
     + 4.5 滚动行为
     + 4.6 路由懒加载
 
@@ -289,14 +314,120 @@
     console.log(this.$route.params.pathMath);   // '/non-existing'
   ```
 ##### 3.2.3 高级匹配模式
-- `vue-router` 使用 [path-to-regexp]() 作为路径匹配引擎,
-  所以支持很多高级的匹配模式, 例如: 可选的动态路径参数、匹配零个或多个、一个或多个,
-  甚至是自定义正则匹配。查看它的[文档]()学习高阶的路径匹配, 还有这个例子 展示 vue-router 怎么使用这类匹配。
+- `vue-router` 使用
+  [path-to-regexp](https://github.com/pillarjs/path-to-regexp/tree/v1.7.0)
+  作为路径匹配引擎, 所以支持很多高级的匹配模式, 例如: 可选的动态路径参数、
+  匹配零个或多个、一个或多个, 甚至是自定义正则匹配。查看它的
+  [文档](https://github.com/pillarjs/path-to-regexp/tree/v1.7.0#parameters)
+  学习高阶的路径匹配, 还有
+  [这个例子](https://github.com/vuejs/vue-router/blob/dev/examples/route-matching/app.js)
+  展示 `vue-router` 怎么使用这类匹配.
 ##### 3.2.4 匹配优先级
+- 有时候, 同一个路径可以匹配多个路由, 此时, 匹配的优先级就按照路由的定义顺序:
+  谁先定义的, 谁的优先级就最高.
 
   
 
 #### 3.3 嵌套路由
+- 实际生活中的应用界面，通常由多层嵌套的组件组合而成。同样地，
+  URL 中各段动态路径也按某种结构对应嵌套的各层组件，例如:
+  ```base
+    /user/foo/profile                     /user/foo/posts
+    +------------------+                  +-----------------+
+    | User             |                  | User            |
+    | +--------------+ |                  | +-------------+ |
+    | | Profile      | |  +------------>  | | Posts       | |
+    | |              | |                  | |             | |
+    | +--------------+ |                  | +-------------+ |
+    +------------------+                  +-----------------+
+  ``` 
+  借助 `vue-router`, 使用嵌套路由配置, 就可以很简单地表达这种关系.
+
+  接着上节创建的 app:
+  ```html
+    <div id="app">
+        <router-view></router-view>
+    </div>
+  ```
+  ```js
+    const User = {
+        template: '<div>User {{ $route.params.id }}</div>'
+    }
+    const router = new VueRouter({
+        routes: [
+            {path: '/user/:id', component: User}
+        ]
+    })
+  ```
+  这里的 `<router-view>` 是最顶层的出口, 渲染最高级路由匹配到的组件. 同样地，
+  一个被渲染组件同样可以包含自己的嵌套 `<router-view>`。例如，在 User
+  组件的模板添加一个 `<router-view>`:
+  ```js
+    const User = {
+        template: `
+            <div class="user">
+                <h2>User {{ $route.params.id }}</h2>
+                <router-view></router-view>
+            </div>
+        `
+    }
+  ```
+  要在嵌套的出口中渲染组件，需要在 VueRouter 的参数中使用 children 配置：
+  ```js
+    const router = new VueRouter({
+    routes: [
+        { 
+            path: '/user/:id',
+            component: User,
+            children: [
+                {
+                    // - 当 /user/:id/profile 匹配成功, UserProfile
+                    //   会被渲染在 User 的 <router-view> 中
+                    path: 'profile',
+                    component: UserProfile
+                },
+                {
+                    // - 当 /user/:id/posts 匹配成功 UserPosts
+                    //   会被渲染在 User 的 <router-view> 中
+                    path: 'posts',
+                    component: UserPosts
+                }
+            ]
+        }
+    ]
+    })
+  ```
+  **要注意，以 `/` 开头的嵌套路径会被当作根路径.
+  这让你充分的使用嵌套组件而无须设置嵌套的路径.**
+
+  你会发现, ` children` 配置就是像 `routes` 配置一样的路由配置数组, 所以呢,
+  你可以嵌套多层路由.
+
+  此时, 基于上面的配置, 当你访问 `/user/foo` 时, `User` 的出口是不会渲染任何东西,
+  这是因为没有匹配到合适的子路由. 如果你想要渲染点什么, 可以提供一个空的子路由:
+  ```js
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/user/:id',
+                component: User,
+                children: [
+                    // - 当 /user/:id 匹配成功, UserHome 不会被渲染在
+                    //   User 的 <router-view> 中
+                    {
+                        path: '',
+                        component: UserHome
+                    },
+                ]
+            }
+        ]
+    })
+  ```
+
+  提供以上案例的可运行代码请[移步这里](https://jsfiddle.net/yyx990803/L7hscd8h/)
+
+  **Hint:** 此章节的单组件示例详见: `../../../Vue-Examples/vue-router-document-example/src/components/3.3`
+
 #### 3.4 编程式的导航
 #### 3.5 命令路由
 #### 3.6 命名视图
