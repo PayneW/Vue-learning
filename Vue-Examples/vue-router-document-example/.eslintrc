@@ -6,7 +6,7 @@
         "space-before-function-paren": ["off", "always"],
         "comma-dangle": ["off", "never"],
         "no-unused-vars": ["off", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-        "no-trailing-space": [0],
+        "no-trailing-spaces": 0,
         "camelCase": [0],
         "no-param-reassign": [0],
         "one-var": 0,
@@ -21,7 +21,8 @@
             "LabeledStatement",
             "WithStatement"
         ],
-        "no-multi-spaces": 0
+        "no-multi-spaces": 0,
+        "no-multiple-empty-lines": 0
     },
     "root": true,
     "env": {

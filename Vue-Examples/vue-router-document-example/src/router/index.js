@@ -10,6 +10,29 @@ import Bar from '../components/3.1/bar.vue';
 import Demo32 from '../components/3.2/3.2.vue';
 import User from '../components/3.2/user.vue';
 
+// - 3.3 嵌套路由
+import Demo33 from '../components/3.3/3.3';
+import Worker from '../components//3.3/worker';
+import WorkerHome from  '../components/3.3/worker-home';
+import WorkerProfile from '../components/3.3/worker-profile';
+import WorkerPosts from '../components/3.3/worker-posts';
+
+// - 3.6 命名视图
+import Demo36 from '../components//3.6/3.6';
+import Container from '../components//3.6/container';
+import FullBlank from '../components/3.6/full-blank';
+import NavBar from '../components//3.6/nav-bar';
+import TheMain from '../components//3.6/the-main';
+// -- 3.6-2 命名视图
+import Demo362 from '../components/3.6-2/362';
+import UserSettings from '../components/3.6-2/user-settings';
+import UserSettingNav from '../components/3.6-2/user-settings-nav';
+import UserProfile from '../components/3.6-2/user-profile';
+import UserProfileView from '../components/3.6-2/user-profile-view';
+import userEmailSubscriptions from '../components/3.6-2/user-email-subscriptions';
+
+
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -39,6 +62,76 @@ const routes = [
             {
                 path: '/user/:id',
                 component: User
+            }
+        ]
+    },
+    {
+        path: '/Demo33',
+        component: Demo33,
+        children: [
+            {
+                path: '/worker/:id',
+                component: Worker,
+                children: [
+                    {
+                        path: '',
+                        component: WorkerHome
+                    },
+                    {
+                        path: 'profile',
+                        component: WorkerProfile
+                    },
+                    {
+                        path: 'posts',
+                        component: WorkerPosts
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        path: '/Demo36',
+        component: Demo36,
+        children: [
+            {
+                path: '/container',
+                component: Container,
+                children: [
+                    {
+                        path: 'full-blank',
+                        component: FullBlank,
+                    },
+                    {
+                        path: 'other',
+                        components: {
+                            NavBar: NavBar,
+                            TheMain: TheMain
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        path: '/Demo362',
+        component: Demo362,
+        children: [
+            {
+                path: '/settings',
+                component: UserSettings,
+                children: [
+                    {
+                        path: 'emails',
+                        component: userEmailSubscriptions
+                    },
+                    {
+                        path: 'profile',
+                        components: {
+                            default: UserProfile,
+                            helper: UserProfileView
+                        }
+                    }
+                ]
             }
         ]
     }

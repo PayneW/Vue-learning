@@ -1,10 +1,12 @@
 <template>
   <div id="app">
-      <img alt="Vue logo" class="logo" src="./assets/logo.png">
-      <p class="link-p"><router-link to="/Demo31">Demo31</router-link></p>
-      <p class="link-p"><router-link to="/Demo32">Demo32</router-link></p>
-
-      <router-view></router-view>
+        <img alt="Vue logo" class="logo" src="./assets/logo.png">
+        <p class="link-p"><router-link to="/Demo31">Demo31</router-link></p>
+        <p class="link-p"><router-link to="/Demo32">Demo32</router-link></p>
+        <p class="link-p"><router-link to="/Demo33">Demo33</router-link></p>
+        <p class="link-p"><router-link to="/Demo36">Demo36</router-link></p>
+        <p class="link-p"><router-link to="/Demo362">Demo362</router-link></p>
+        <router-view></router-view>
   </div>
 </template>
 
@@ -15,12 +17,6 @@
             // this.getViewport();
         },
         methods: {
-            getViewport: function() {
-                console.log('window.innerWidth:', window.innerWidth);
-                console.log('window.innerHeight:', window.innerHeight);
-                console.log('document.documentElement.clientWidth:', document.documentElement.clientWidth);
-                console.log('document.documentElement.clientHeight:', document.documentElement.clientHeight);
-            }
         }
     }
 </script>
@@ -36,7 +32,7 @@
     }
     .logo{
         display: block;
-        width: 120px;
+        width: 60px;
         height: auto;
         margin: 0 auto;
     }
