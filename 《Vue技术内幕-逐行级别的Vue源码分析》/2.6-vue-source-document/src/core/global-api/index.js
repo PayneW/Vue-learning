@@ -23,9 +23,9 @@ export function initGlobalAPI(Vue: GlobalAPI) {         // {4-11}
     // - config
     const configDef = {};                               // {4-12}
     configDef.get = () => config;                       // {4-13}
-    if (proecess.env.NODE.ENV !== 'production') {       // {4-14}
+    if (process.env.NODE.ENV !== 'production') {       // {4-14}
         configDef.set = () => {                         // {4-15}
-            warn('Do not replace the Vue.cofnig object, set individual fields instead.')
+            warn('Do not replace the Vue.config object, set individual fields instead.')
         }
     }
     Object.defineProperty(Vue, 'config', configDef);    // {4-16}

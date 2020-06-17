@@ -609,7 +609,7 @@
     import {toArray} from '../util/index';                      // {5-1} 
     export function initUse(Vue: GlobalAPI) {                   // {5-2}
         Vue.use = function(plugin: Function | Object) {         // {5-3}
-            // - installed plguins 安装的插件
+            // - installed plugins 安装的插件
             const installedPlugins = 
                 (this._installedPlugins || (this._installedPlugins = [])); // {5-4}
             if (installedPlugins.indexOf(plugin) > -1) {        // {5-5}
@@ -625,7 +625,7 @@
             } else if (typeof plugin === 'function') {          // {5-10}
                 plugin.apply(null, args);                       // {5-11}
             }
-            installedPlguins.push(plugin);                      // {5-12}
+            installedPlugins.push(plugin);                      // {5-12}
             return this;                                        // {5-13}
         }
     }
