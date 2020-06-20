@@ -22,7 +22,8 @@
             "WithStatement"
         ],
         "no-multi-spaces": 0,
-        "no-multiple-empty-lines": 0
+        "no-multiple-empty-lines": 0,
+        "object-curly-spacing": 0
     },
     "root": true,
     "env": {

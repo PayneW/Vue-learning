@@ -15,7 +15,7 @@ export default {
 
             console.log(this.$route.params);    // {id: bar}
 
-            // - to/from 输出的都是 this.$route(当前 router 对象信息)
+            // - to/from 输出的都是 this.$route(当前 route 对象信息)
             // {
             //     fullpath: "/user/bar",
             //     hash: "",

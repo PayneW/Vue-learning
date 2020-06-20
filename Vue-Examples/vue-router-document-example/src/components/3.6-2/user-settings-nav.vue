@@ -18,12 +18,14 @@ export default {
 <style scoped>
     .us_nav {
         flex-direction: column;
-        flex-basis: 25%;
+        flex-basis: 30%;
         display: flex;
+        align-items: center;
     }
     .us_nav p {
-        border-radius: 6px;
-        margin-top: 20px;
+        border-radius: 4px;
+        padding: .1em .6em;
+        margin: auto;
         background: #fafafa;
     }
 </style>

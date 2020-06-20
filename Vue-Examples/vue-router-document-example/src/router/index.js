@@ -17,6 +17,10 @@ import WorkerHome from  '../components/3.3/worker-home';
 import WorkerProfile from '../components/3.3/worker-profile';
 import WorkerPosts from '../components/3.3/worker-posts';
 
+// - 3.4 编程式导航
+import Demo34 from '../components/3.4/3.4';
+import Runner from '../components/3.4/runner';
+
 // - 3.6 命名视图
 import Demo36 from '../components//3.6/3.6';
 import Container from '../components//3.6/container';
@@ -31,9 +35,22 @@ import UserProfile from '../components/3.6-2/user-profile';
 import UserProfileView from '../components/3.6-2/user-profile-view';
 import userEmailSubscriptions from '../components/3.6-2/user-email-subscriptions';
 
+// - 3.8 传递 Props 到路由组件
+import Demo38 from '../components/3.8/3.8';
+import RouterProps from '../components/3.8/router-props';
+
 
 
 Vue.use(VueRouter)
+
+
+
+function dynamicPropsFn(route) {
+    const now = new Date();
+    return {
+        name: (now.getFullYear() + parseInt(route.params.years)) + '!'
+    }
+}
 
 const routes = [
     // - (3) 定义路由
@@ -90,6 +107,16 @@ const routes = [
         ]
     },
     {
+        path: '/Demo34',
+        component: Demo34,
+        children: [
+            {
+                path: '/runner/:id',
+                component: Runner,
+            }
+        ]
+    },
+    {
         path: '/Demo36',
         component: Demo36,
         children: [
@@ -134,8 +161,26 @@ const routes = [
                 ]
             }
         ]
+    },
+    {
+        path: '/Demo38',
+        component: Demo38,
+        children: [
+            // { path: '/', component: RouterProps},
+            // - Pass route.params to props (通过 route.params 到 props)
+            { path: '/hello/:name', component: RouterProps, props: true },
+            // - static values (静态值)
+            // - 问题: 目前还不知道这个静态值, 在子路由(router-props.vue)
+            //   中如何获取. 待解决.
+            { path: '/static', component: RouterProps, props: {name: 'world'}},
+            // - custom logic for mapping between route and props
+            //   (用于在 route 和 props 之间进行映射的自定义逻辑)
+            { path: '/dynamic/:years', component: RouterProps, props: dynamicPropsFn},
+            { path: '/attrs', component: RouterProps, props: {name: 'attrs'}}
+
+        ]
     }
-]
+];
 
 const router = new VueRouter({
     mode: 'history',

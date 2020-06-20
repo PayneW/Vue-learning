@@ -1,11 +1,29 @@
 <template>
   <div id="app">
-        <img alt="Vue logo" class="logo" src="./assets/logo.png">
-        <p class="link-p"><router-link to="/Demo31">Demo31</router-link></p>
-        <p class="link-p"><router-link to="/Demo32">Demo32</router-link></p>
-        <p class="link-p"><router-link to="/Demo33">Demo33</router-link></p>
-        <p class="link-p"><router-link to="/Demo36">Demo36</router-link></p>
-        <p class="link-p"><router-link to="/Demo362">Demo362</router-link></p>
+        <h2>Vue Router 官网文档单组件示例</h2>
+        <p class="link-p">
+            <router-link to="/Demo31">Demo31 起步</router-link>
+        </p>
+        <p class="link-p">
+            <router-link to="/Demo32">Demo32 动态路由匹配</router-link>
+        </p>
+        <p class="link-p">
+            <router-link to="/Demo33">Demo33 嵌套路由</router-link>
+        </p>
+        <p class="link-p">
+            <router-link to="/Demo34">Demo34 编程式导航</router-link>
+        </p>
+        <p class="link-p">
+            <router-link to="/Demo36">Demo36 命名视图</router-link>
+        </p>
+        <p class="link-p">
+            <router-link to="/Demo362">Demo362 嵌套命名视图</router-link>
+        </p>
+        <p class="link-p">
+            <router-link to="/Demo38">Demo38 传递 Props 到路由组件</router-link>
+        </p>
+
+
         <router-view></router-view>
   </div>
 </template>
@@ -40,6 +58,6 @@
         width: 90%;
         margin: 5px auto;
         border-radius: 4px;
-        background-color: #a3dafa;
+        background-color: #7fd0ff;
     }
 </style>
