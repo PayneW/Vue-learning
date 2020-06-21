@@ -52,4 +52,24 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
       "parser": "babel-eslint"
   }
 
+- (4) 使用 `npm run build` 打包后在本地预览的方法:
+    + (1) 在 `vue.config.js` 中添加.
+      ```js
+        module.exports = {
+            public: './'
+        }
+      ```
+    + `dist` 目录需要启动一个 HTTP 服务器来访问(除非你已经将 `publicPath`
+      配置为了一个相对的值), 所以以 `file://` 协议直接打开 `dist/index.html`
+      是不会工作的. 在本地预览生产环境构建最简单的方式就是使用一个 Node.js
+      静态服务器, 例如 [serve](https://github.com/vercel/serve):
+      ```shell
+        # 全局安装 serve
+        npm install -g serve
+
+        # 进入到项目文件中执行
+        serve -s dist
+        # -s 参数的意思就是将其假设在 Single-Page Application 模式下
+        # 这个模式会处理即将提到的路由问题.
+      ```
 

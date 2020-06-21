@@ -1,6 +1,8 @@
 const IS_PROD = ["production", "prod"].includes(process.env.NODE_ENV);
 
 module.exports = {
+    publicPath: './',
+
     chainWebpack: config => {
         // - 修复热重载(HMR (hot module reload))
         config.resolve.symlinks(true)
