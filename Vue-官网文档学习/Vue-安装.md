@@ -61,8 +61,9 @@
        安装到 `Node` 的全局 `node-modules` 中):  
        ```shell
         # npm
-        npm install -g @vue/cli  
-
+        # 读作(@ vue 斜杠 cli)
+ npm install -g @vue/cli  
+       
         # 或 yarn
         yarn global add @vue/cli
        ```
@@ -74,8 +75,8 @@
         # - 警告: 如果你在 `Windows` 上通过 `minTTY` 使用 `Git Bash`,
         #   交互提示符并不工作. 你必须通过 `winpty vue.cmd create my-project` 
         #   启动这个命令。
-        vue create my-project
-
+    vue create my-project
+    
         # (2) 选择预设配置(preset) [注: 自行判断]
         #  - ? Please pick a preset:
         #    + default (babel, eslint)
