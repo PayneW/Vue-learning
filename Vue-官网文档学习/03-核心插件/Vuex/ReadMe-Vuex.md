@@ -107,8 +107,8 @@
   当使用全局 script 标签引用 Vuex 时, 不需要以上安装过程. 
 
 - Promise
-  Vuex 依赖 [Promise](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Using_promises). 如果你支持的浏览器并没有实现 Promise
-  (比如 IE), 那么你可以使用一个 polyfill 的库, 
+  Vuex 依赖 [Promise](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Using_promises).
+  如果你支持的浏览器并没有实现 Promise (比如 IE), 那么你可以使用一个 polyfill 的库, 
   例如 [es6-promise](https://github.com/stefanpenner/es6-promise). 
 
   你可以通过 CDN 将其引入: 
