@@ -4,7 +4,8 @@
 const _products = [
     {"id": 1, "title": "ipad 4 Mini", "price": 500.01, "inventory": 2},
     {"id": 2, "title": "H&M T-Shirt White", "price": 10.99, "inventory": 10},
-    {"id": 3, "title": "Charli XCX - Sucker CD", "price": 19.99, "inventory": 5}
+    {"id": 3, "title": "Charli XCX - Sucker CD", "price": 19.99, "inventory": 5},
+    {"id": 4, "title": "Mac Book Pro", "price": 2112.36, "inventory": 45}
 ];
 
 export default {
@@ -13,6 +14,7 @@ export default {
         setTimeout(() => cb(_products), 100)
     },
 
+    // - 购买产品成功与否
     buyProducts(products, cb, errorCb) {
         setTimeout(() => {
             // - simulate random checkout failure.(模拟随你结账失败)

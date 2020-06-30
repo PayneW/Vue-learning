@@ -1470,6 +1470,9 @@
   ```
   请参考[购物车示例](https://github.com/vuejs/vuex/tree/dev/examples/shopping-cart)。
 
+  **Tip:** 购物车完整示例讲解见同级目录:
+  `./购物车示例详解/readme_shopping-cart.md`
+
 #### 2.3 插件
 - Vuex 的 store 接受 `plugins` 选项，这个选项暴露出每次 mutation 的钩子。
   Vuex 插件就是一个函数，它接收 store 作为唯一参数: 

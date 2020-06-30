@@ -28,7 +28,7 @@ export default {
         this.$store.dispatch('products/getAllProducts');
     },
     computed: mapState({
-        products:  function(state) {
+        products: function(state) {
             console.log('state.products.all:', state.products.all);
             return state.products.all;
         }
