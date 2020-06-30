@@ -1,20 +1,41 @@
 <template>
     <div id="app">
+        <h2>Vuex 示例</h2>
         <div id="nav">
-            <h2>Vuex 示例</h2>
-            <router-link to="/">Home</router-link> |
-            <router-link to="/count">Count</router-link>
+            <router-link to="/count">Count (计数)</router-link>
+            <router-link to="/shopping-cart">Shopping Cart</router-link>
         </div>
         <router-view/>
     </div>
 </template>
 
 <style lang="stylus">
-#app
-  font-family Avenir, Helvetica, Arial, sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-  text-align center
-  color #2c3e50
-  margin-top 60px
+    #app
+        font-family Avenir, Helvetica, Arial, sans-serif
+        -webkit-font-smoothing antialiased
+        -moz-osx-font-smoothing grayscale
+        text-align center
+        color #2c3e50
+        margin: 30px 0
+
+    h2 {
+        margin-bottom: 1em
+    }
+    
+    #nav {
+        display: flex
+        justify-content: space-around
+        align-items: center
+        margin-bottom: 1.2em
+
+        a {
+            flex: 0 0 40%
+            background: #66cc99
+            border-radius: 4px
+            padding: 3px 0
+            margin: 0
+            color: #000
+            text-decoration: none
+        }
+    }
 </style>

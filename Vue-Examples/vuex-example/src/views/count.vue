@@ -15,11 +15,17 @@ export default {
     name: 'count',
     computed: {
         // count() {
-        //     return this.$store.state.count;
+        //     return this.$store.state.count.count;
         // },
+
         // - 使用 ES6 的对象展开运算符(`...`) 把 mapState 对象内的属性,
         //   合并到当前 computed 对象中.
-        ...mapState(['count'])
+        // - 这里是使用了模块(module)分隔 store 后的写法.
+        ...mapState({
+            count: function(state) {
+                return state.count.count
+            }
+        })
     },
     methods: {
         // - (1) 正常调用 vuex 中 mutation 的方式: this.$store.commit() 
@@ -58,5 +64,12 @@ export default {
         padding: .3em .8em;
         background-color: #66cc99;
         cursor: pointer;
+    }
+    .count {
+        width: 90% 
+        margin: 10px auto
+        background: #ececec
+        min-height: 50vh
+        overflow: hidden
     }
 </style>

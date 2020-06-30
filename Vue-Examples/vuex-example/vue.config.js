@@ -11,6 +11,11 @@ module.exports = {
         // sourceMap: true
     },
     devServer: {
+        overlay: {
+            // - 让浏览器 overlay 同时显示警告和错误
+            warnings: false,
+            errors: false
+        },
         open: true,
         host: 'localhost',
         port: 13400,

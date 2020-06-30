@@ -4,7 +4,7 @@
 
 
 ## Catalog
-- Vue 生存周期
+1. Vue 生存周期
 
 
 
@@ -18,18 +18,18 @@
 
 
 ## Content
-- Vue 生存周期
+### 1. Vue 生存周期
   ```js
     let vm = new Vue({
         el:"#box",
         data: {
-            // 对于这样含有标签的字符串，解析方式就是使用 v-html
+            // 对于这样含有标签的字符串, 解析方式就是使用 v-html
             msg: "Welcome to Vue.js"
         },
 
         methods: {
             change () {
-                this.msg = "组件更新完毕，查看console.log中的组件更新提示"
+                this.msg = "组件更新完毕, 查看console.log中的组件更新提示"
             },
             destroy () {
                 this.$destroy();
@@ -64,3 +64,13 @@
         }
     });
   ```
+
+### 2. vue-cli 3.x 项目中的 views 和 components 文件夹有什么区别?
+- components 是小组件
+- containers 是容器级组件
+- views 是页面级组件
+  
+  也就是说, views 是页面级组件, components 是小组件, 小组件可被引用在 views 中,
+  一般 views 组件不被复用[containers 是容器级组件(根据项目大小决定是否使用)]
+
+  从组件大小级别区分 components - （containers）- views

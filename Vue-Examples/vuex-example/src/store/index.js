@@ -1,20 +1,25 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+// - 计数 store
+import count from './modules/count'
+
+// - 购物车 store
+import cart from './modules/cart'
+import products from './modules/products'
+
+
 Vue.use(Vuex)
 
+const debug = process.env.NODE_ENV !== 'production'
+
 export default new Vuex.Store({
-    state: {
-        count: 0
-    },
-    getters: {
-    },
-    mutations: {
-        increment: state => state.count++,
-        decrement: state => state.count--
-    },
-    actions: {
-    },
     modules: {
-    }
+        // - 计数组件
+        count,
+        
+        // - 购物车组件
+        cart,
+        products
+    },
 })
