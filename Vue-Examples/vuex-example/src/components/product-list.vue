@@ -7,6 +7,7 @@
                <span> {{ product.title }} - {{ product.price | currency }}</span>
                 <button
                     :disabled="!product.inventory"
+                    :class="{'disable-btn': !product.inventory}"
                     @click="addProductToCart(product)">
                     添加到购物车
                 </button>
@@ -44,22 +45,28 @@ export default {
 </script>
 
 <style lang="stylus">
-.product-list ul {
-    list-style: none;
-    padding: 0;
-}
-.product-list ul li {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-top: .4em;
-    padding: 1%
-}
-.product-list ul li span {
-    flex: 1 1 auto;
-}
-.product-list ul li button {
-    font-size: 13px;
-    padding: .2em;
-}
+    .product-list ul {
+        list-style: none;
+        padding: 0;
+    }
+    .product-list ul li {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: .4em;
+        padding: 1%
+    }
+    .product-list ul li span {
+        flex: 1 1 auto;
+    }
+    .product-list ul li button {
+        font-size: 13px;
+        padding: .3em;
+        border: 1px solid #ccc;
+        border-radius: .3em;
+    }
+    .disable-btn {
+        color: red;
+        border: 1px solid red !important;
+    }
 </style>

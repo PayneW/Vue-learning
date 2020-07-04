@@ -127,7 +127,8 @@
   使用单一状态管理模式来管理.
 
   还有另外一种情况需要考虑, 我们在当前页面添加产品到"购物车",
-  接着跳转到别一个页面, 在此页面再次添加一个产品到购物车, 那么此时购物车应正确的显示我已经添加的产品总数,
+  接着跳转到别一个页面, 在此页面再次添加一个产品到购物车,
+  那么此时购物车应正确的显示我已经添加的所有产品总数,
   所以也需要把购物车中的产品放入到 Vuex 中. 
   
   下面在创建 Vuex  文件 `src/store/index.js`,
@@ -157,8 +158,8 @@
   ```
   上面 (3) 中, 我们把创建产品的功能单独放在 `product-list.vue` 组件里,
   因为创建产品这个功能, 可能在项目中的多个页面中使用到, 为了更好的组织代码,
-  现在把 `Vuex.Store()` 中的 store 对象分割为 `products` 和 `cart`
-  两个模块(module), 即上面的 `行{1-1}` 和 `行{1-2}`. 
+  现在把 `Vuex.Store()` 中的 store 对象分割为 `products(产品)` 和
+  `cart(购物车)` 两个模块(module), 即上面的 `行{1-1}` 和 `行{1-2}`. 
   
   我们先来看 `products` 模块中的代码要怎么写, 产品列表首先要获取到产品数据,
   然后开始渲染, 下面是代码:
@@ -236,11 +237,11 @@
         computed: mapState({
             products: function(state) {                         // {3-2}
                 console.log('state.products.all:', state.products.all);
-                return state.products.all
+                return state.products.all                       // {3-3}
             }
         }),
         // - 'cart' 为 namespaced 名称
-        methods: mapActions('cart', [                           // {3-3}  
+        methods: mapActions('cart', [                           // {3-4}  
             'addProductToCart'
         ]);     
     }
@@ -255,10 +256,18 @@
   我们来看上面的代码, `<template>` 中的 `button` 按钮暂时先不分析; 先看
   Vue 生命周期的 `created()` 钩子中利用 `dispatch` 调用  Vuex 中 
   `products` 模块内的 `getAllProducts` 方法, 即 `行{3-1}`,  `行{3-1}`
-  执行, 上面 `行{2-4}` 的 `getAllProducts` 方法被调用, 然后接着 `行{2-5}`
-  调用 `shop.js` 中定义的 `getProducts` 方法, 那么我们进入到 `shop.js` 方法,
-  看看这个方法写的是什么, 由于上面我们还没有在 `shop.js` 中添加方法,
-  所以根据示例, 把代码添加进来, 更新第 (4) 步中的 `shop.js` 文件:
+  执行, 上面 `行{2-4}` 的 `getAllProducts` 方法被调用, 
+  ```js
+    /* - str/store/modules/products.js */
+    getAllProducts({ commit }) {                // {2-4}
+        shop.getProducts(products => {          // {2-5}
+            commit('setProducts', products)     // {2-6}
+        })
+    }
+  ```
+  然后接着 `行{2-5}` 调用 `shop.js` 中定义的 `getProducts` 方法,
+  那么我们进入到 `shop.js` 方法, 看看这个方法写的是什么, 由于上面我们还没有在
+  `shop.js` 中添加方法, 所以根据示例, 把代码添加进来, 更新第 (4) 步中的 `shop.js` 文件:
   ```js
     /*
     * Mocking client-server processing (模拟客户端-服务器处理)
@@ -274,11 +283,46 @@
         getProducts(cb) {       // {4-1}
             setTimeout(
                 () => cb(_products)
-            ), 100
+            , 100)
         }
     }
   ```
-  可以看到 `行{2-5}` 调用的即使 `行{4-1}` 的 `getProducts()` 方法, 
+  可以看到 `行{2-5}` 调用的即是 `行{4-1}` 的 `getProducts()` 方法,
+  `行{2-5}` `shop.getProducts()` 传递一个函数参数 `cb` 到 `行{4-1}`; 
+  此处更改一下 `行{4-1}` 的 `getProducts()`方法以便更直观的看出这里的调用关系,
+  ```js
+    // - `行{2-5}` 传递的 函数参数 `cb`
+    let cb = function(products) {
+        return commit('setProducts', products);
+    }
+    getProducts(cb) {
+        setTimeout(
+            function() {
+                return function(products) {
+                    return commit('setProducts', products);
+                }
+            }
+            , 100
+        )
+    }
+  ```
+  这里的调用很巧妙. 接着是代码 `行{2-6}`, 这里利用 ES6 的对象解构, 取到
+  `context` 对象下的 `commit` (函数)属性, 接着我们利用
+  `context.commit('setProducts', products)` 调用 mutation 下的
+  `setProducts`(设置商品)方法, 并传递一个参数 `products`, 即 `行{2-3}`
+  执行, 期内的 `state.all = products` 被调用, 此时 `state`状态下的 `all`
+  属性便得到了 products 数据, 由于 Vuex 中的 `state` 数据是响应式的, `all`
+  属性的值改变, 便会触发 `product-list.vue` 中计算属性内的 `products()`
+  方法(即 `行{3-2}`) 执行, 注意 `行{3-4}` 因为我们使用了模块的命名空间,
+  此时返回数据的方式是 `state.命名空间.属性`, 请一定注意.
+
+
+
+
+
+
+
+
 
 
 ```vue

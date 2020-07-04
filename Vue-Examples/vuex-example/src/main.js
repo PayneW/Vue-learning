@@ -47,7 +47,6 @@ Vue.filter('currency', function(value, currency, decimals){
     var sign = value < 0 ? '-' : '';
     return sign + currency + head +
         _int.slice(i).replace(digitsRE, '$1,') + _float;
-
 });
 
 new Vue({
