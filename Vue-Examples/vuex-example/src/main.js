@@ -7,8 +7,12 @@ import "./assets/typo.css";
 
 Vue.config.productionTip = false
 
-// - 自定义全局过滤器 currency
+// - `(\d{3})`: 一个捕获型分组, 分组中匹配 3 个数字.
+// - `(?=\d)`: 一个正向前瞻型分组, 它断言自身出现位置的后面要匹配的模式,
+//   这里是匹配为一个数字
 const digitsRE = /(\d{3})(?=\d)/g;
+
+// - 自定义全局过滤器 currency
 Vue.filter('currency', function(value, currency, decimals){
     // - `parseFloat()`: 把非数值转换为数值
     value = parseFloat(value);

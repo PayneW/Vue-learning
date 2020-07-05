@@ -60,6 +60,7 @@
   并在 `src/components/` 下新建 `product-list.vue` 组件(即产品列表组件),
   接着我们在 `shopping-cart.vue` 中引入 `product-list.vue` 组件, 到目前为止,
   购物车示例需要的页面部分就创建完毕.
+  
     + views 是页面级组件, components 是小组件, 小组件可被引用在 views 中,
       一般 views 组件不被复用.
   ```js
@@ -284,6 +285,16 @@
             setTimeout(
                 () => cb(_products)
             , 100)
+        },
+
+        // - 购买产品成功与否
+        buyProducts(products, cb, errorCb) {
+            setTimeout(() => {
+                // - simulate random checkout failure.(模拟随机结账失败)
+                (Math.random() > 0.5 || navigator.webdriver)
+                    ? cb()
+                    : errorCb()
+            }, 100)
         }
     }
   ```
@@ -313,89 +324,30 @@
   执行, 期内的 `state.all = products` 被调用, 此时 `state`状态下的 `all`
   属性便得到了 products 数据, 由于 Vuex 中的 `state` 数据是响应式的, `all`
   属性的值改变, 便会触发 `product-list.vue` 中计算属性内的 `products()`
-  方法(即 `行{3-2}`) 执行, 注意 `行{3-4}` 因为我们使用了模块的命名空间,
+  方法(即 `行{3-2}`) 执行, 注意 `行{3-3}` 因为我们使用了模块的命名空间,
   此时返回数据的方式是 `state.命名空间.属性`, 请一定注意.
 
+- (6) 上面第 (5) 步我们已经把商品列表, 循环输出到页面上了,
+  下面一个功能就是点击 "添加到购物车"按钮, 可以把产品添加到下半部分的购物车, 即如下图:
 
+  <img src="./images/shopping-cart.png"
+        style="margin-left: 0; border-radius: 4px; width: 46%;
+                box-shadow: 1px 1px 3px 2px #e5e5e5">
+  
+  既然要 "添加到购物车" 我们就要获取到当前点击 "添加到购物车" 按钮对应的商品,
+  放入到下半部分的购物车, 我们先找到模板中 "添加到购物车" 按钮的点击事件, 它在
+  `src/components/product-list.vue` 的模板中 `addProductToCart(product)`,
+  那么这个 `addProductToCart()` 方法定义在哪里呢? 答案是在
+  `src/modules/cart.js` 中, 因为既然是和购物车(cart) 相关的事件,
+  所以较合理的方式就是放在 store 的购物车(cart) 模块中, 现在知道要把
+  `addProductToCart()` 方法放在 `cart.js` 模块中, 那么该定义为 actions
+  内的属性方法还是 mutations 内的属性方法呢? 答, 应该是 actions 的属性方法,
+  比如当用户疯狂点击 "添加购物车" 按钮添加商品到购物车时,
+  商品应该是异步按顺序加入到购物车的, 下面先给出 `src/modules/cart.js`
+  中所有的代码, 然后慢慢分析每行代码:
+  ```js
+    /* - src/modules/cart.js */
 
-
-
-
-
-
-
-
-```vue
-    <template>
-        <div class="shopping-cart">
-            <ProductList/>
-            <hr>
-            <h2>您的购物车</h2>
-            <p v-show="!products.length"><i>请添加一些产品到购物车.</i></p>
-            <ul>
-                <li
-                    v-for="product in products"
-                    :key="product.id">
-                    {{ product.title }} - {{ product.price | currency }}
-                        x {{ product.quantity }}    
-                </li>
-            </ul>
-            <p>Total: {{ total | currency }} </p>
-            <p>
-                <button
-                    :disabled="!products.length"
-                    @click="checkout(products)">
-                    结账
-                </button>
-            </p>
-            <p v-show="checkoutStatus">结账状态 {{ checkoutStatus }}</p>
-        
-        </div>
-    </template>
-
-    <script>
-        import ProductList from '../components/product-list';
-
-        import { mapGetters, mapState } from 'vuex';
-
-        export default {
-            name: 'ShoppingCart',
-            components: {
-                ProductList
-            },
-            computed: {
-                ...mapState({
-                    // - 从 cart.js 获取结账状态
-                    checkoutStatus: state => state.cart.checkoutStatus
-                }),
-                // - 从 cart.js 获取 "购物车产品" 和 "购物车总价"
-                ...mapGetters('cart', {
-                    products: 'cartProducts',
-                    total: 'cartTotalPrice'
-                })
-            },
-            methods: {
-                checkout(products) {
-                    this.$store.dispatch('cart/checkout', products)
-                }
-            }
-        }
-    </script>
-
-    <style lang="stylus" scoped>
-        .shopping-cart {
-            width: 96% 
-            margin: 10px auto
-            background: #ececec
-            min-height: 50vh
-            overflow: hidden
-        }
-    </style>
-
-```
-
-
-```js
     // - cart 手推车/购物车
     import shop from "../../api/shop"
 
@@ -501,8 +453,142 @@
         }
     }
   ```
-  
-  
-  
+  下面的代码在各个文件中添加的注释已经够多, 所以不再单独细说, 主要是太多了,
+  请看各自的文件即可:
+  ```vue
+    <!-- shopping-cart.vue -->
+    <template>
+        <div class="shopping-cart">
+            <ProductList/>
+            <hr>
+            <h2>您的购物车</h2>
+            <p v-show="!products.length"><i>请添加一些产品到购物车.</i></p>
+            <ul>
+                <li
+                    v-for="product in products"
+                    :key="product.id">
+                    {{ product.title }} - {{ product.price | currency }}
+                        x {{ product.quantity }}    
+                </li>
+            </ul>
+            <p>Total: {{ total | currency }} </p>
+            <p>
+                <button
+                    :disabled="!products.length"
+                    @click="checkout(products)">
+                    结账
+                </button>
+            </p>
+            <p v-show="checkoutStatus">结账状态 {{ checkoutStatus }}</p>
+        </div>
+    </template>
+
+    <script>
+        import ProductList from '../components/product-list';
+
+        import { mapGetters, mapState } from 'vuex';
+
+        export default {
+            name: 'ShoppingCart',
+            components: {
+                ProductList
+            },
+            computed: {
+                ...mapState({
+                    // - 从 cart.js 获取结账状态
+                    checkoutStatus: state => state.cart.checkoutStatus
+                }),
+                // - 从 cart.js 获取 "购物车产品" 和 "购物车总价"
+                ...mapGetters('cart', {
+                    products: 'cartProducts',
+                    total: 'cartTotalPrice'
+                })
+            },
+            methods: {
+                checkout(products) {
+                    this.$store.dispatch('cart/checkout', products)
+                }
+            }
+        }
+    </script>
+    <style lang="stylus" scoped>
+        .shopping-cart {
+            width: 96% 
+            margin: 10px auto
+            background: #ececec
+            min-height: 50vh
+            overflow: hidden
+        }
+    </style>
+  ```
+- `src/main.js` 中需要使用的过滤器方法 `currency`, 这个过滤器方法方法写的很巧妙,
+  请认真看实现过程:
+  ```js
+    import Vue from 'vue'
+    import App from './App.vue'
+    import router from './router'
+    import store from './store'
+
+    import "./assets/typo.css";
+
+    Vue.config.productionTip = false
+
+    // - `(\d{3})`: 一个捕获型分组, 分组中匹配 3 个数字.
+    // - `(?=\d)`: 一个正向前瞻型分组, 它断言自身出现位置的后面要匹配的模式,
+    //   这里是匹配为一个数字
+    const digitsRE = /(\d{3})(?=\d)/g;
+
+    // - 自定义全局过滤器 currency
+    Vue.filter('currency', function(value, currency, decimals){
+        // - `parseFloat()`: 把非数值转换为数值
+        value = parseFloat(value);
+
+        // - - **finite ['faɪnaɪt] --adj.有限的, 限定的.  --n.有限之物**
+        // - `isFinite()`: 确定一个数是不是有穷.
+        if (!isFinite(value) || (!value && value !== 0)) return '';
+        currency = currency != null ? current : '$';
+        // - - **decimal ['desɪm(ə)l] --adj.十进制的, 小数的. --n.小数**
+        decimals = decimals != null ? decimals: 2;
+
+        // - stringified 字符串化: 把当前 value 数值利用 Math.abs()转成正数,
+        //   然后利用数组的 toFixed() 方法截取小数点后两位数, 并转换成字符串.
+        // - Math.abs() 返回数值的绝对值
+        // - 数组的 `toFixed()` 方法会按照指定的小数位返回数值的字符串表示.
+        var stringified = Math.abs(value).toFixed(decimals);
+
+        // - 截取 stringified 的整数部分.
+        var _int = decimals ? stringified.slice(0, -1 - decimals) : stringified;
+        // - (1) _int: 500; (2) _int: 10; (3) _int: 19; (4) _int: 2112
+        // console.log('_int:', _int)
+
+        var i = _int.length % 3;
+        // console.log('i: ', i);  // - (1) i: 0; (2) i: 2; (3) i: 2; (4) i: 1
+        var head = i > 0
+            ? (_int.slice(0, i) + (_int.length > 3 ? ',' : ''))
+            : '';
+        // - (1) head: ; (2) head: 10; (3) head: 19; (4) head: 2,
+        // console.log('head: ', head);
+
+        var _float = decimals ? stringified.slice(-1 - decimals) : '';
+        // - _float 为取得价格的小数部分.
+        // - (1) _float: .01; (2) _float: .99; (3) _float: .99; (4) _float: .36,
+        // console.log('_float: ', _float);
+
+        var sign = value < 0 ? '-' : '';
+        return sign + currency + head +
+            _int.slice(i).replace(digitsRE, '$1,') + _float;
+    });
+
+    new Vue({
+        router,
+        store,
+        render: h => h(App)
+    }).$mount('#app')
+  ```
+
+
+
+
+
 
 

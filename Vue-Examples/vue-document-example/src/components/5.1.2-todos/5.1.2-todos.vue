@@ -58,7 +58,7 @@
 
         methods: {
             addTodo(e) {
-                // - unshift() 在数组前端添加任意个项并返回新数组的长度。
+                // - unshift() 在数组前端添加任意个项并返回新数组的长度.
                 this.todos.unshift({
                     id: id++,
                     content: e.target.value.trim(),

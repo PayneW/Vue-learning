@@ -6,7 +6,7 @@
                v-for="state in states"
                :key="state"
                :class="[state, filter === state ? 'actived' : '']"
-               @click="toggleFilter(state)" 
+               @click="toggleFilter(state)"
             >
                 {{ state }}
             </span>
@@ -62,6 +62,11 @@
         font-size 14px
         /*line-height 30px*/
         background-color #fff
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
+                    0 8px 0 -3px #f6f6f6,
+                    0 9px 1px -3px rgba(0, 0, 0, 0.2),
+                    0 16px 0 -6px #f6f6f6,
+                    0 17px 2px -6px rgba(0, 0, 0, 0.2);
     }
     .left, .clear, .tabs {
         padding 0 10px

@@ -14,7 +14,7 @@
         </ul>
         <p>Total: {{ total | currency }} </p>
         <p>
-            <button
+            <button class="checkout-btn"
                 :disabled="!products.length"
                 @click="checkout(products)">
                 结账
@@ -61,5 +61,10 @@
         background: #ececec
         min-height: 50vh
         overflow: hidden
+        padding-bottom: 1em
+    }
+    .checkout-btn {
+        margin-top: .6em
+        padding: .1em 1em
     }
 </style>
