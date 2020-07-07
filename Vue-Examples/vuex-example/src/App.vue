@@ -4,6 +4,7 @@
         <div id="nav">
             <router-link to="/count">Count (计数)</router-link>
             <router-link to="/shopping-cart">Shopping Cart</router-link>
+            <router-link to="/todos">Todos</router-link>
         </div>
         <router-view/>
     </div>
@@ -21,21 +22,29 @@
     h2 {
         margin-bottom: 1em
     }
-    
+
     #nav {
         display: flex
-        justify-content: space-around
+        height: auto
+        width: 100%
+        overflow: hidden
+        justify-content: center
         align-items: center
+        flex-wrap: wrap
+        align-content: flex-start
         margin-bottom: 1.2em
 
         a {
             flex: 0 0 40%
+            align-content: start
             background: #66cc99
             border-radius: 4px
-            padding: 3px 0
-            margin: 0
+            padding: 3px
+            margin-left: .5em
+            margin-bottom: .5em
             color: #000
             text-decoration: none
+            word-wrap: normal
         }
     }
 </style>

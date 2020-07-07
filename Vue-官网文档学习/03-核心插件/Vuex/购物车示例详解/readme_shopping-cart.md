@@ -258,6 +258,7 @@
   Vue 生命周期的 `created()` 钩子中利用 `dispatch` 调用  Vuex 中 
   `products` 模块内的 `getAllProducts` 方法, 即 `行{3-1}`,  `行{3-1}`
   执行, 上面 `行{2-4}` 的 `getAllProducts` 方法被调用, 
+  
   ```js
     /* - str/store/modules/products.js */
     getAllProducts({ commit }) {                // {2-4}
@@ -285,8 +286,8 @@
             setTimeout(
                 () => cb(_products)
             , 100)
-        },
-
+      },
+  
         // - 购买产品成功与否
         buyProducts(products, cb, errorCb) {
             setTimeout(() => {
@@ -325,8 +326,8 @@
   属性便得到了 products 数据, 由于 Vuex 中的 `state` 数据是响应式的, `all`
   属性的值改变, 便会触发 `product-list.vue` 中计算属性内的 `products()`
   方法(即 `行{3-2}`) 执行, 注意 `行{3-3}` 因为我们使用了模块的命名空间,
-  此时返回数据的方式是 `state.命名空间.属性`, 请一定注意.
-
+此时返回数据的方式是 `state.命名空间.属性`, 请一定注意.
+  
 - (6) 上面第 (5) 步我们已经把商品列表, 循环输出到页面上了,
   下面一个功能就是点击 "添加到购物车"按钮, 可以把产品添加到下半部分的购物车, 即如下图:
 

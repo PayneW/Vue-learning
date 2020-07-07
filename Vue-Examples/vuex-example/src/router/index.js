@@ -23,6 +23,11 @@ const routes = [
         //   此路由生成一个单独的块(about.[hash].js), 当访问该路由时会被延迟加载.)
         // - 将 `/shopping-cart` 路由下的所有组件都打包在 ShoppingCart 异步块中.
         component: () => import(/* webpackChunkName: 'ShoppingCart' */ '../views/shopping-cart')
+    },
+    {
+        path: '/todos',
+        name: 'Todos',
+        component: () => import(/* webpackChunkName: 'Todos' */ '../views/todos')
     }
 ]
 

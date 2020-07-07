@@ -37,12 +37,13 @@ audio, canvas, video {
 /* 要注意表单元素并不继承父级 font 的问题 */
 body, button, input, select, textarea {
     /* font: 300 1em/1.8 system-ui, -apple-system, BlinkMacSystemFont, segoe ui, Roboto, Helvetica, Arial, sans-serif, apple color emoji, segoe ui emoji, segoe ui symbol; */
-    /* font: 300 1em/1.8 source-code-pro, Menlo,Monaco,Consolas, 
+    /* font: 300 1em/1.8 source-code-pro, Menlo,Monaco,Consolas,
         PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif; */
     font: 400 1em/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif;
     letter-spacing: .2px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: transparent;
 }
 
 button::-moz-focus-inner,
@@ -164,8 +165,8 @@ ins, a {
   text-decoration: none;
 }
 
-/* 
- * - 专名号: 虽然 u 已经重回 html5 Draft, 但在所有浏览器中都是可以使用的, 
+/*
+ * - 专名号: 虽然 u 已经重回 html5 Draft, 但在所有浏览器中都是可以使用的,
  *   要做到更好, 向后兼容的话, 添加 class="typo-u" 来显示专名号
  *   关于 <u> 标签:
  *   http://www.whatwg.org/specs/web-apps/current-work/multipage/text-level-semantics.html#the-u-element
@@ -188,7 +189,7 @@ mark {
 /* 代码片断 */
 pre, code, pre tt {
     /* font-family: Courier, 'Courier New', monospace; */
-    /* font-family: source-code-pro, Menlo,Monaco,Consolas, 
+    /* font-family: source-code-pro, Menlo,Monaco,Consolas,
     PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif; */
     font-family: system-ui, -apple-system, BlinkMacSystemFont, segoe ui,
         Roboto, Helvetica, Arial, sans-serif, apple color emoji, segoe ui emoji,
@@ -255,7 +256,7 @@ strong, b {
 /* 提供 serif 版本的字体设置: iOS 下中文自动 fallback 到 sans-serif */
 .serif {
     /* font-family: Palatino, Optima, Georgia, serif; */
-    /* font-family: source-code-pro, Menlo,Monaco,Consolas, 
+    /* font-family: source-code-pro, Menlo,Monaco,Consolas,
         PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif; */
     font-family: system-ui, -apple-system, BlinkMacSystemFont, segoe ui,
         Roboto, Helvetica, Arial, sans-serif, apple color emoji, segoe ui emoji,

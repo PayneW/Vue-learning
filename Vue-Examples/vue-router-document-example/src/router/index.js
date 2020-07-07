@@ -12,7 +12,7 @@ import User from '../components/3.2/user.vue';
 
 // - 3.3 嵌套路由
 import Demo33 from '../components/3.3/3.3';
-import Worker from '../components//3.3/worker';
+import Worker from '../components/3.3/worker';
 import WorkerHome from  '../components/3.3/worker-home';
 import WorkerProfile from '../components/3.3/worker-profile';
 import WorkerPosts from '../components/3.3/worker-posts';
@@ -22,15 +22,14 @@ import Demo34 from '../components/3.4/3.4';
 import Runner from '../components/3.4/runner';
 
 // - 3.6 命名视图
-import Demo36 from '../components//3.6/3.6';
-import Container from '../components//3.6/container';
+import Demo36 from '../components/3.6/3.6';
+import Container from '../components/3.6/container';
 import FullBlank from '../components/3.6/full-blank';
-import NavBar from '../components//3.6/nav-bar';
-import TheMain from '../components//3.6/the-main';
+import NavBar from '../components/3.6/nav-bar';
+import TheMain from '../components/3.6/the-main';
 // -- 3.6-2 命名视图
 import Demo362 from '../components/3.6-2/362';
 import UserSettings from '../components/3.6-2/user-settings';
-import UserSettingNav from '../components/3.6-2/user-settings-nav';
 import UserProfile from '../components/3.6-2/user-profile';
 import UserProfileView from '../components/3.6-2/user-profile-view';
 import userEmailSubscriptions from '../components/3.6-2/user-email-subscriptions';
@@ -40,9 +39,7 @@ import Demo38 from '../components/3.8/3.8';
 import RouterProps from '../components/3.8/router-props';
 
 
-
 Vue.use(VueRouter)
-
 
 
 function dynamicPropsFn(route) {
@@ -177,7 +174,6 @@ const routes = [
             //   (用于在 route 和 props 之间进行映射的自定义逻辑)
             { path: '/dynamic/:years', component: RouterProps, props: dynamicPropsFn},
             { path: '/attrs', component: RouterProps, props: {name: 'attrs'}}
-
         ]
     }
 ];

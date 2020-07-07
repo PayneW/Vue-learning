@@ -13,6 +13,8 @@ export default {
     getters: {
         // - 购物车产品
         cartProducts: (state, getters, rootState) => {
+            // - 注意: items. 中的 {id: xx, quantity: xx} 为下面 mutations
+            //   内的 pushProductToCart() 调用推入的.
             return state.items.map(({ id, quantity }) => {
                 // - `[].find()` 返回数组中满足方法内部函数的第一个元素的值.
                 //   否则返回 `undefined`.
@@ -81,9 +83,9 @@ export default {
         },
         // - 添加商品到购物车
         addProductToCart({ state, commit }, product) {
-            // - 首先设置结账状态 
+            // - 首先设置结账状态
             commit('setCheckoutStatus', null);
-            // - 如果当前产品的库存(inventory) 大于 0 
+            // - 如果当前产品的库存(inventory) 大于 0
             if (product.inventory > 0) {
                 // - 找到当前点击要添加的项
                 const cartItem = state.items.find(function(item) {

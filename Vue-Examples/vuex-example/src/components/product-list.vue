@@ -23,14 +23,14 @@ export default {
     created() {
         // - 在当前 created 生命周期利用 dispatch 调度 products.js 中的
         //   getAllProducts actions, 在 getAllProducts 内部调用 `api/shop.js`
-        //   内的 getProducts() 方法, 此方法把 shop.js 内部模拟的 `_products` 
+        //   内的 getProducts() 方法, 此方法把 shop.js 内部模拟的 `_products`
         //   数据传递给其内部利用 commit 提交的 mutations 的 payload.
         //   (说实话真心好绕啊...)
         this.$store.dispatch('products/getAllProducts');
     },
     computed: mapState({
         products: function(state) {
-            console.log('state.products.all:', state.products.all);
+            // console.log('state.products.all:', state.products.all);
             return state.products.all;
         }
         // state => state.products.all

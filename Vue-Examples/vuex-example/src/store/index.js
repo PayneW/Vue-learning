@@ -8,6 +8,9 @@ import count from './modules/count'
 import cart from './modules/cart'
 import products from './modules/products'
 
+// - todos
+import todos from './modules/todosapp/todos'
+
 
 Vue.use(Vuex)
 
@@ -17,9 +20,12 @@ export default new Vuex.Store({
     modules: {
         // - 计数组件
         count,
-        
+
         // - 购物车组件
         cart,
-        products
+        products,
+
+        // - todos
+        todos,
     },
 })
