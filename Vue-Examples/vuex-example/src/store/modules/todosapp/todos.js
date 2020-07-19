@@ -22,13 +22,11 @@ export default {
             state.todos.splice(state.todos.indexOf(todo), 1)
         },
         // - 编辑 todo
+        // - Hint: 函数的第二个参数使用了对象解构, 默认给 text 和 done
+        //   赋值了 state 中每个 todo 的属性值, 但是如果 actions
+        //   对象内的方法如果有传入 done 的值, 那么 done 就会使用新值.
         editTodo(state, {todo, text = todo.text, done = todo.done}) {
-            // console.log('todo:', todo);
-            console.log('text: ', text);
-            console.log('done: ', done);
             const index = state.todos.indexOf(todo)
-            // - (1) 0. (2) 1.
-            console.log('index: ', index);
 
             // - { ...todo, text, done } 为利用 ES6 的扩展运算符合并对象
             state.todos.splice(index, 1, {
@@ -36,10 +34,6 @@ export default {
                 text,
                 done
             })
-
-            // - 上面一步, 把 state.todos 数组内的每一项通过循环, 都删除后, 添加通过
-            //   toggleAll 选项的
-            console.log('state.todos: ', state.todos);
         }
     },
     actions: {
@@ -77,6 +71,7 @@ export default {
                 // console.log('done ->', done);
 
                 // - 调用 mutations 内的 editTodo, 把 todo 和 done 当做参数传入
+                // console.log('actions toggleAll {todo, done}:', {todo, done});
                 commit('editTodo', {todo, done})
             })
         },

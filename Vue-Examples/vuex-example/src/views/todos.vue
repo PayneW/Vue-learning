@@ -50,7 +50,7 @@
                         <a href="#/completed">Completed</a>
                      </li> -->
                     <li v-for="(val, key) in filters" :key="key">
-                        <a href="'#/' + key"
+                        <a :href="'#/' + key"
                            :class="{ selected: visibility === key }"
                            @click="visibility = key">
                             {{ key | capitalize }}
@@ -108,12 +108,17 @@
                 console.log(this.$store.state.todos.todos);
                 return this.$store.state.todos.todos;
             },
-            // - 所有选中的
+            // - 所有选中/反选
+            // - 这个
             allChecked() {
                 // - every(): 对数组中的每一项运行给定函数, 如果该函数对每一项都返回
                 //   true, 则返回 true.
+                // - 打开页面是, 因为我们的数据有 done 属性为 false 的, 所以这个
+                //   every 返回 false, 在上面模板内的
+                //   `@change="toggleAll(!allChecked)" 是取反的, 所以此 change
+                //   方法, 等于 toggleAll(true). 接下来进入 todo.js 内部看
+                //   toggleAll 方法的执行,
                 return this.todos.every(function(todo){
-                    console.log(todo.done);
                     return todo.done;
                 })
             },
