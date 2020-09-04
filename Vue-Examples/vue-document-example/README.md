@@ -1,4 +1,4 @@
-vue-document-learning-example
+# vue-document-learning-example
 
 ## Project setup
 ```
